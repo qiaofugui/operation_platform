@@ -8,7 +8,9 @@ export {}
 declare module 'vue' {
   export interface GlobalComponents {
     ElButton: typeof import('element-plus/es')['ElButton']
+    ElConfigProvider: typeof import('element-plus/es')['ElConfigProvider']
     ElIcon: typeof import('element-plus/es')['ElIcon']
+    ElTimePicker: typeof import('element-plus/es')['ElTimePicker']
     IEpMinus: typeof import('~icons/ep/minus')['default']
     IEpUserFilled: typeof import('~icons/ep/user-filled')['default']
     SvgIcon: typeof import('./src/components/SvgIcon/index.vue')['default']
