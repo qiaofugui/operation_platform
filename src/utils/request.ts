@@ -40,6 +40,7 @@ request.interceptors.response.use(
       message: msg,
     })
     return Promise.reject(error)
-  })
+  },
+)
 
 export default request
