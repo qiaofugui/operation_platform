@@ -1,8 +1,5 @@
-<script setup lang="ts">
-</script>
+<script setup lang="ts"></script>
 
-<template>
-  App
-</template>
+<template>App</template>
 
 <style scoped></style>
