@@ -10,6 +10,8 @@ import { ElementPlusResolver } from 'unplugin-vue-components/resolvers'
 import Icons from 'unplugin-icons/vite'
 import IconsResolver from 'unplugin-icons/resolver'
 
+import { createSvgIconsPlugin } from 'vite-plugin-svg-icons'
+
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [
@@ -33,6 +35,12 @@ export default defineConfig({
     }),
     Icons({
       autoInstall: true,
+    }),
+    createSvgIconsPlugin({
+      // Specify the icon folder to be cached
+      iconDirs: [path.resolve(process.cwd(), 'src/assets/icons')],
+      // Specify symbolId format
+      symbolId: 'icon-[dir]-[name]',
     }),
   ],
   resolve: {

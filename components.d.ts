@@ -11,5 +11,6 @@ declare module 'vue' {
     ElIcon: typeof import('element-plus/es')['ElIcon']
     IEpMinus: typeof import('~icons/ep/minus')['default']
     IEpUserFilled: typeof import('~icons/ep/user-filled')['default']
+    SvgIcon: typeof import('./src/components/SvgIcon/index.vue')['default']
   }
 }
