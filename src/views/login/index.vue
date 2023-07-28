@@ -1,11 +1,46 @@
 <script setup lang="ts">
-import { reactive } from 'vue'
+import { reactive, ref } from 'vue'
+import { useRouter } from 'vue-router'
+import { ElNotification } from 'element-plus'
+
+// 用户修改仓库
+import useUserStore from '@/store/modules/user'
+
+const router = useRouter()
+const userStore = useUserStore()
 
 // 收集表单数据
 let loginForm = reactive({
   username: 'admin',
   password: '111111',
 })
+
+const loading = ref(false)
+// 登录按钮
+const login = async () => {
+  loading.value = true
+  // 通知仓库发登录请求
+  try {
+    await userStore.userLogin(loginForm)
+    loading.value = false
+    // 请求成功跳转首页
+    router.push('/')
+    // 登录成功提示
+    ElNotification({
+      title: '登录成功',
+      message: '欢迎回来',
+      type: 'success',
+    })
+  } catch (error) {
+    loading.value = false
+    // 请求失败提示错误信息
+    ElNotification({
+      title: '登录失败',
+      message: (error as Error).message || '未知错误',
+      type: 'error',
+    })
+  }
+}
 </script>
 
 <template>
@@ -31,7 +66,9 @@ let loginForm = reactive({
             </el-input>
           </el-form-item>
           <el-form-item>
-            <el-button class="login-btn" type="primary">登录</el-button>
+            <el-button class="login-btn" type="primary" @click="login" :loading="loading">
+              登录
+            </el-button>
           </el-form-item>
         </el-form>
       </el-col>
