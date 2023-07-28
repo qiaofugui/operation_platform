@@ -59,14 +59,24 @@ const login = async () => {
             </el-input>
           </el-form-item>
           <el-form-item>
-            <el-input v-model="loginForm.password" type="password" clearable show-password>
+            <el-input
+              v-model="loginForm.password"
+              type="password"
+              clearable
+              show-password
+            >
               <template #prefix>
                 <IEpLock />
               </template>
             </el-input>
           </el-form-item>
           <el-form-item>
-            <el-button class="login-btn" type="primary" @click="login" :loading="loading">
+            <el-button
+              class="login-btn"
+              type="primary"
+              @click="login"
+              :loading="loading"
+            >
               登录
             </el-button>
           </el-form-item>
