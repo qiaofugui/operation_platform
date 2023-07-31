@@ -6,6 +6,7 @@ export const constantRoutes = [
     component: () => import('@/views/login/index.vue'),
     meta: {
       title: '登录',
+      hidden: true, // 路由标题是否显示在侧边栏
     },
   },
   {
@@ -14,6 +15,7 @@ export const constantRoutes = [
     component: () => import('@/layout/index.vue'),
     meta: {
       title: 'Layout',
+      hidden: false,
     },
     children: [
       {
@@ -22,6 +24,7 @@ export const constantRoutes = [
         component: () => import('@/views/home/index.vue'),
         meta: {
           title: '首页',
+          hidden: false,
         },
       },
       {
@@ -30,6 +33,7 @@ export const constantRoutes = [
         component: () => import('@/views/home/index.vue'),
         meta: {
           title: 'cs',
+          hidden: false,
         },
       },
     ],
@@ -40,6 +44,7 @@ export const constantRoutes = [
     component: () => import('@/views/404/index.vue'),
     meta: {
       title: '404',
+      hidden: true,
     },
   },
   {
@@ -48,6 +53,7 @@ export const constantRoutes = [
     redirect: '/404',
     meta: {
       title: 'Any',
+      hidden: true,
     },
   },
 ]
