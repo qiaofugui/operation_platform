@@ -9,10 +9,13 @@ import type { loginFormData, loginResponseData } from '@/api/user/type'
 
 import { GET_TOKEN } from '@/utils/token'
 
+import { constantRoutes } from '@/router/routes'
+
 const useUserStore = defineStore(
   'user',
   () => {
     const token = ref(GET_TOKEN() || '')
+    const menuRoutes = ref(constantRoutes)
 
     const userLogin = async (data: loginFormData) => {
       const res: loginResponseData = await reqLogin(data)
@@ -28,6 +31,7 @@ const useUserStore = defineStore(
     return {
       token,
       userLogin,
+      menuRoutes,
     }
   },
   {
