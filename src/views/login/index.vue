@@ -37,7 +37,7 @@ const loading = ref(false)
 const loginFormRef = ref(null)
 // 登录按钮
 const login = async () => {
-  let result = await loginFormRef.value.validate()
+  // let result = await loginFormRef.value.validate()
 
   loading.value = true
   // 通知仓库发登录请求
@@ -71,7 +71,12 @@ const login = async () => {
     <el-row>
       <el-col :span="12" :xs="0"></el-col>
       <el-col :span="12" :xs="24">
-        <el-form class="login-form" :model="loginForm" :rules="loginRules" ref="loginFormRef">
+        <el-form
+          class="login-form"
+          :model="loginForm"
+          :rules="loginRules"
+          ref="loginFormRef"
+        >
           <h1>登录</h1>
           <h2>欢迎登录甄选运营平台</h2>
           <el-form-item prop="username">
@@ -82,14 +87,24 @@ const login = async () => {
             </el-input>
           </el-form-item>
           <el-form-item prop="password">
-            <el-input v-model="loginForm.password" type="password" clearable show-password>
+            <el-input
+              v-model="loginForm.password"
+              type="password"
+              clearable
+              show-password
+            >
               <template #prefix>
                 <IEpLock />
               </template>
             </el-input>
           </el-form-item>
           <el-form-item>
-            <el-button class="login-btn" type="primary" @click="login" :loading="loading">
+            <el-button
+              class="login-btn"
+              type="primary"
+              @click="login"
+              :loading="loading"
+            >
               登录
             </el-button>
           </el-form-item>
