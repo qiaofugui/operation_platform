@@ -5,17 +5,19 @@ import { ref } from 'vue'
 // 引入接口
 import { reqLogin } from '@/api/user'
 // 引入类型
-import type { loginFormData } from '@/api/user/type'
+import type { loginFormData, loginResponseData } from '@/api/user/type'
+
+import { GET_TOKEN } from '@/utils/token'
 
 const useUserStore = defineStore(
   'user',
   () => {
-    const token = ref(localStorage.getItem('TOKEN' || ''))
+    const token = ref(GET_TOKEN() || '')
 
     const userLogin = async (data: loginFormData) => {
-      const res: any = await reqLogin(data)
+      const res: loginResponseData = await reqLogin(data)
       if (res.code === 200) {
-        token.value = res.data.token
+        token.value = (res.data.token as string)
 
         return true
       } else {

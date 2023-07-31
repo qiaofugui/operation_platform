@@ -3,6 +3,8 @@ import { reactive, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { ElNotification } from 'element-plus'
 
+import { getTime } from '@/utils/time'
+
 // 用户修改仓库
 import useUserStore from '@/store/modules/user'
 
@@ -14,10 +16,29 @@ let loginForm = reactive({
   username: 'admin',
   password: '111111',
 })
+const validatorUserName = (rule: any, value: any, callback: any) => {
+  console.log(rule)
+  console.log(value)
+  console.log(callback)
+}
+const loginRules = {
+  username: [
+    // { required: true, message: '请输入用户名', trigger: 'blur' },
+    // { min: 6, max: 10, message: '长度在 6 到 10 个字符', trigger: 'blur' },
+    { trigger: 'change', validator: validatorUserName },
+  ],
+  password: [
+    { required: true, message: '请输入密码', trigger: 'blur' },
+    { min: 6, max: 20, message: '长度在 6 到 20 个字符', trigger: 'blur' },
+  ],
+}
 
 const loading = ref(false)
+const loginFormRef = ref(null)
 // 登录按钮
 const login = async () => {
+  let result = await loginFormRef.value.validate()
+
   loading.value = true
   // 通知仓库发登录请求
   try {
@@ -28,8 +49,9 @@ const login = async () => {
     // 登录成功提示
     ElNotification({
       title: '登录成功',
-      message: '欢迎回来',
+      message: `Hi,${getTime()}好欢迎回来`,
       type: 'success',
+      duration: 2000,
     })
   } catch (error) {
     loading.value = false
@@ -38,6 +60,7 @@ const login = async () => {
       title: '登录失败',
       message: (error as Error).message || '未知错误',
       type: 'error',
+      duration: 2000,
     })
   }
 }
@@ -48,35 +71,25 @@ const login = async () => {
     <el-row>
       <el-col :span="12" :xs="0"></el-col>
       <el-col :span="12" :xs="24">
-        <el-form class="login-form">
+        <el-form class="login-form" :model="loginForm" :rules="loginRules" ref="loginFormRef">
           <h1>登录</h1>
           <h2>欢迎登录甄选运营平台</h2>
-          <el-form-item>
+          <el-form-item prop="username">
             <el-input v-model="loginForm.username" clearable>
               <template #prefix>
                 <IEpUser />
               </template>
             </el-input>
           </el-form-item>
-          <el-form-item>
-            <el-input
-              v-model="loginForm.password"
-              type="password"
-              clearable
-              show-password
-            >
+          <el-form-item prop="password">
+            <el-input v-model="loginForm.password" type="password" clearable show-password>
               <template #prefix>
                 <IEpLock />
               </template>
             </el-input>
           </el-form-item>
           <el-form-item>
-            <el-button
-              class="login-btn"
-              type="primary"
-              @click="login"
-              :loading="loading"
-            >
+            <el-button class="login-btn" type="primary" @click="login" :loading="loading">
               登录
             </el-button>
           </el-form-item>
