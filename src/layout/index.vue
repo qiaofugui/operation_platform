@@ -40,6 +40,10 @@ const userStore = useUserStore()
     .scrollbar {
       width: 100%;
       height: calc(100vh - $base-tabbar-height);
+
+      .el-menu {
+        border: none;
+      }
     }
   }
 

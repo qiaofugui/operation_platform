@@ -3,7 +3,7 @@ defineProps(['menuList'])
 </script>
 <script lang="ts">
 export default {
-  name: 'Menu'
+  name: 'Menu',
 }
 </script>
 
@@ -18,7 +18,10 @@ export default {
     </el-menu-item>
 
     <!-- 只有一个子路由 -->
-    <el-menu-item v-if="item.children && item.children.length === 1" :index="item.children[0].path">
+    <el-menu-item
+      v-if="item.children && item.children.length === 1"
+      :index="item.children[0].path"
+    >
       <template #title>
         <span>t</span>
         <span>{{ item.children[0].meta.title }}</span>
@@ -26,7 +29,10 @@ export default {
     </el-menu-item>
 
     <!-- 子路由大于一个 -->
-    <el-sub-menu v-if="item.children && item.children.length > 1" :index="item.path">
+    <el-sub-menu
+      v-if="item.children && item.children.length > 1"
+      :index="item.path"
+    >
       <template #title>
         <span>t</span>
         <span>{{ item.meta.title }}</span>
