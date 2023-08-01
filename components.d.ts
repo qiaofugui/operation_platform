@@ -7,12 +7,19 @@ export {}
 
 declare module 'vue' {
   export interface GlobalComponents {
+    ElAvatar: typeof import('element-plus/es')['ElAvatar']
+    ElBreadcrumb: typeof import('element-plus/es')['ElBreadcrumb']
+    ElBreadcrumbItem: typeof import('element-plus/es')['ElBreadcrumbItem']
     ElButton: typeof import('element-plus/es')['ElButton']
     ElCol: typeof import('element-plus/es')['ElCol']
     ElConfigProvider: typeof import('element-plus/es')['ElConfigProvider']
+    ElDropdown: typeof import('element-plus/es')['ElDropdown']
+    ElDropdownItem: typeof import('element-plus/es')['ElDropdownItem']
+    ElDropdownMenu: typeof import('element-plus/es')['ElDropdownMenu']
     ElForm: typeof import('element-plus/es')['ElForm']
     ElFormItem: typeof import('element-plus/es')['ElFormItem']
     ElIcon: typeof import('element-plus/es')['ElIcon']
+    ElImage: typeof import('element-plus/es')['ElImage']
     ElInput: typeof import('element-plus/es')['ElInput']
     ElItem: typeof import('element-plus/es')['ElItem']
     ElMenu: typeof import('element-plus/es')['ElMenu']
@@ -22,6 +29,8 @@ declare module 'vue' {
     ElSubmenu: typeof import('element-plus/es')['ElSubmenu']
     ElSubMenu: typeof import('element-plus/es')['ElSubMenu']
     ElTimePicker: typeof import('element-plus/es')['ElTimePicker']
+    IEpArrowDown: typeof import('~icons/ep/arrow-down')['default']
+    IEpExpand: typeof import('~icons/ep/expand')['default']
     IEpLock: typeof import('~icons/ep/lock')['default']
     IEpMinus: typeof import('~icons/ep/minus')['default']
     IEpUser: typeof import('~icons/ep/user')['default']

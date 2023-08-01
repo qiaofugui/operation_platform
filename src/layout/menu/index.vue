@@ -12,10 +12,10 @@ export default {
     <template v-if="!item.children">
       <!-- 没有子路由 -->
       <el-menu-item v-if="!item.meta.hidden" :index="item.path">
+        <el-icon>
+          <component :is="item.meta.icon"></component>
+        </el-icon>
         <template #title>
-          <el-icon>
-            <component :is="item.meta.icon"></component>
-          </el-icon>
           <span>{{ item.meta.title }}</span>
         </template>
       </el-menu-item>
@@ -27,10 +27,10 @@ export default {
         v-if="!item.children[0].meta.hidden"
         :index="item.children[0].path"
       >
+        <el-icon>
+          <component :is="item.children[0].meta.icon"></component>
+        </el-icon>
         <template #title>
-          <el-icon>
-            <component :is="item.children[0].meta.icon"></component>
-          </el-icon>
           <span>{{ item.children[0].meta.title }}</span>
         </template>
       </el-menu-item>

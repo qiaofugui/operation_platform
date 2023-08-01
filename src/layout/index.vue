@@ -2,6 +2,7 @@
 import Logo from './logo/index.vue'
 import Menu from './menu/index.vue'
 import Main from './main/index.vue'
+import Tabbar from './tabbar/index.vue'
 
 import useUserStore from '@/store/modules/user'
 const userStore = useUserStore()
@@ -13,13 +14,15 @@ const userStore = useUserStore()
     <div class="layout_slider">
       <Logo />
       <el-scrollbar class="scrollbar">
-        <el-menu background-color="$base-menu-background" text-color="#fff" router>
+        <el-menu background-color="$base-menu-background" text-color="#fff" router :default-active="$route.path">
           <Menu :menuList="userStore.menuRoutes" />
         </el-menu>
       </el-scrollbar>
     </div>
     <!-- 顶部导航 -->
-    <div class="layout_tabbar">456</div>
+    <div class="layout_tabbar">
+      <Tabbar />
+    </div>
     <!-- 主体内容 -->
     <div class="layout_main">
       <Main />
