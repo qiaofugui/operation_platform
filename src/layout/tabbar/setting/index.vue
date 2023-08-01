@@ -4,8 +4,12 @@
   <el-button icon="Refresh" circle />
   <el-button icon="FullScreen" circle />
   <el-button icon="Setting" circle />
-  <el-avatar :size="35" fit="cover" src="https://fuss10.elemecdn.com/a/3f/3302e58f9a181d2509f3dc0fa68b0jpeg.jpeg"
-    style="margin: 0 10px;" />
+  <el-avatar
+    :size="35"
+    fit="cover"
+    src="https://fuss10.elemecdn.com/a/3f/3302e58f9a181d2509f3dc0fa68b0jpeg.jpeg"
+    style="margin: 0 10px"
+  />
   <el-dropdown>
     <span>
       Name
