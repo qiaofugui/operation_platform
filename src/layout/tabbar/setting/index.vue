@@ -1,11 +1,23 @@
 <script lang="ts" setup>
 import useSettingStore from '@/store/modules/setting'
 const settingStore = useSettingStore()
+
+// 全屏功能
+const fullScreen = () => {
+  // 用来判断是不是全屏返回布尔值
+  const full = document.fullscreenElement
+  // 有兼容问题
+  if (full) {
+    document.exitFullscreen()
+  } else {
+    document.documentElement.requestFullscreen()
+  }
+}
 </script>
 
 <template>
   <el-button icon="Refresh" circle @click="settingStore.changeRefresh" />
-  <el-button icon="FullScreen" circle />
+  <el-button icon="FullScreen" circle @click="fullScreen" />
   <el-button icon="Setting" circle />
   <el-avatar
     :size="35"
