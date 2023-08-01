@@ -13,22 +13,36 @@ const settingStore = useSettingStore()
 <template>
   <div class="layout_container">
     <!-- 左侧菜单 -->
-    <div class="layout_slider" :class="{ fold: settingStore.fold ? true : false }">
+    <div
+      class="layout_slider"
+      :class="{ fold: settingStore.fold ? true : false }"
+    >
       <Logo v-if="!settingStore.fold" />
-      <p v-else style="text-align: center;color: #fff;">LOGO</p>
+      <p v-else style="text-align: center; color: #fff">LOGO</p>
       <el-scrollbar class="scrollbar">
-        <el-menu background-color="$base-menu-background" text-color="#fff" router :default-active="$route.path"
-          :collapse="settingStore.fold">
+        <el-menu
+          background-color="$base-menu-background"
+          text-color="#fff"
+          router
+          :default-active="$route.path"
+          :collapse="settingStore.fold"
+        >
           <Menu :menuList="userStore.menuRoutes" />
         </el-menu>
       </el-scrollbar>
     </div>
     <!-- 顶部导航 -->
-    <div class="layout_tabbar" :class="{ fold: settingStore.fold ? true : false }">
+    <div
+      class="layout_tabbar"
+      :class="{ fold: settingStore.fold ? true : false }"
+    >
       <Tabbar />
     </div>
     <!-- 主体内容 -->
-    <div class="layout_main" :class="{ fold: settingStore.fold ? true : false }">
+    <div
+      class="layout_main"
+      :class="{ fold: settingStore.fold ? true : false }"
+    >
       <Main />
     </div>
   </div>
