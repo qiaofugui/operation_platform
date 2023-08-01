@@ -1,9 +1,26 @@
-<script lang="ts" setup></script>
+<script lang="ts" setup>
+import { watch, ref, nextTick } from 'vue'
+import useSettingStore from '@/store/modules/setting'
+const settingStore = useSettingStore()
+
+// 控制当前组件是否销毁重建
+let flag = ref(true)
+// 监听仓库的变化，如果变化了，就说明用户点击刷新按钮了，这时候就要刷新页面
+watch(
+  () => settingStore.refresh,
+  () => {
+    flag.value = false
+    nextTick(() => {
+      flag.value = true
+    })
+  },
+)
+</script>
 
 <template>
   <router-view v-slot="{ Component }">
     <transition name="fade">
-      <component :is="Component" />
+      <component :is="Component" v-if="flag" />
     </transition>
   </router-view>
 </template>

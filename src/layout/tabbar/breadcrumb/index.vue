@@ -13,11 +13,19 @@ const route = useRoute()
     <component :is="settingStore.fold ? 'Fold' : 'Expand'"></component>
   </el-icon>
   <el-breadcrumb separator-icon="ArrowRight">
-    <el-breadcrumb-item v-for="(item, i) in route.matched" :key="i" v-show="item.name !== 'Layout'" :to="item.path">
-      <el-icon style="margin-right: 5px;vertical-align: middle;" @click="settingStore.changeFold">
+    <el-breadcrumb-item
+      v-for="(item, i) in route.matched"
+      :key="i"
+      v-show="item.name !== 'Layout'"
+      :to="item.path"
+    >
+      <el-icon
+        style="margin-right: 5px; vertical-align: middle"
+        @click="settingStore.changeFold"
+      >
         <component :is="item.meta.icon"></component>
       </el-icon>
-      <span style="vertical-align: middle;">{{ item.meta.title }}</span>
+      <span style="vertical-align: middle">{{ item.meta.title }}</span>
     </el-breadcrumb-item>
   </el-breadcrumb>
 </template>

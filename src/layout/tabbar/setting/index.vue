@@ -1,7 +1,10 @@
-<script lang="ts" setup></script>
+<script lang="ts" setup>
+import useSettingStore from '@/store/modules/setting'
+const settingStore = useSettingStore()
+</script>
 
 <template>
-  <el-button icon="Refresh" circle />
+  <el-button icon="Refresh" circle @click="settingStore.changeRefresh" />
   <el-button icon="FullScreen" circle />
   <el-button icon="Setting" circle />
   <el-avatar
