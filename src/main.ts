@@ -8,6 +8,7 @@ import 'virtual:svg-icons-register'
 import globalComponent from './components/index'
 
 import router from './router'
+import './permission.ts'
 
 import pinia from './store'
 
