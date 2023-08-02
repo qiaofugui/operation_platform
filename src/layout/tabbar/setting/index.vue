@@ -33,20 +33,9 @@ const logout = async () => {
 </script>
 
 <template>
-  <el-button
-    icon="Refresh"
-    circle
-    @click="settingStore.changeRefresh"
-  />
-  <el-button
-    icon="FullScreen"
-    circle
-    @click="fullScreen"
-  />
-  <el-button
-    icon="Setting"
-    circle
-  />
+  <el-button icon="Refresh" circle @click="settingStore.changeRefresh" />
+  <el-button icon="FullScreen" circle @click="fullScreen" />
+  <el-button icon="Setting" circle />
   <el-avatar
     :size="35"
     fit="cover"
