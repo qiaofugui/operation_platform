@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { reactive, ref } from 'vue'
-import { useRouter } from 'vue-router'
+import { useRouter, useRoute } from 'vue-router'
 import { ElNotification } from 'element-plus'
 
 import { getTime } from '@/utils/time'
@@ -9,6 +9,7 @@ import { getTime } from '@/utils/time'
 import useUserStore from '@/store/modules/user'
 
 const router = useRouter()
+const route = useRoute()
 const userStore = useUserStore()
 
 // 收集表单数据
@@ -43,9 +44,12 @@ const login = async () => {
   // 通知仓库发登录请求
   try {
     await userStore.userLogin(loginForm)
+
+    const redirect = route.query.redirect
+
     loading.value = false
     // 请求成功跳转首页
-    router.push('/')
+    router.push({ path: redirect || '/' })
     // 登录成功提示
     ElNotification({
       title: '登录成功',

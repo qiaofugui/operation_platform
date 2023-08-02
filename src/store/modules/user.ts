@@ -16,6 +16,7 @@ const useUserStore = defineStore(
   () => {
     const token = ref(GET_TOKEN() || '')
     const menuRoutes = ref(constantRoutes)
+    const username = ref('qiao')
 
     const userLogin = async (data: loginFormData) => {
       const res: loginResponseData = await reqLogin(data)
@@ -28,10 +29,20 @@ const useUserStore = defineStore(
       }
     }
 
+    const userInfo = async () => {}
+
+    const userLogout = () => {
+      token.value = ''
+      username.value = ''
+    }
+
     return {
       token,
       userLogin,
       menuRoutes,
+      username,
+      userLogout,
+      userInfo,
     }
   },
   {

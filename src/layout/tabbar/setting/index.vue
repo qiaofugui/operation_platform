@@ -1,6 +1,14 @@
 <script lang="ts" setup>
 import useSettingStore from '@/store/modules/setting'
+import useUserStore from '@/store/modules/user'
+
+import { useRouter, useRoute } from 'vue-router'
+
 const settingStore = useSettingStore()
+const userStore = useUserStore()
+
+const router = useRouter()
+const route = useRoute()
 
 // 全屏功能
 const fullScreen = () => {
@@ -13,12 +21,32 @@ const fullScreen = () => {
     document.documentElement.requestFullscreen()
   }
 }
+
+// 退出登录
+const logout = () => {
+  // 发起退出登录请求
+  // 清空用户信息
+  userStore.userLogout()
+  // 跳转到登录页
+  router.push({ path: '/login', query: { redirect: route.path } })
+}
 </script>
 
 <template>
-  <el-button icon="Refresh" circle @click="settingStore.changeRefresh" />
-  <el-button icon="FullScreen" circle @click="fullScreen" />
-  <el-button icon="Setting" circle />
+  <el-button
+    icon="Refresh"
+    circle
+    @click="settingStore.changeRefresh"
+  />
+  <el-button
+    icon="FullScreen"
+    circle
+    @click="fullScreen"
+  />
+  <el-button
+    icon="Setting"
+    circle
+  />
   <el-avatar
     :size="35"
     fit="cover"
@@ -27,7 +55,7 @@ const fullScreen = () => {
   />
   <el-dropdown>
     <span>
-      Name
+      {{ userStore.username }}
       <el-icon>
         <arrow-down />
       </el-icon>
@@ -35,7 +63,7 @@ const fullScreen = () => {
     <IEpArrowDown />
     <template #dropdown>
       <el-dropdown-menu>
-        <el-dropdown-item>退出登录</el-dropdown-item>
+        <el-dropdown-item @click="logout">退出登录</el-dropdown-item>
       </el-dropdown-menu>
     </template>
   </el-dropdown>
