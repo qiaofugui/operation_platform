@@ -4,6 +4,7 @@ import { ref, onMounted, nextTick } from 'vue'
 import {
   getTrademarkListAPI,
   addOrUpdateTrademarkAPI,
+  deleteTrademarkAPI,
 } from '@/api/product/trademark'
 
 import type {
@@ -118,6 +119,17 @@ const confirm = async () => {
   }
 }
 
+// 删除品牌
+const deleteTrademark = async (row: TradeMark) => {
+  const res = await deleteTrademarkAPI(row.id)
+  if (res.code === 200) {
+    ElMessage.success(res.message)
+    getTrademarkList(trademarkList.value.length > 1 ? pageNo.value : pageNo.value - 1)
+  } else {
+    ElMessage.error(res.message)
+  }
+}
+
 const uploadFlag = ref<boolean>(false)
 // 图片上传之前的钩子
 const beforeAvatarUpload: UploadProps['beforeUpload'] = (rawFile) => {
@@ -200,11 +212,20 @@ const handleAvatarSuccess: UploadProps['onSuccess'] = (
             icon="Edit"
             @click="updateTrademark(row)"
           />
-          <el-button
-            type="danger"
-            size="small"
-            icon="Delete"
-          />
+          <el-popconfirm
+            title="确定要删除吗?"
+            icon="DeleteFilled"
+            icon-color="#f56c6c"
+            @confirm="deleteTrademark(row)"
+          >
+            <template #reference>
+              <el-button
+                type="danger"
+                size="small"
+                icon="Delete"
+              />
+            </template>
+          </el-popconfirm>
         </template>
       </el-table-column>
     </el-table>
