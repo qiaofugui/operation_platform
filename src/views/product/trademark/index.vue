@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, nextTick } from 'vue'
 
 import {
   getTrademarkListAPI,
@@ -57,6 +57,24 @@ const trademarkParams = ref<TradeMark>({
   tmName: '',
   logoUrl: '',
 })
+let trademarkFormRef: any = ref(null)
+// 自定义校验规则
+const validatorLogoUrl = (rule: any, value: string, callback: any) => {
+  if (!value) {
+    callback(new Error('请上传品牌LOGO'))
+  } else {
+    callback()
+  }
+}
+const rules = ref({
+  tmName: [
+    { required: true, message: '请输入品牌名', trigger: 'blur' },
+  ],
+  logoUrl: [
+    { required: true, trigger: 'change', validator: validatorLogoUrl },
+  ],
+})
+
 // 添加品牌
 const addTrademark = () => {
   dialogFormVisible.value = true
@@ -65,9 +83,12 @@ const addTrademark = () => {
       tmName: '',
       logoUrl: '',
     }
+    nextTick(() => {
+      trademarkFormRef.value.clearValidate()
+    })
 }
 // 修改品牌
-const updateTrademark = (row) => {
+const updateTrademark = (row: TradeMark) => {
   dialogFormVisible.value = true
   trademarkParams.value = {
       id: row.id,
@@ -81,6 +102,9 @@ const cancel = () => {
 }
 // 确认添加
 const confirm = async () => {
+  // 表单校验
+  await trademarkFormRef.value.validate()
+
   // dialogFormVisible.value = false
   const res = await addOrUpdateTrademarkAPI(trademarkParams.value)
   if (res.code === 200) {
@@ -120,6 +144,9 @@ const handleAvatarSuccess: UploadProps['onSuccess'] = (
   // 收集地址
   trademarkParams.value.logoUrl = response.data
   // imageUrl.value = URL.createObjectURL(uploadFile.raw!)
+
+  // 上传成功，清除LOGO校验
+  trademarkFormRef.value.clearValidate('logoUrl')
 }
 </script>
 
@@ -198,8 +225,16 @@ const handleAvatarSuccess: UploadProps['onSuccess'] = (
     :title="trademarkParams.id ? '修改品牌' : '添加品牌'"
     width="40%"
   >
-    <el-form label-width="80px">
-      <el-form-item label="品牌名称">
+    <el-form
+      label-width="100px"
+      :model="trademarkParams"
+      :rules="rules"
+      ref="trademarkFormRef"
+    >
+      <el-form-item
+        label="品牌名称"
+        prop="tmName"
+      >
         <el-input
           placeholder="请输入品牌名称"
           v-model="trademarkParams.tmName"
@@ -208,6 +243,7 @@ const handleAvatarSuccess: UploadProps['onSuccess'] = (
       <el-form-item
         label="品牌LOGO"
         :disabled="true"
+        prop="logoUrl"
       >
         <!--
           action: 上传的地址
