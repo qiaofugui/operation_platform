@@ -23,23 +23,34 @@ const fullScreen = () => {
 }
 
 // 退出登录
-const logout = () => {
+const logout = async () => {
   // 发起退出登录请求
   // 清空用户信息
-  userStore.userLogout()
+  await userStore.userLogout()
   // 跳转到登录页
   router.push({ path: '/login', query: { redirect: route.path } })
 }
 </script>
 
 <template>
-  <el-button icon="Refresh" circle @click="settingStore.changeRefresh" />
-  <el-button icon="FullScreen" circle @click="fullScreen" />
-  <el-button icon="Setting" circle />
+  <el-button
+    icon="Refresh"
+    circle
+    @click="settingStore.changeRefresh"
+  />
+  <el-button
+    icon="FullScreen"
+    circle
+    @click="fullScreen"
+  />
+  <el-button
+    icon="Setting"
+    circle
+  />
   <el-avatar
     :size="35"
     fit="cover"
-    src="https://fuss10.elemecdn.com/a/3f/3302e58f9a181d2509f3dc0fa68b0jpeg.jpeg"
+    :src="userStore.avatar"
     style="margin: 0 10px"
   />
   <el-dropdown>
