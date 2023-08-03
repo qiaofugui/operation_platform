@@ -1,6 +1,6 @@
 import request from '@/utils/request'
 
-import type { CategoryResponseData, AttrResponseData } from './type'
+import type { CategoryResponseData, AttrResponseData, AttrValue } from './type'
 
 enum API {
   // 获取一级分类
@@ -11,6 +11,8 @@ enum API {
   C3_URL = '/admin/product/getCategory3/',
   // 获取属性列表
   ATTR_URL = '/admin/product/attrInfoList/',
+  // 添加或修改属性
+  ADDORUPDATEATTR_URL = '/admin/product/saveAttrInfo',
 }
 
 // 获取一级分类
@@ -42,5 +44,14 @@ export const getAttrListAPI = (category1Id: string | number, category2Id: string
   return request<any, AttrResponseData>({
     url: `${API.ATTR_URL}${category1Id}/${category2Id}/${category3Id}`,
     method: 'GET'
+  })
+}
+
+// 添加或修改属性
+export const addOrUpdateAttrAPI = (data: AttrValue) => {
+  return request<any, any>({
+    url: API.ADDORUPDATEATTR_URL,
+    method: 'POST',
+    data
   })
 }

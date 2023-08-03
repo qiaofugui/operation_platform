@@ -1,9 +1,9 @@
 <script lang="ts" setup>
-import { ref, watch } from 'vue'
+import { reactive, ref, watch } from 'vue'
 import useCategoryStore from '@/store/modules/category'
 import { getAttrListAPI } from '@/api/product/attr'
 
-import type { AttrResponseData, AttrValueList } from '@/api/product/attr/type'
+import type { AttrResponseData, AttrValueList, AttrValue } from '@/api/product/attr/type'
 
 const categoryStore = useCategoryStore()
 
@@ -29,6 +29,14 @@ const getAttrList = async () => {
   }
 }
 
+
+// 收集新增或修改属性的数据
+const attrParams = reactive<AttrValueList>({
+  attrName: '',
+  attrValueList: [],
+  categoryId: categoryStore.c3Id,
+  categoryLevel: 3,
+})
 // 定义卡片组件内容切换 table 和添加
 const scene = ref(true)
 const addAttr = () => {
@@ -46,7 +54,7 @@ const cancel = () => {
 
 <template>
   <div>
-    <Category :scene="scene"/>
+    <Category :scene="scene" />
 
     <el-card style="margin: 10px 0">
       <div v-show="scene">
