@@ -30,14 +30,14 @@ const getAttrList = async () => {
 }
 
 // 收集新增或修改属性的数据
-const attrParams = reactive<AttrValueList>({
+let attrParams = reactive<AttrValueList>({
   attrName: '',
   attrValueList: [],
   categoryId: '',
   categoryLevel: 3
 })
 // 定义卡片组件内容切换 table 和添加
-const scene = ref(false)
+const scene = ref(true)
 const addAttr = () => {
   // 每一次点击的时候先清空数据
   Object.assign(attrParams, {
@@ -49,8 +49,8 @@ const addAttr = () => {
   scene.value = false
 }
 const updateAttr = (row: AttrValueList) => {
-  console.log(row)
   scene.value = false
+  Object.assign(attrParams, JSON.parse(JSON.stringify(row)))
 }
 // 取消添加
 const cancel = () => {
@@ -197,7 +197,7 @@ const inputArr = ref<any[]>([])
         <el-button
           type="primary"
           icon="Plus"
-          :disabled="attrParams.attrName.trim().length > 0 ? false : true"
+          :disabled="attrParams.attrName.trim().length >= 0 ? false : true"
           @click="addAttrValue"
         >添加属性值</el-button>
         <el-button @click="cancel">取消</el-button>
