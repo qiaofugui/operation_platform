@@ -9,6 +9,20 @@ onMounted(() => {
   categoryStore.getC1()
 })
 
+const handler1 = () => {
+  // 清空二级三级分类
+  categoryStore.c2Id = ''
+  categoryStore.c3Id = ''
+  categoryStore.c3List = []
+
+  categoryStore.getC2()
+}
+const handler2 = () => {
+  categoryStore.c3Id = ''
+
+  categoryStore.getC3()
+}
+
 </script>
 
 <template>
@@ -17,7 +31,10 @@ onMounted(() => {
       <el-row :gutter="20">
         <el-col :span="8">
           <el-form-item label="一级分类">
-            <el-select v-model="categoryStore.c1Id">
+            <el-select
+              v-model="categoryStore.c1Id"
+              @change="handler1"
+            >
               <el-option
                 v-for="item in categoryStore.c1List"
                 :key="item.id"
@@ -29,7 +46,10 @@ onMounted(() => {
         </el-col>
         <el-col :span="8">
           <el-form-item label="二级分类">
-            <el-select v-model="categoryStore.c2Id">
+            <el-select
+              v-model="categoryStore.c2Id"
+              @change="handler2"
+            >
               <el-option
                 v-for="item in categoryStore.c2List"
                 :key="item.id"

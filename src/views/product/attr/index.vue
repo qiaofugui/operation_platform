@@ -1,11 +1,18 @@
-<script lang="ts" setup></script>
+<script lang="ts" setup>
+import useCategoryStore from '@/store/modules/category'
+
+const categoryStore = useCategoryStore()
+</script>
 
 <template>
   <div>
     <Category />
 
     <el-card style="margin: 10px 0;">
-      <el-button type="primary">
+      <el-button
+        type="primary"
+        :disabled="categoryStore.c3Id ? false : true"
+      >
         <IEpPlus />
         添加属性
       </el-button>

@@ -25,14 +25,14 @@ const useCategoryStore = defineStore(
         c1List.value = res.data
       }
     }
-    const getC2 = async (id: number | string) => {
-      const res: CategoryResponseData = await getC2API(id)
+    const getC2 = async () => {
+      const res: CategoryResponseData = await getC2API(c1Id.value)
       if (res.code === 200) {
         c2List.value = res.data
       }
     }
-    const getC3 = async (id: number | string) => {
-      const res: CategoryResponseData = await getC3API(id)
+    const getC3 = async () => {
+      const res: CategoryResponseData = await getC3API(c2Id.value)
       if (res.code === 200) {
         c3List.value = res.data
       }
