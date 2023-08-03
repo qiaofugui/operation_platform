@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { reactive, ref, watch } from 'vue'
+import { nextTick, reactive, ref, watch } from 'vue'
 import useCategoryStore from '@/store/modules/category'
 import { getAttrListAPI, addOrUpdateAttrAPI } from '@/api/product/attr'
 
@@ -63,6 +63,9 @@ const addAttrValue = () => {
     valueName: '',
     flag: true
   })
+  nextTick(() => {
+    inputArr.value[attrParams.attrValueList.length - 1].focus()
+  })
 }
 
 // 保存发送请求
@@ -93,10 +96,17 @@ const toLook = (row: AttrValue, $index: number) => {
 
   row.flag = false
 }
+
 // 点击编辑
-const toEdit = (row: AttrValue) => {
+const toEdit = (row: AttrValue, $index: number) => {
   row.flag = true
+  nextTick(() => {
+    inputArr.value[$index].focus()
+  })
 }
+
+// 用来存储el-input的ref
+const inputArr = ref<any[]>([])
 </script>
 
 <template>
@@ -208,22 +218,23 @@ const toEdit = (row: AttrValue) => {
                 placeholder="请输入属性值"
                 size="small"
                 v-model="row.valueName"
-                v-if="row.flag"
+                v-show="row.flag"
                 @blur="toLook(row, $index)"
+                :ref="(el: any) => (inputArr[$index] = el)"
               ></el-input>
               <div
-                v-else
-                @click="toEdit(row)"
+                v-show="!row.flag"
+                @click="toEdit(row, $index)"
               >{{ row.valueName }}</div>
             </template>
           </el-table-column>
           <el-table-column label="操作">
-            <template #="{ row }">
+            <template #="{ row, $index }">
               <el-popconfirm
                 title="确定要删除吗?"
                 icon="DeleteFilled"
                 icon-color="#f56c6c"
-                @confirm=""
+                @confirm="attrParams.attrValueList.splice($index, 1)"
               >
                 <template #reference>
                   <el-button
