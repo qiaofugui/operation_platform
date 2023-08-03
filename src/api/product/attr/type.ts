@@ -15,3 +15,21 @@ export interface CategoryObj {
 export interface CategoryResponseData extends ResponseData {
   data: CategoryObj[]
 }
+
+export interface AttrValue {
+  id: number
+  valueName: string
+  attrId: number
+}
+
+export interface AttrValueList {
+  id: number
+  attName: string
+  categoryId: number
+  categoryLevel: number
+  attrValueList: AttrValue[]
+}
+
+export interface AttrResponseData extends ResponseData {
+  data: AttrValueList
+}

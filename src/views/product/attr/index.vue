@@ -1,14 +1,40 @@
 <script lang="ts" setup>
+import { ref, watch } from 'vue'
 import useCategoryStore from '@/store/modules/category'
+import { getAttrListAPI } from '@/api/product/attr'
+
+import type { AttrResponseData, AttrValueList } from '@/api/product/attr/type'
 
 const categoryStore = useCategoryStore()
+
+const loading = ref(false)
+
+const attrList = ref<AttrValueList[]>([])
+watch(
+  () => categoryStore.c3Id,
+  () => {
+    if(!categoryStore.c3Id) return attrList.value = []
+    loading.value = true
+    getAttrList()
+  }
+)
+const getAttrList = async () => {
+  const { c1Id, c2Id, c3Id } = categoryStore
+  const res: AttrResponseData = await getAttrListAPI(c1Id, c2Id, c3Id)
+  if (res.code === 200) {
+    attrList.value = res.data
+    loading.value = false
+  } else {
+    loading.value = false
+  }
+}
 </script>
 
 <template>
   <div>
     <Category />
 
-    <el-card style="margin: 10px 0;">
+    <el-card style="margin: 10px 0">
       <el-button
         type="primary"
         :disabled="categoryStore.c3Id ? false : true"
@@ -17,8 +43,11 @@ const categoryStore = useCategoryStore()
         添加属性
       </el-button>
       <el-table
+        v-loading="loading"
+        element-loading-text="数据正在加载中"
         border
         style="margin: 10px 0"
+        :data="attrList"
       >
         <el-table-column
           prop="id"
@@ -28,16 +57,16 @@ const categoryStore = useCategoryStore()
           type="index"
         />
         <el-table-column
-          prop="tmName"
+          prop="attrName"
           label="属性名称"
           width="120px"
         />
         <el-table-column
-          prop="logoUrl"
+          prop="attrValueList"
           label="属性名称值"
         >
           <template #="{ row }">
-
+            <el-tag v-for="item in row.attrValueList" :key="item.id" style="margin: 3px;">{{ item.valueName }}</el-tag>
           </template>
         </el-table-column>
         <el-table-column
