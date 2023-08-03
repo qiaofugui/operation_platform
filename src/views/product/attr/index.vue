@@ -3,7 +3,7 @@ import { reactive, ref, watch } from 'vue'
 import useCategoryStore from '@/store/modules/category'
 import { getAttrListAPI, addOrUpdateAttrAPI } from '@/api/product/attr'
 
-import type { AttrResponseData, AttrValueList } from '@/api/product/attr/type'
+import type { AttrResponseData, AttrValueList, AttrValue } from '@/api/product/attr/type'
 
 const categoryStore = useCategoryStore()
 
@@ -60,7 +60,8 @@ const cancel = () => {
 // 添加属性值按钮
 const addAttrValue = () => {
   attrParams.attrValueList.push({
-    valueName: ''
+    valueName: '',
+    flag: true
   })
 }
 
@@ -74,6 +75,27 @@ const save = async () => {
   } else {
     ElMessage.error(res.message)
   }
+}
+
+// 失去焦点
+const toLook = (row: AttrValue, $index: number) => {
+  // 非法清空判断1
+  if (row.valueName.trim() === '') {
+    attrParams.attrValueList.splice($index, 1)
+    return ElMessage.warning('属性值不能为空')
+  }
+  // 非法清空判断2
+  let repeat = attrParams.attrValueList.find(item => item !== row && item.valueName === row.valueName)
+  if (repeat) {
+    attrParams.attrValueList.splice($index, 1)
+    return ElMessage.warning('属性值不能重复')
+  }
+
+  row.flag = false
+}
+// 点击编辑
+const toEdit = (row: AttrValue) => {
+  row.flag = true
 }
 </script>
 
@@ -181,19 +203,43 @@ const save = async () => {
             label="序号"
           ></el-table-column>
           <el-table-column label="属性值">
-            <template #="{ row }">
+            <template #="{ row, $index }">
               <el-input
                 placeholder="请输入属性值"
                 size="small"
                 v-model="row.valueName"
+                v-if="row.flag"
+                @blur="toLook(row, $index)"
               ></el-input>
+              <div
+                v-else
+                @click="toEdit(row)"
+              >{{ row.valueName }}</div>
             </template>
           </el-table-column>
-          <el-table-column label="操作"></el-table-column>
+          <el-table-column label="操作">
+            <template #="{ row }">
+              <el-popconfirm
+                title="确定要删除吗?"
+                icon="DeleteFilled"
+                icon-color="#f56c6c"
+                @confirm=""
+              >
+                <template #reference>
+                  <el-button
+                    type="danger"
+                    size="small"
+                    icon="Delete"
+                  />
+                </template>
+              </el-popconfirm>
+            </template>
+          </el-table-column>
         </el-table>
         <el-button
           type="primary"
           @click="save"
+          :disabled="attrParams.attrValueList.length > 0 ? false : true"
         >保存</el-button>
         <el-button @click="cancel">取消</el-button>
       </div>

@@ -20,6 +20,7 @@ export interface AttrValue {
   id?: number
   valueName: string
   attrId?: number
+  flag?: boolean
 }
 
 export interface AttrValueList {
