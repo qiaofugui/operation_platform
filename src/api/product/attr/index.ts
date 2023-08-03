@@ -1,6 +1,6 @@
 import request from '@/utils/request'
 
-import type { CategoryResponseData, AttrResponseData, AttrValue } from './type'
+import type { CategoryResponseData, AttrResponseData, AttrValueList } from './type'
 
 enum API {
   // 获取一级分类
@@ -48,7 +48,7 @@ export const getAttrListAPI = (category1Id: string | number, category2Id: string
 }
 
 // 添加或修改属性
-export const addOrUpdateAttrAPI = (data: AttrValue) => {
+export const addOrUpdateAttrAPI = (data: AttrValueList) => {
   return request<any, any>({
     url: API.ADDORUPDATEATTR_URL,
     method: 'POST',
