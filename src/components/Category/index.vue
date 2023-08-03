@@ -23,6 +23,12 @@ const handler2 = () => {
   categoryStore.getC3()
 }
 
+defineProps({
+  scene: {
+    type: Boolean,
+  }
+})
+
 </script>
 
 <template>
@@ -34,6 +40,7 @@ const handler2 = () => {
             <el-select
               v-model="categoryStore.c1Id"
               @change="handler1"
+              :disabled="!scene"
             >
               <el-option
                 v-for="item in categoryStore.c1List"
@@ -49,6 +56,7 @@ const handler2 = () => {
             <el-select
               v-model="categoryStore.c2Id"
               @change="handler2"
+              :disabled="!scene"
             >
               <el-option
                 v-for="item in categoryStore.c2List"
@@ -61,7 +69,10 @@ const handler2 = () => {
         </el-col>
         <el-col :span="8">
           <el-form-item label="三级分类">
-            <el-select v-model="categoryStore.c3Id">
+            <el-select
+              v-model="categoryStore.c3Id"
+              :disabled="!scene"
+            >
               <el-option
                 v-for="item in categoryStore.c3List"
                 :key="item.id"
