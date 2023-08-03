@@ -1,4 +1,15 @@
-<script lang="ts" setup></script>
+<script lang="ts" setup>
+import { onMounted } from 'vue'
+
+import useCategoryStore from '@/store/modules/category'
+
+const categoryStore = useCategoryStore()
+
+onMounted(() => {
+  categoryStore.getC1()
+})
+
+</script>
 
 <template>
   <el-card>
@@ -6,22 +17,37 @@
       <el-row :gutter="20">
         <el-col :span="8">
           <el-form-item label="一级分类">
-            <el-select>
-              <el-option label="1"></el-option>
+            <el-select v-model="categoryStore.c1Id">
+              <el-option
+                v-for="item in categoryStore.c1List"
+                :key="item.id"
+                :label="item.name"
+                :value="item.id"
+              />
             </el-select>
           </el-form-item>
         </el-col>
         <el-col :span="8">
           <el-form-item label="二级分类">
-            <el-select>
-              <el-option label="2"></el-option>
+            <el-select v-model="categoryStore.c2Id">
+              <el-option
+                v-for="item in categoryStore.c2List"
+                :key="item.id"
+                :label="item.name"
+                :value="item.id"
+              />
             </el-select>
           </el-form-item>
         </el-col>
         <el-col :span="8">
           <el-form-item label="三级分类">
-            <el-select>
-              <el-option label="3"></el-option>
+            <el-select v-model="categoryStore.c3Id">
+              <el-option
+                v-for="item in categoryStore.c3List"
+                :key="item.id"
+                :label="item.name"
+                :value="item.id"
+              />
             </el-select>
           </el-form-item>
         </el-col>
