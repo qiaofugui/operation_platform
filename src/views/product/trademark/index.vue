@@ -101,7 +101,7 @@ const updateTrademark = (row: TradeMark) => {
 const cancel = () => {
   dialogFormVisible.value = false
 }
-// 确认添加
+// 确认添加或修改
 const confirm = async () => {
   // 表单校验
   await trademarkFormRef.value.validate()
@@ -112,7 +112,7 @@ const confirm = async () => {
     // 关闭对话框
     dialogFormVisible.value = false
     ElMessage.success(res.message)
-    getTrademarkList()
+    getTrademarkList(pageNo.value)
   } else {
     ElMessage.error(res.message)
     dialogFormVisible.value = false
@@ -163,152 +163,154 @@ const handleAvatarSuccess: UploadProps['onSuccess'] = (
 </script>
 
 <template>
-  <el-card>
-    <el-button
-      type="primary"
-      @click="addTrademark"
-    >
-      <IEpPlus />
-      添加品牌
-    </el-button>
-    <el-table
-      :data="trademarkList"
-      border
-      style="margin: 10px 0"
-    >
-      <el-table-column
-        prop="id"
-        label="序号"
-        width="80px"
-        align="center"
-        type="index"
-      />
-      <el-table-column
-        prop="tmName"
-        label="品牌名称"
-      />
-      <el-table-column
-        prop="logoUrl"
-        label="品牌LOGO"
+  <div>
+    <el-card>
+      <el-button
+        type="primary"
+        @click="addTrademark"
       >
-        <template #="{ row }">
-          <el-image
-            style="width: 60px; height: 60px"
-            fit="scale-down"
-            :src="row.logoUrl"
-            :preview-src-list="srcPreviewList"
-            :preview-teleported="true"
-          />
-        </template>
-      </el-table-column>
-      <el-table-column
-        prop="address"
-        label="品牌操作"
+        <IEpPlus />
+        添加品牌
+      </el-button>
+      <el-table
+        :data="trademarkList"
+        border
+        style="margin: 10px 0"
       >
-        <template #="{ row }">
-          <el-button
-            type="primary"
-            size="small"
-            icon="Edit"
-            @click="updateTrademark(row)"
-          />
-          <el-popconfirm
-            title="确定要删除吗?"
-            icon="DeleteFilled"
-            icon-color="#f56c6c"
-            @confirm="deleteTrademark(row)"
-          >
-            <template #reference>
-              <el-button
-                type="danger"
-                size="small"
-                icon="Delete"
-              />
-            </template>
-          </el-popconfirm>
-        </template>
-      </el-table-column>
-    </el-table>
-    <el-pagination
-      v-model:current-page="pageNo"
-      v-model:page-size="limit"
-      :page-sizes="[3, 5, 10, 30]"
-      :background="true"
-      layout="prev, pager, next, jumper, ->, sizes, total"
-      :total="total"
-      @size-change="changeSize"
-      @current-change="changePageNo"
-    />
-  </el-card>
-  <!-- 对话框组件 -->
-  <el-dialog
-    v-model="dialogFormVisible"
-    :title="trademarkParams.id ? '修改品牌' : '添加品牌'"
-    width="40%"
-  >
-    <el-form
-      label-width="100px"
-      :model="trademarkParams"
-      :rules="rules"
-      ref="trademarkFormRef"
-    >
-      <el-form-item
-        label="品牌名称"
-        prop="tmName"
-      >
-        <el-input
-          placeholder="请输入品牌名称"
-          v-model="trademarkParams.tmName"
+        <el-table-column
+          prop="id"
+          label="序号"
+          width="80px"
+          align="center"
+          type="index"
         />
-      </el-form-item>
-      <el-form-item
-        label="品牌LOGO"
-        :disabled="true"
-        prop="logoUrl"
+        <el-table-column
+          prop="tmName"
+          label="品牌名称"
+        />
+        <el-table-column
+          prop="logoUrl"
+          label="品牌LOGO"
+        >
+          <template #="{ row }">
+            <el-image
+              style="width: 60px; height: 60px"
+              fit="scale-down"
+              :src="row.logoUrl"
+              :preview-src-list="srcPreviewList"
+              :preview-teleported="true"
+            />
+          </template>
+        </el-table-column>
+        <el-table-column
+          prop="address"
+          label="品牌操作"
+        >
+          <template #="{ row }">
+            <el-button
+              type="primary"
+              size="small"
+              icon="Edit"
+              @click="updateTrademark(row)"
+            />
+            <el-popconfirm
+              title="确定要删除吗?"
+              icon="DeleteFilled"
+              icon-color="#f56c6c"
+              @confirm="deleteTrademark(row)"
+            >
+              <template #reference>
+                <el-button
+                  type="danger"
+                  size="small"
+                  icon="Delete"
+                />
+              </template>
+            </el-popconfirm>
+          </template>
+        </el-table-column>
+      </el-table>
+      <el-pagination
+        v-model:current-page="pageNo"
+        v-model:page-size="limit"
+        :page-sizes="[3, 5, 10, 30]"
+        :background="true"
+        layout="prev, pager, next, jumper, ->, sizes, total"
+        :total="total"
+        @size-change="changeSize"
+        @current-change="changePageNo"
+      />
+    </el-card>
+    <!-- 对话框组件 -->
+    <el-dialog
+      v-model="dialogFormVisible"
+      :title="trademarkParams.id ? '修改品牌' : '添加品牌'"
+      width="40%"
+    >
+      <el-form
+        label-width="100px"
+        :model="trademarkParams"
+        :rules="rules"
+        ref="trademarkFormRef"
       >
-        <!--
+        <el-form-item
+          label="品牌名称"
+          prop="tmName"
+        >
+          <el-input
+            placeholder="请输入品牌名称"
+            v-model="trademarkParams.tmName"
+          />
+        </el-form-item>
+        <el-form-item
+          label="品牌LOGO"
+          :disabled="true"
+          prop="logoUrl"
+        >
+          <!--
           action: 上传的地址
           :show-file-list: 是否显示已上传文件列表
           :on-success: 文件上传成功时的钩子
           :before-upload: 上传文件之前的钩子，参数为上传的文件，若返回 false 或者返回 Promise 且被 reject，则停止上传
         -->
-        <el-upload
-          class="avatar-uploader"
-          action="/api/admin/product/fileUpload"
-          :show-file-list="false"
-          :on-success="handleAvatarSuccess"
-          :before-upload="beforeAvatarUpload"
-          :disabled="uploadFlag"
-        >
-          <el-image
-            v-if="trademarkParams.logoUrl"
-            :src="trademarkParams.logoUrl"
-            class="avatar"
-            fit="scale-down"
-            v-loading="uploadFlag"
-          />
-          <el-icon
-            v-else
-            v-loading="uploadFlag"
-            class="avatar-uploader-icon"
+          <el-upload
+            class="avatar-uploader"
+            action="/api/admin/product/fileUpload"
+            :show-file-list="false"
+            :on-success="handleAvatarSuccess"
+            :before-upload="beforeAvatarUpload"
+            :disabled="uploadFlag"
           >
-            <Plus />
-          </el-icon>
-        </el-upload>
-      </el-form-item>
-    </el-form>
-    <template #footer>
-      <span class="dialog-footer">
-        <el-button @click="cancel">取消</el-button>
-        <el-button
-          type="primary"
-          @click="confirm"
-        >
-          确认
-        </el-button>
-      </span>
-    </template>
-  </el-dialog>
+            <el-image
+              v-if="trademarkParams.logoUrl"
+              :src="trademarkParams.logoUrl"
+              class="avatar"
+              fit="scale-down"
+              v-loading="uploadFlag"
+            />
+            <el-icon
+              v-else
+              v-loading="uploadFlag"
+              class="avatar-uploader-icon"
+            >
+              <Plus />
+            </el-icon>
+          </el-upload>
+        </el-form-item>
+      </el-form>
+      <template #footer>
+        <span class="dialog-footer">
+          <el-button @click="cancel">取消</el-button>
+          <el-button
+            type="primary"
+            @click="confirm"
+          >
+            确认
+          </el-button>
+        </span>
+      </template>
+    </el-dialog>
+  </div>
 </template>
 
 <style lang="scss" scoped>
