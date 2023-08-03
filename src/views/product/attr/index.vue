@@ -1,7 +1,7 @@
 <script lang="ts" setup>
-import { nextTick, reactive, ref, watch } from 'vue'
+import { nextTick, reactive, ref, watch, onUnmounted } from 'vue'
 import useCategoryStore from '@/store/modules/category'
-import { getAttrListAPI, addOrUpdateAttrAPI } from '@/api/product/attr'
+import { getAttrListAPI, addOrUpdateAttrAPI, deleteAttrAPI } from '@/api/product/attr'
 
 import type { AttrResponseData, AttrValueList, AttrValue } from '@/api/product/attr/type'
 
@@ -107,6 +107,23 @@ const toEdit = (row: AttrValue, $index: number) => {
 
 // 用来存储el-input的ref
 const inputArr = ref<any[]>([])
+
+// 删除属性
+const deleteAttr = async (row: AttrValueList) => {
+  const res: any = await deleteAttrAPI(row.id)
+  if (res.code === 200) {
+    getAttrList()
+    ElMessage.success(res.message)
+  } else {
+    ElMessage.error(res.message)
+  }
+}
+
+// 销毁清空仓库数据
+onUnmounted(() => {
+  // 清空分类仓库数据自带方法，仓库是 Setup 语法不支持需要修改一下
+  categoryStore.$reset()
+})
 </script>
 
 <template>
@@ -170,7 +187,7 @@ const inputArr = ref<any[]>([])
                 title="确定要删除吗?"
                 icon="DeleteFilled"
                 icon-color="#f56c6c"
-                @confirm=""
+                @confirm="deleteAttr(row)"
               >
                 <template #reference>
                   <el-button
