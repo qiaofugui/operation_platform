@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { ref } from 'vue'
+import { ref, computed, nextTick } from 'vue'
 
 import type {
   SpuData,
@@ -11,6 +11,7 @@ import type {
   SpuImage,
   SpuSaleAttr,
   SaleAttr,
+  SpuSaleAttrValue
 } from '@/api/product/spu/type'
 
 import { getAllTrademarkAPI, getSpuImageListAPI, getSpuSaleAttrListAPI, getAllSaleAttrAPI } from '@/api/product/spu'
@@ -65,7 +66,7 @@ const initSpuData = async (row: SpuData) => {
     getAllSaleAttrAPI()
   ])
   allTradeMark.value = res[0].data
-  imgList.value = res[1].data.map(item => ({name: item.imgName, url: item.imgUrl}))
+  imgList.value = res[1].data.map(item => ({ name: item.imgName, url: item.imgUrl }))
   saleAttr.value = res[2].data
   allSaleAttr.value = res[3].data
 
@@ -99,6 +100,74 @@ const beforeUpload = (rawFile: any) => {
   }
   return true
 }
+
+// 计算出当前SPU还为拥有的销售属性
+let unSelectSaleAttr = computed(() => {
+  return allSaleAttr.value.filter(item => (
+    saleAttr.value.every(sale => item.name !== sale.saleAttrName)
+  ))
+})
+
+// 收集还未先择的销售属性ID和属性值的名字
+let saleAttrIdAndValueName = ref('')
+
+// 添加销售属性的方法
+const addSaleAttr = () => {
+  const [baseSaleAttrId, saleAttrName] = saleAttrIdAndValueName.value.split(':')
+  // 准备新的销售属性对象
+  let newSaleAttr: SpuSaleAttr = {
+    baseSaleAttrId,
+    saleAttrName,
+    spuSaleAttrValueList: []
+  }
+  // 追加到数组中
+  saleAttr.value.push(newSaleAttr)
+  // 清空收集的数据
+  saleAttrIdAndValueName.value = ''
+}
+
+// 属性值按钮的点击事件
+const toEdit = (row: SpuSaleAttr, i: number) => {
+  // 点击按钮显示input
+  row.flag = true
+  row.saleAttrValue = ''
+
+  nextTick(() => {
+    inputArr.value[i].focus()
+  })
+}
+// 表单元素失去焦点
+const toLook = (row: SpuSaleAttr, i: number) => {
+  // 整理收集到的数据
+  const { baseSaleAttrId, saleAttrValue } = row
+  let newSaleAttrValue: SpuSaleAttrValue = {
+    baseSaleAttrId,
+    saleAttrName: saleAttrValue
+  }
+
+  // 非法情况1
+  if ((saleAttrValue as string).trim() === '') {
+    row.flag = false
+    return ElMessage.warning('属性值不能为空')
+  }
+
+  // 判断属性值是否在数组中存在
+  let repeat = row.spuSaleAttrValueList.find(item => item.saleAttrName === saleAttrValue)
+  if (repeat) {
+    ElMessage.warning('属性值已存在')
+    nextTick(() => {
+      inputArr.value[i].select()
+    })
+    return
+  }
+
+  // 追加新的属性值
+  row.spuSaleAttrValueList.push(newSaleAttrValue)
+  row.flag = false
+}
+
+// 输入框的所有实例对象
+let inputArr = ref([])
 
 // 对外暴露方法，父组件可拿到
 defineExpose({
@@ -148,19 +217,29 @@ defineExpose({
       </el-upload>
     </el-form-item>
     <el-form-item label="SPU销售属性">
-      <el-select style="margin-right: 10px;">
-        <el-option label="1"></el-option>
-        <el-option label="2"></el-option>
-        <el-option label="3"></el-option>
+      <el-select
+        style="margin-right: 10px;"
+        :placeholder="unSelectSaleAttr.length ? '请选择销售属性' : '暂无属性供选择'"
+        v-model="saleAttrIdAndValueName"
+      >
+        <el-option
+          v-for="item in unSelectSaleAttr"
+          :key="item.id"
+          :label="item.name"
+          :value="`${item.id}:${item.name}`"
+        />
       </el-select>
       <el-button
         type="primary"
         icon="Plus"
+        :disabled="saleAttrIdAndValueName ? false : true"
+        @click="addSaleAttr"
       >添加属性值</el-button>
 
       <el-table
         border
         style="margin: 10px 0;"
+        :data="saleAttr"
       >
         <el-table-column
           label="序号"
@@ -171,8 +250,37 @@ defineExpose({
         <el-table-column
           label="属性名"
           width="160px"
+          prop="saleAttrName"
         ></el-table-column>
-        <el-table-column label="属性值"></el-table-column>
+        <el-table-column label="属性值">
+          <template #="{ row, $index }">
+            <el-tag
+              type="success"
+              v-for="(item, i) in row.spuSaleAttrValueList"
+              :key="item.id"
+              style="margin: 3px;"
+              closable
+              @close="row.spuSaleAttrValueList.splice(i, 1)"
+            >{{
+                item.saleAttrName }}</el-tag>
+            <el-input
+              v-if="row.flag"
+              v-model="row.saleAttrValue"
+              style="width: 150px;"
+              size="small"
+              placeholder="请输入属性值"
+              @blur="toLook(row, $index)"
+              :ref="(el: any) => (inputArr[$index] = el)"
+            />
+            <el-button
+              v-else
+              type="primary"
+              size="small"
+              icon="Plus"
+              @click="toEdit(row, $index)"
+            ></el-button>
+          </template>
+        </el-table-column>
         <el-table-column
           label="操作"
           width="80px"
@@ -182,7 +290,7 @@ defineExpose({
               title="确定要删除吗?"
               icon="DeleteFilled"
               icon-color="#f56c6c"
-              @confirm=""
+              @confirm="saleAttr.splice(saleAttr.indexOf(row), 1)"
             >
               <template #reference>
                 <el-button
