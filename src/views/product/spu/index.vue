@@ -2,12 +2,15 @@
 import { ref, watch } from "vue";
 import useCategoryStore from '@/store/modules/category'
 
+import SkuForm from './skuForm.vue'
+import SpuForm from './spuForm.vue'
+
 import { getHasSpuListAPI } from '@/api/product/spu'
 import type { HasSpuResponseData, SpuData } from '@/api/product/spu/type'
 
 const categoryStore = useCategoryStore()
 
-let scene = ref(true)
+let scene = ref(0)
 
 // 分页器默认页码
 let pageNo = ref(1)
@@ -46,6 +49,21 @@ const changePageNo = (page: number) => {
 const changeSize = () => {
   getSpuList()
 }
+
+// 场景0添加SPU按钮
+const addSpu = () => {
+  scene.value = 1
+}
+
+// 子组件自定义事件通知父组件改变场景
+const changeScene = (s: number) => {
+  scene.value = s
+}
+
+// 场景1修改SPU按钮
+const updateSpu = () => {
+  scene.value = 1
+}
 </script>
 
 <template>
@@ -53,101 +71,110 @@ const changeSize = () => {
     <Category :scene="scene" />
 
     <el-card style="margin: 10px 0">
-      <el-button
-        type="primary"
-        :disabled="categoryStore.c3Id ? false : true"
-        @click=""
-      >
-        <IEpPlus />
-        添加属性
-      </el-button>
-
-      <el-table
-        style="margin: 10px 0;"
-        border
-        v-loading="loading"
-        :data="spuList"
-      >
-        <el-table-column
-          label="序号"
-          type="index"
-          width="80px"
-          align="center"
-          prop="id"
-        ></el-table-column>
-        <el-table-column
-          prop="spuName"
-          label="SPU名称"
-        ></el-table-column>
-        <el-table-column
-          prop="description"
-          label="SPU描述"
-          show-overflow-tooltip
-        ></el-table-column>
-        <el-table-column label="SPU操作">
-          <template #="{ row }">
-            <el-tooltip
-              effect="dark"
-              content="添加SKU"
-              placement="bottom"
-            >
-              <el-button
-                type="primary"
-                size="small"
-                icon="Plus"
-              />
-            </el-tooltip>
-            <el-tooltip
-              effect="dark"
-              content="修改SPU"
-              placement="bottom"
-            >
-              <el-button
-                type="success"
-                size="small"
-                icon="Edit"
-              />
-            </el-tooltip>
-            <el-tooltip
-              effect="dark"
-              content="查看SPU列表"
-              placement="bottom"
-            >
-              <el-button
-                type="info"
-                size="small"
-                icon="View"
-              />
-            </el-tooltip>
-            <el-popconfirm
-              title="确定要删除吗?"
-              icon="DeleteFilled"
-              icon-color="#f56c6c"
-              @confirm=""
-            >
-              <template #reference>
+      <div v-show="scene === 0 ? true : false">
+        <el-button
+          type="primary"
+          :disabled="categoryStore.c3Id ? false : true"
+          @click="addSpu"
+        >
+          <IEpPlus />
+          添加属性
+        </el-button>
+        <el-table
+          style="margin: 10px 0;"
+          border
+          v-loading="loading"
+          :data="spuList"
+        >
+          <el-table-column
+            label="序号"
+            type="index"
+            width="80px"
+            align="center"
+            prop="id"
+          ></el-table-column>
+          <el-table-column
+            prop="spuName"
+            label="SPU名称"
+          ></el-table-column>
+          <el-table-column
+            prop="description"
+            label="SPU描述"
+            show-overflow-tooltip
+          ></el-table-column>
+          <el-table-column label="SPU操作">
+            <template #="{ row }">
+              <el-tooltip
+                effect="dark"
+                content="添加SKU"
+                placement="bottom"
+              >
                 <el-button
-                  type="danger"
+                  type="primary"
                   size="small"
-                  icon="Delete"
+                  icon="Plus"
                 />
-              </template>
-            </el-popconfirm>
-          </template>
-        </el-table-column>
-      </el-table>
-      <!-- 分页器 -->
-      <el-pagination
-        v-model:current-page="pageNo"
-        v-model:page-size="pageSize"
-        :page-sizes="[3, 5, 10, 30]"
-        :background="true"
-        layout="prev, pager, next, jumper, ->, sizes, total"
-        :total="total"
-        @size-change="changeSize"
-        @current-change="changePageNo"
-      />
-
+              </el-tooltip>
+              <el-tooltip
+                effect="dark"
+                content="修改SPU"
+                placement="bottom"
+              >
+                <el-button
+                  type="success"
+                  size="small"
+                  icon="Edit"
+                  @click="updateSpu"
+                />
+              </el-tooltip>
+              <el-tooltip
+                effect="dark"
+                content="查看SPU列表"
+                placement="bottom"
+              >
+                <el-button
+                  type="info"
+                  size="small"
+                  icon="View"
+                />
+              </el-tooltip>
+              <el-popconfirm
+                title="确定要删除吗?"
+                icon="DeleteFilled"
+                icon-color="#f56c6c"
+                @confirm=""
+              >
+                <template #reference>
+                  <el-button
+                    type="danger"
+                    size="small"
+                    icon="Delete"
+                  />
+                </template>
+              </el-popconfirm>
+            </template>
+          </el-table-column>
+        </el-table>
+        <!-- 分页器 -->
+        <el-pagination
+          v-model:current-page="pageNo"
+          v-model:page-size="pageSize"
+          :page-sizes="[3, 5, 10, 30]"
+          :background="true"
+          layout="prev, pager, next, jumper, ->, sizes, total"
+          :total="total"
+          @size-change="changeSize"
+          @current-change="changePageNo"
+        />
+      </div>
+      <!-- 添加SPU|修改SPU的子组件 -->
+      <div v-show="scene === 1 ? true : false">
+        <SpuForm @changeScene="changeScene"/>
+      </div>
+      <!-- 添加SKU的子组件 -->
+      <div v-show="scene === 2 ? true : false">
+        <SkuForm @changeScene="changeScene"/>
+      </div>
     </el-card>
   </div>
 </template>

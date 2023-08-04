@@ -25,8 +25,7 @@ const handler2 = () => {
 
 defineProps({
   scene: {
-    type: Boolean,
-    default: true
+    type: Number,
   }
 })
 
@@ -41,7 +40,7 @@ defineProps({
             <el-select
               v-model="categoryStore.c1Id"
               @change="handler1"
-              :disabled="!scene"
+              :disabled="scene !== 0"
             >
               <el-option
                 v-for="item in categoryStore.c1List"
@@ -57,7 +56,7 @@ defineProps({
             <el-select
               v-model="categoryStore.c2Id"
               @change="handler2"
-              :disabled="!scene"
+              :disabled="scene !== 0"
             >
               <el-option
                 v-for="item in categoryStore.c2List"
@@ -72,7 +71,7 @@ defineProps({
           <el-form-item label="三级分类">
             <el-select
               v-model="categoryStore.c3Id"
-              :disabled="!scene"
+              :disabled="scene !== 0"
             >
               <el-option
                 v-for="item in categoryStore.c3List"

@@ -37,7 +37,7 @@ let attrParams = reactive<AttrValueList>({
   categoryLevel: 3
 })
 // 定义卡片组件内容切换 table 和添加
-const scene = ref(true)
+const scene = ref(0)
 const addAttr = () => {
   // 每一次点击的时候先清空数据
   Object.assign(attrParams, {
@@ -46,15 +46,15 @@ const addAttr = () => {
     categoryId: categoryStore.c3Id,
     categoryLevel: 3
   })
-  scene.value = false
+  scene.value = 1
 }
 const updateAttr = (row: AttrValueList) => {
-  scene.value = false
+  scene.value = 1
   Object.assign(attrParams, JSON.parse(JSON.stringify(row)))
 }
 // 取消添加
 const cancel = () => {
-  scene.value = true
+  scene.value = 0
 }
 
 // 添加属性值按钮
@@ -73,7 +73,7 @@ const save = async () => {
   const res: any = await addOrUpdateAttrAPI(attrParams)
   if (res.code === 200) {
     getAttrList()
-    scene.value = true
+    scene.value = 0
     ElMessage.success(res.message)
   } else {
     ElMessage.error(res.message)
@@ -131,7 +131,7 @@ onUnmounted(() => {
     <Category :scene="scene" />
 
     <el-card style="margin: 10px 0">
-      <div v-show="scene">
+      <div v-show="scene === 0 ? true : false">
         <el-button
           type="primary"
           :disabled="categoryStore.c3Id ? false : true"
@@ -202,7 +202,7 @@ onUnmounted(() => {
         </el-table>
       </div>
       <!-- 展示添加和修改属性的结构 -->
-      <div v-show="scene === false">
+      <div v-show="scene === 1 ? true : false">
         <el-form :inline="true">
           <el-form-item label="属性名称">
             <el-input
