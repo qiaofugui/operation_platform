@@ -46,6 +46,8 @@ const initSpuData = async (row: SpuData) => {
   // 存储已有spu对象
   spuParams.value = row
 
+  imgLoading.value = true
+
   // 获取全部品牌数据
   // let res1: TradeMarkResponseData = await getAllTrademarkAPI()
   // let res2: SpuImageResponseData = await getSpuImageListAPI((row.id as number))
@@ -63,9 +65,39 @@ const initSpuData = async (row: SpuData) => {
     getAllSaleAttrAPI()
   ])
   allTradeMark.value = res[0].data
-  imgList.value = res[1].data
+  imgList.value = res[1].data.map(item => ({name: item.imgName, url: item.imgUrl}))
   saleAttr.value = res[2].data
   allSaleAttr.value = res[3].data
+
+  imgLoading.value = false
+}
+
+const imgLoading = ref(false)
+// 预览图片对话框的显示与隐藏
+let dialogVisible = ref(false)
+let currentImg = ref('')
+// 照片墙点击预览
+const handlePictureCardPreview = (e: any) => {
+  console.log(e)
+  currentImg.value = e.url
+  dialogVisible.value = true
+}
+// 照片墙删除某一个
+const handleRemove = (uploadFile: any, uploadFiles: any) => {
+  console.log(uploadFile, uploadFiles)
+}
+// 图片上传之前的钩子
+const beforeUpload = (rawFile: any) => {
+  // 允许的图片格式
+  const allowedImageType = ['image/jpg', 'image/jpeg', 'image/png', 'image/gif']
+  if (!allowedImageType.includes(rawFile.type)) {
+    ElMessage.error('图片必须是JPG|PNG|GIF格式!')
+    return false
+  } else if (rawFile.size / 1024 / 1024 > 4) {
+    ElMessage.error('图片大小不能超过4MB!')
+    return false
+  }
+  return true
 }
 
 // 对外暴露方法，父组件可拿到
@@ -102,10 +134,13 @@ defineExpose({
     </el-form-item>
     <el-form-item label="SPU图片">
       <el-upload
-        v-model:file-list="fileList"
-        action="https://run.mocky.io/v3/9d059bf9-4660-45f2-925d-ce80ad6c4d15"
+        v-loading="imgLoading"
+        v-model:file-list="imgList"
+        action="/api/admin/product/fileUpload"
         list-type="picture-card"
+        :on-preview="handlePictureCardPreview"
         :on-remove="handleRemove"
+        :before-upload="beforeUpload"
       >
         <el-icon>
           <Plus />
@@ -169,6 +204,18 @@ defineExpose({
 
     </el-form-item>
   </el-form>
+
+  <!-- 照片墙 -->
+  <el-dialog
+    v-model="dialogVisible"
+    width="35%"
+  >
+    <el-image
+      :src="currentImg"
+      style="width: 100%; height: 100%;"
+      fit="cover"
+    ></el-image>
+  </el-dialog>
 </template>
 
 <style lang="scss" scoped></style>

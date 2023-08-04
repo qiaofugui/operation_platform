@@ -135,7 +135,7 @@ const uploadFlag = ref<boolean>(false)
 const beforeAvatarUpload: UploadProps['beforeUpload'] = (rawFile) => {
   uploadFlag.value = true
   // 允许的图片格式
-  const allowedImageType = ['image/jpeg', 'image/png', 'image/gif']
+  const allowedImageType = ['image/jpg', 'image/jpeg', 'image/png', 'image/gif']
   if (!allowedImageType.includes(rawFile.type)) {
     ElMessage.error('图片必须是JPG|PNG|GIF格式!')
     uploadFlag.value = false

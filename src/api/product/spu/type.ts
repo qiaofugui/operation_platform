@@ -39,15 +39,19 @@ export interface TradeMarkResponseData extends ResponseData {
 
 // 商品图片数据类型
 export interface SpuImage {
-  id: number
+  id?: number
   createTime?: string
   updateTime?: string
-  spuId: number
-  imgName: string
+  spuId?: number
+  imgName?: string
   imgUrl?: string
+  status?: string
+  name?: string
+  url?: string
+  uid?: number
 }
 // 商品图片数据类型
-export interface SpuImageResponseData  extends ResponseData{
+export interface SpuImageResponseData extends ResponseData {
   data: SpuImage[]
 }
 
