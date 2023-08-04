@@ -14,7 +14,13 @@ import type {
   SpuSaleAttrValue
 } from '@/api/product/spu/type'
 
-import { getAllTrademarkAPI, getSpuImageListAPI, getSpuSaleAttrListAPI, getAllSaleAttrAPI } from '@/api/product/spu'
+import {
+  getAllTrademarkAPI,
+  getSpuImageListAPI,
+  getSpuSaleAttrListAPI,
+  getAllSaleAttrAPI,
+  addOrUpdateSpuAPI
+} from '@/api/product/spu'
 
 let $emit = defineEmits(['changeScene'])
 
@@ -169,6 +175,26 @@ const toLook = (row: SpuSaleAttr, i: number) => {
 // 输入框的所有实例对象
 let inputArr = ref([])
 
+// 保存按钮
+const save = async () => {
+  // 整理参数
+  // 1.照片墙数据整理
+  spuParams.value.spuImageList = imgList.value.map((item: any) => ({
+      imgName: item.name,
+      imgUrl: (item.response && item.response.data) || item.url
+  }))
+  // 2.销售属性数据整理
+  spuParams.value.spuSaleAttrList = saleAttr.value
+  // 发请求：添加SPU|修改SPU
+  const res = await addOrUpdateSpuAPI(spuParams.value)
+  if (res.code === 200) {
+    ElMessage.success(res.message)
+    $emit('changeScene', 0)
+  } else {
+    ElMessage.error(res.message)
+  }
+}
+
 // 对外暴露方法，父组件可拿到
 defineExpose({
   initSpuData
@@ -306,7 +332,7 @@ defineExpose({
 
       <el-button
         type="primary"
-        @click=""
+        @click="save"
       >保存</el-button>
       <el-button @click="cancel">取消</el-button>
 
