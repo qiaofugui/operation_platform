@@ -26,6 +26,7 @@ const handler2 = () => {
 defineProps({
   scene: {
     type: Boolean,
+    default: true
   }
 })
 
