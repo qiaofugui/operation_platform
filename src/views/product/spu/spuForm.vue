@@ -31,8 +31,21 @@ let saleAttr = ref<SpuSaleAttr[]>([])
 // 存储已有的销售属性数据
 let allSaleAttr = ref<SaleAttr[]>([])
 
+// 存储已有spu对象
+const spuParams = ref<SpuData>({
+  category3Id: '',
+  spuName: '',
+  description: '',
+  tmId: '',
+  spuImageList: [],
+  spuSaleAttrList: [],
+})
+
 // 获取所有品牌数据
 const initSpuData = async (row: SpuData) => {
+  // 存储已有spu对象
+  spuParams.value = row
+
   // 获取全部品牌数据
   // let res1: TradeMarkResponseData = await getAllTrademarkAPI()
   // let res2: SpuImageResponseData = await getSpuImageListAPI((row.id as number))
@@ -64,13 +77,19 @@ defineExpose({
 <template>
   <el-form label-width="100px">
     <el-form-item label="SPU名称">
-      <el-input placeholder="请输入SPU名称"></el-input>
+      <el-input
+        placeholder="请输入SPU名称"
+        v-model="spuParams.spuName"
+      ></el-input>
     </el-form-item>
     <el-form-item label="SPU品牌">
-      <el-select>
-        <el-option label="1"></el-option>
-        <el-option label="2"></el-option>
-        <el-option label="3"></el-option>
+      <el-select v-model="spuParams.tmId">
+        <el-option
+          v-for="item in allTradeMark"
+          :key="item.id"
+          :label="item.tmName"
+          :value="item.id"
+        ></el-option>
       </el-select>
     </el-form-item>
     <el-form-item label="SPU描述">
@@ -78,6 +97,7 @@ defineExpose({
         type="textarea"
         placeholder="请输入SPU描述"
         :rows="2"
+        v-model="spuParams.description"
       ></el-input>
     </el-form-item>
     <el-form-item label="SPU图片">
