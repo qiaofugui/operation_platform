@@ -8,7 +8,7 @@ enum API {
   // 获取所有品牌列表
   ALLTRaDEMARK_URL = '/admin/product/baseTrademark/getTrademarkList',
   // 获取某个sku的图片列表
-  IMAGE_URL = '/admin/product/supImageList/',
+  IMAGE_URL = '/admin/product/spuImageList/',
   // 某个 spu 销售属性
   SPUSALEATTR_URL = '/admin/product/spuSaleAttrList/',
   // 获取所有销售属性列表

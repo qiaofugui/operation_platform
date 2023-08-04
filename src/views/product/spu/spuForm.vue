@@ -1,10 +1,64 @@
 <script lang="ts" setup>
+import { ref } from 'vue'
+
+import type {
+  SpuData,
+  TradeMarkResponseData,
+  SpuImageResponseData,
+  SpuSaleAttrResponseData,
+  SaleAttrResponseData,
+  TradeMark,
+  SpuImage,
+  SpuSaleAttr,
+  SaleAttr
+} from '@/api/product/spu/type'
+
+import { getAllTrademarkAPI, getSpuImageListAPI, getSpuSaleAttrListAPI, getAllSaleAttrAPI } from '@/api/product/spu'
+
 let $emit = defineEmits(['changeScene'])
 
 // 子组件点击取消按钮通知父组件改变场景
 const cancel = () => {
   $emit('changeScene', 0)
 }
+
+// 存储已有的SPU数据
+let allTradeMark = ref<TradeMark[]>([])
+// 存储已有的SPU图片数据
+let imgList = ref<SpuImage[]>([])
+// 存储已有的SPU销售属性数据
+let saleAttr = ref<SpuSaleAttr[]>([])
+// 存储已有的销售属性数据
+let allSaleAttr = ref<SaleAttr[]>([])
+
+// 获取所有品牌数据
+const initSpuData = async (row: SpuData) => {
+  // 获取全部品牌数据
+  // let res1: TradeMarkResponseData = await getAllTrademarkAPI()
+  // let res2: SpuImageResponseData = await getSpuImageListAPI((row.id as number))
+  // let res3: SpuSaleAttrResponseData = await getSpuSaleAttrListAPI((row.id as number))
+  // let res4: SaleAttrResponseData = await getAllSaleAttrAPI()
+  // allTradeMark.value = res1.data
+  // imgList.value = res2.data
+  // saleAttr.value = res3.data
+  // allSaleAttr.value = res4.data
+  // 获取全部品牌数据
+  const res:[TradeMarkResponseData,SpuImageResponseData,SpuSaleAttrResponseData,SaleAttrResponseData] = await Promise.all([
+    getAllTrademarkAPI(),
+    getSpuImageListAPI((row.id as number)),
+    getSpuSaleAttrListAPI((row.id as number)),
+    getAllSaleAttrAPI()
+  ])
+  allTradeMark.value = res[0].data
+  imgList.value = res[1].data
+  saleAttr.value = res[2].data
+  allSaleAttr.value = res[3].data
+}
+
+// 对外暴露方法，父组件可拿到
+defineExpose({
+  initSpuData
+})
 </script>
 
 <template>

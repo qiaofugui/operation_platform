@@ -60,10 +60,14 @@ const changeScene = (s: number) => {
   scene.value = s
 }
 
+// 子组件实例
+const spuFormRef = ref<any>(null)
 // 场景1修改SPU按钮
-const updateSpu = () => {
+const updateSpu = (row: SpuData) => {
   scene.value = 1
+  spuFormRef.value.initSpuData(row)
 }
+
 </script>
 
 <template>
@@ -124,7 +128,7 @@ const updateSpu = () => {
                   type="success"
                   size="small"
                   icon="Edit"
-                  @click="updateSpu"
+                  @click="updateSpu(row)"
                 />
               </el-tooltip>
               <el-tooltip
@@ -169,7 +173,7 @@ const updateSpu = () => {
       </div>
       <!-- 添加SPU|修改SPU的子组件 -->
       <div v-show="scene === 1 ? true : false">
-        <SpuForm @changeScene="changeScene"/>
+        <SpuForm ref="spuFormRef" @changeScene="changeScene"/>
       </div>
       <!-- 添加SKU的子组件 -->
       <div v-show="scene === 2 ? true : false">

@@ -7,7 +7,7 @@ export interface ResponseData {
 
 // SPU数据类型
 export interface SpuData {
-  id?: number
+  id?: number | string
   spuName: string
   description: string
   category3Id: number | string
@@ -28,7 +28,7 @@ export interface HasSpuResponseData extends ResponseData {
 }
 
 export interface TradeMark {
-  id?: number
+  id: number
   tmName: string
   logoUrl: string
 }
@@ -47,7 +47,7 @@ export interface SpuImage {
   imgUrl: string
 }
 // 商品图片数据类型
-export interface SpuImageResponseData {
+export interface SpuImageResponseData  extends ResponseData{
   data: SpuImage[]
 }
 
@@ -63,7 +63,7 @@ export interface SpuSaleAttrValue {
 }
 // 销售属性对象数据类型
 export interface SpuSaleAttr {
-  id?: number
+  id?: number | string
   createTime: null
   updateTime: null
   spuId: number
