@@ -23,7 +23,7 @@ const cancel = () => {
       <el-input
         type="textarea"
         placeholder="请输入SPU描述"
-        :rows="3"
+        :rows="2"
       ></el-input>
     </el-form-item>
     <el-form-item label="SPU图片">
