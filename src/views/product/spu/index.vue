@@ -53,11 +53,19 @@ const changeSize = () => {
 // 场景0添加SPU按钮
 const addSpu = () => {
   scene.value = 1
+  spuFormRef.value.initAddSpu(categoryStore.c3Id)
 }
 
 // 子组件自定义事件通知父组件改变场景
-const changeScene = (s: number) => {
-  scene.value = s
+const changeScene = (obj: any) => {
+  scene.value = obj.flag
+  if(obj.params === 'update') {
+    // 更新留在当前页
+    getSpuList(pageNo.value)
+  } else {
+    // 添加回到第一页
+    getSpuList()
+  }
 }
 
 // 子组件实例
@@ -173,11 +181,14 @@ const updateSpu = (row: SpuData) => {
       </div>
       <!-- 添加SPU|修改SPU的子组件 -->
       <div v-show="scene === 1 ? true : false">
-        <SpuForm ref="spuFormRef" @changeScene="changeScene"/>
+        <SpuForm
+          ref="spuFormRef"
+          @changeScene="changeScene"
+        />
       </div>
       <!-- 添加SKU的子组件 -->
       <div v-show="scene === 2 ? true : false">
-        <SkuForm @changeScene="changeScene"/>
+        <SkuForm @changeScene="changeScene" />
       </div>
     </el-card>
   </div>

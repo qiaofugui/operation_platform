@@ -26,7 +26,7 @@ let $emit = defineEmits(['changeScene'])
 
 // 子组件点击取消按钮通知父组件改变场景
 const cancel = () => {
-  $emit('changeScene', 0)
+  $emit('changeScene', {flag: 0, params: 'update'})
 }
 
 // 存储已有的SPU数据
@@ -180,8 +180,8 @@ const save = async () => {
   // 整理参数
   // 1.照片墙数据整理
   spuParams.value.spuImageList = imgList.value.map((item: any) => ({
-      imgName: item.name,
-      imgUrl: (item.response && item.response.data) || item.url
+    imgName: item.name,
+    imgUrl: (item.response && item.response.data) || item.url
   }))
   // 2.销售属性数据整理
   spuParams.value.spuSaleAttrList = saleAttr.value
@@ -189,15 +189,44 @@ const save = async () => {
   const res = await addOrUpdateSpuAPI(spuParams.value)
   if (res.code === 200) {
     ElMessage.success(res.message)
-    $emit('changeScene', 0)
+    $emit('changeScene', { falg: 0, params: spuParams.value.category3Id ? 'update' : 'add' })
   } else {
     ElMessage.error(res.message)
   }
 }
 
+// 添加一个新的 SPU 初始化请求方法
+const initAddSpu = async (id: number | string) => {
+  // 清空数据
+  Object.assign(spuParams.value, {
+    category3Id: '',
+    spuName: '',
+    description: '',
+    tmId: '',
+    spuImageList: [],
+    spuSaleAttrList: [],
+  })
+  // 清空照片
+  imgList.value = []
+  // 清空销售属性
+  saleAttr.value = []
+  saleAttrIdAndValueName.value = ''
+
+  // 存储三级分类id
+  spuParams.value.category3Id = id
+  // 获取全部品牌数据
+  const res: [TradeMarkResponseData, SaleAttrResponseData] = await Promise.all([
+    getAllTrademarkAPI(),
+    getAllSaleAttrAPI()
+  ])
+  allTradeMark.value = res[0].data
+  allSaleAttr.value = res[1].data
+}
+
 // 对外暴露方法，父组件可拿到
 defineExpose({
-  initSpuData
+  initSpuData,
+  initAddSpu
 })
 </script>
 
