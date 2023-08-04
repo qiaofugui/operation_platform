@@ -10,7 +10,7 @@ import type {
   TradeMark,
   SpuImage,
   SpuSaleAttr,
-  SaleAttr
+  SaleAttr,
 } from '@/api/product/spu/type'
 
 import { getAllTrademarkAPI, getSpuImageListAPI, getSpuSaleAttrListAPI, getAllSaleAttrAPI } from '@/api/product/spu'
@@ -43,7 +43,7 @@ const initSpuData = async (row: SpuData) => {
   // saleAttr.value = res3.data
   // allSaleAttr.value = res4.data
   // 获取全部品牌数据
-  const res:[TradeMarkResponseData,SpuImageResponseData,SpuSaleAttrResponseData,SaleAttrResponseData] = await Promise.all([
+  const res: [TradeMarkResponseData, SpuImageResponseData, SpuSaleAttrResponseData, SaleAttrResponseData] = await Promise.all([
     getAllTrademarkAPI(),
     getSpuImageListAPI((row.id as number)),
     getSpuSaleAttrListAPI((row.id as number)),
@@ -151,4 +151,4 @@ defineExpose({
   </el-form>
 </template>
 
-<style lang="scss" scoped> </style>
+<style lang="scss" scoped></style>
