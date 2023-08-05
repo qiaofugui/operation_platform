@@ -10,7 +10,7 @@ import type { HasSpuResponseData, SpuData } from '@/api/product/spu/type'
 
 const categoryStore = useCategoryStore()
 
-let scene = ref(0)
+let scene = ref(2)
 
 // 分页器默认页码
 let pageNo = ref(1)
@@ -59,7 +59,7 @@ const addSpu = () => {
 // 子组件自定义事件通知父组件改变场景
 const changeScene = (obj: any) => {
   scene.value = obj.flag
-  if(obj.params === 'update') {
+  if (obj.params === 'update') {
     // 更新留在当前页
     getSpuList(pageNo.value)
   } else {
@@ -76,6 +76,14 @@ const updateSpu = (row: SpuData) => {
   spuFormRef.value.initSpuData(row)
 }
 
+// 子组件实例
+const skuFormRef = ref<any>(null)
+// 添加sku按钮
+const addSku = (row: SpuData) => {
+  scene.value = 2
+  skuFormRef.value.initSkuData(categoryStore.c1Id, categoryStore.c2Id, row)
+}
+
 // 删除spu
 const deleteSpu = async (row: SpuData) => {
   const res = await deleteSpuAPI((row.id as number))
@@ -87,7 +95,6 @@ const deleteSpu = async (row: SpuData) => {
     ElMessage.error(res.message)
   }
 }
-
 </script>
 
 <template>
@@ -137,6 +144,7 @@ const deleteSpu = async (row: SpuData) => {
                   type="primary"
                   size="small"
                   icon="Plus"
+                  @click="addSku(row)"
                 />
               </el-tooltip>
               <el-tooltip
@@ -200,7 +208,10 @@ const deleteSpu = async (row: SpuData) => {
       </div>
       <!-- 添加SKU的子组件 -->
       <div v-show="scene === 2 ? true : false">
-        <SkuForm @changeScene="changeScene" />
+        <SkuForm
+          ref="skuFormRef"
+          @changeScene="changeScene"
+        />
       </div>
     </el-card>
   </div>
