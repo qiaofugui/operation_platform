@@ -9,6 +9,8 @@ enum API {
   SKUUP_URL = '/admin/product/onSale/',
   // 下架
   SKUOFF_URL = '/admin/product/cancelSale/',
+  // 获取sku商品信息
+  SKUINFO_URL = '/admin/product/getSkuInfo/',
 }
 
 // 获取已有商品数据-sku列表
@@ -31,6 +33,14 @@ export function skuUpAPI(skuId: number | string) {
 export function skuOffAPI(skuId: number | string) {
   return request<any, any>({
     url: `${API.SKUOFF_URL}${skuId}`,
+    method: 'get',
+  })
+}
+
+// 获取sku商品信息
+export function getSkuInfoAPI(skuId: number | string) {
+  return request<any, any>({
+    url: `${API.SKUINFO_URL}${skuId}`,
     method: 'get',
   })
 }

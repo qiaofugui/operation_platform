@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { ref, onMounted } from "vue"
 
-import { getSkuListAPI, skuUpAPI, skuOffAPI } from '@/api/product/sku'
+import { getSkuListAPI, skuUpAPI, skuOffAPI, getSkuInfoAPI } from '@/api/product/sku'
 
 import type { SkuResponseData, SkuData } from "@/api/product/sku/type"
 
@@ -53,7 +53,16 @@ const updateSale = async (row: SkuData) => {
 
 // 更新sku
 const updateSku = () => {
-  ElMessage.warning ('功能正在开发中...')
+  ElMessage.warning('功能正在开发中...')
+}
+
+// 抽屉
+let drawer = ref(true)
+// 查看详情
+const findSku = async (row: SkuData) => {
+  const res = await getSkuInfoAPI((row.id as number)
+
+  drawer.value = true
 }
 
 </script>
@@ -61,32 +70,103 @@ const updateSku = () => {
 <template>
   <div>
     <el-card>
-      <el-table border style="margin: 10px 0;" :data="skuList">
-        <el-table-column label="序号" type="index" align="center" width="80px"></el-table-column>
-        <el-table-column label="名称" width="150px" prop="skuName"></el-table-column>
-        <el-table-column label="描述" prop="skuDesc" min-width="300"></el-table-column>
-        <el-table-column label="默认图片" width="150px">
+      <el-table
+        border
+        style="margin: 10px 0;"
+        :data="skuList"
+      >
+        <el-table-column
+          label="序号"
+          type="index"
+          align="center"
+          width="80px"
+        ></el-table-column>
+        <el-table-column
+          label="名称"
+          width="150px"
+          prop="skuName"
+        ></el-table-column>
+        <el-table-column
+          label="描述"
+          prop="skuDesc"
+          min-width="300"
+        ></el-table-column>
+        <el-table-column
+          label="默认图片"
+          width="150px"
+        >
           <template #="{ row }">
-            <el-image style="width: 100%; height: 100%" fit="scale-down" :src="row.skuDefaultImg" />
+            <el-image
+              style="width: 100%; height: 100%"
+              fit="scale-down"
+              :src="row.skuDefaultImg"
+            />
           </template>
         </el-table-column>
-        <el-table-column label="重量(克)" prop="weight" width="150px"></el-table-column>
-        <el-table-column label="价格(元)" prop="price" width="150px"></el-table-column>
-        <el-table-column label="操作" width="260px" fixed="right">
+        <el-table-column
+          label="重量(克)"
+          prop="weight"
+          width="150px"
+        ></el-table-column>
+        <el-table-column
+          label="价格(元)"
+          prop="price"
+          width="150px"
+        ></el-table-column>
+        <el-table-column
+          label="操作"
+          width="260px"
+          fixed="right"
+        >
           <template #="{ row }">
-            <el-tooltip effect="dark" :content="row.isSale === 0 ? '上线' : '下线'" placement="bottom">
-              <el-button :type="row.isSale === 0 ? 'success' : 'info'" :icon="row.isSale === 0 ? 'Top' : 'Bottom'"
-                size="small" @click="updateSale(row)" />
+            <el-tooltip
+              effect="dark"
+              :content="row.isSale === 0 ? '上线' : '下线'"
+              placement="bottom"
+            >
+              <el-button
+                :type="row.isSale === 0 ? 'success' : 'info'"
+                :icon="row.isSale === 0 ? 'Top' : 'Bottom'"
+                size="small"
+                @click="updateSale(row)"
+              />
             </el-tooltip>
-            <el-tooltip effect="dark" content="编辑" placement="bottom">
-              <el-button type="primary" icon="Edit" size="small" @click="updateSku" />
+            <el-tooltip
+              effect="dark"
+              content="编辑"
+              placement="bottom"
+            >
+              <el-button
+                type="primary"
+                icon="Edit"
+                size="small"
+                @click="updateSku"
+              />
             </el-tooltip>
-            <el-tooltip effect="dark" content="信息" placement="bottom">
-              <el-button type="info" icon="InfoFilled" size="small" />
+            <el-tooltip
+              effect="dark"
+              content="信息"
+              placement="bottom"
+            >
+              <el-button
+                type="info"
+                icon="InfoFilled"
+                size="small"
+                @click="findSku(row)"
+              />
             </el-tooltip>
-            <el-popconfirm :title="`确定要删除${row}`" icon="DeleteFilled" icon-color="#f56c6c" @confirm="">
+            <el-popconfirm
+              :title="`确定要删除${row}`"
+              icon="DeleteFilled"
+              icon-color="#f56c6c"
+              @confirm=""
+            >
               <template #reference>
-                <el-button type="danger" size="small" icon="Delete" />
+                <el-button
+                  type="danger"
+                  size="small"
+                  icon="Delete"
+                />
               </template>
             </el-popconfirm>
 
@@ -94,11 +174,114 @@ const updateSku = () => {
         </el-table-column>
       </el-table>
       <!-- 分页器 -->
-      <el-pagination v-model:current-page="pageNo" v-model:page-size="pageSize" :page-sizes="[5, 10, 25, 50]"
-        :background="true" layout="prev, pager, next, jumper, ->, sizes, total" :total="total" @size-change="changeSize"
-        @current-change="changePageNo" />
+      <el-pagination
+        v-model:current-page="pageNo"
+        v-model:page-size="pageSize"
+        :page-sizes="[5, 10, 25, 50]"
+        :background="true"
+        layout="prev, pager, next, jumper, ->, sizes, total"
+        :total="total"
+        @size-change="changeSize"
+        @current-change="changePageNo"
+      />
     </el-card>
+
+    <el-drawer
+      v-model="drawer"
+      direction="rtl"
+      size="35%"
+    >
+      <template #header>
+        <h4>查看商品详情</h4>
+      </template>
+      <template #default>
+        <el-row
+          :gutter="5"
+          class="mb-15"
+        >
+          <el-col :span="6">名称</el-col>
+          <el-col :span="18"></el-col>
+        </el-row>
+        <el-row
+          :gutter="5"
+          class="mb-15"
+        >
+          <el-col :span="6">描述</el-col>
+          <el-col :span="18"></el-col>
+        </el-row>
+        <el-row
+          :gutter="5"
+          class="mb-15"
+        >
+          <el-col :span="6">价格</el-col>
+          <el-col :span="18"></el-col>
+        </el-row>
+        <el-row
+          :gutter="5"
+          class="mb-15"
+        >
+          <el-col :span="6">平台属性</el-col>
+          <el-col :span="18">
+            <el-tag>1</el-tag>
+          </el-col>
+        </el-row>
+        <el-row
+          :gutter="5"
+          class="mb-15"
+        >
+          <el-col :span="6">销售属性</el-col>
+          <el-col :span="18">
+            <el-tag>1</el-tag>
+          </el-col>
+        </el-row>
+        <el-row :gutter="5">
+          <el-col :span="6">商品图片</el-col>
+          <el-col :span="18">
+            <el-carousel
+              trigger="click"
+              height="200px"
+            >
+              <el-carousel
+                type="card"
+                height="200px"
+              >
+                <el-carousel-item
+                  v-for="item in 6"
+                  :key="item"
+                >
+                  <h3
+                    text="2xl"
+                    justify="center"
+                  >{{ item }}</h3>
+                </el-carousel-item>
+              </el-carousel>
+            </el-carousel>
+          </el-col>
+        </el-row>
+      </template>
+      <template #footer></template>
+    </el-drawer>
   </div>
 </template>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.mb-15 {
+  margin-bottom: 15px;
+}
+
+.el-carousel__item h3 {
+  color: #475669;
+  opacity: 0.75;
+  line-height: 200px;
+  margin: 0;
+  text-align: center;
+}
+
+.el-carousel__item:nth-child(2n) {
+  background-color: #99a9bf;
+}
+
+.el-carousel__item:nth-child(2n + 1) {
+  background-color: #d3dce6;
+}
+</style>
