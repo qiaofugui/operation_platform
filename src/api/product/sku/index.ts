@@ -11,6 +11,8 @@ enum API {
   SKUOFF_URL = '/admin/product/cancelSale/',
   // 获取sku商品信息
   SKUINFO_URL = '/admin/product/getSkuInfo/',
+  // 删除sku
+  SKUDELETE_URL = '/admin/product/deleteSku/'
 }
 
 // 获取已有商品数据-sku列表
@@ -42,5 +44,13 @@ export function getSkuInfoAPI(skuId: number | string) {
   return request<any, SkuInfoResponseData>({
     url: `${API.SKUINFO_URL}${skuId}`,
     method: 'get',
+  })
+}
+
+// 删除sku
+export function skuDeleteAPI(skuId: number | string) {
+  return request<any, any>({
+    url: `${API.SKUDELETE_URL}${skuId}`,
+    method: 'delete',
   })
 }

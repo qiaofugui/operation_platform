@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { ref, onMounted } from "vue"
 
-import { getSkuListAPI, skuUpAPI, skuOffAPI, getSkuInfoAPI } from '@/api/product/sku'
+import { getSkuListAPI, skuUpAPI, skuOffAPI, getSkuInfoAPI, skuDeleteAPI } from '@/api/product/sku'
 
 import type { SkuResponseData, SkuData, SkuInfoResponseData } from "@/api/product/sku/type"
 
@@ -57,7 +57,7 @@ const updateSku = () => {
 }
 
 // 抽屉
-let drawer = ref(true)
+let drawer = ref(false)
 let loading = ref(false)
 let skuInfo = ref<SkuData>({})
 // 查看详情
@@ -68,7 +68,14 @@ const findSku = async (row: SkuData) => {
   if (res.code !== 200) return ElMessage.error(res.message)
   skuInfo.value = res.data
   loading.value = false
+}
 
+// 删除sku商品
+const delSku = async (row: SkuData) => {
+  const res: any = await skuDeleteAPI(row.id)
+  if (res.code !== 200) return ElMessage.error(res.message)
+  ElMessage.success(res.message)
+  getSkuList(skuList.value.length > 1 ? pageNo.value : pageNo.value - 1)
 }
 
 </script>
@@ -162,10 +169,10 @@ const findSku = async (row: SkuData) => {
               />
             </el-tooltip>
             <el-popconfirm
-              :title="`确定要删除${row}`"
+              :title="`确定要删除 ${row.skuName} 吗?`"
               icon="DeleteFilled"
               icon-color="#f56c6c"
-              @confirm=""
+              @confirm="delSku(row)"
             >
               <template #reference>
                 <el-button
