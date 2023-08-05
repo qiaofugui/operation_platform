@@ -15,6 +15,7 @@ export interface SkuSaleAttrValue {
 }
 // 定义SKU对象的数据类型
 export interface SkuData {
+  id?: number | string
   category3Id: number | string
   spuId: number | string
   tmId: number | string
@@ -24,7 +25,8 @@ export interface SkuData {
   skuDesc: string
   skuAttrValueList: SkuAttrValue[]
   skuSaleAttrValueList: SkuSaleAttrValue[]
-  skuDefaultImg: string
+  skuDefaultImg: string,
+  isSale?: number | string
 }
 export interface SkuResponseData extends ResponseData {
   data: {
