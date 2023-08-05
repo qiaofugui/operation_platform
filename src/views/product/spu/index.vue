@@ -5,7 +5,7 @@ import useCategoryStore from '@/store/modules/category'
 import SkuForm from './skuForm.vue'
 import SpuForm from './spuForm.vue'
 
-import { getHasSpuListAPI } from '@/api/product/spu'
+import { getHasSpuListAPI, deleteSpuAPI } from '@/api/product/spu'
 import type { HasSpuResponseData, SpuData } from '@/api/product/spu/type'
 
 const categoryStore = useCategoryStore()
@@ -74,6 +74,18 @@ const spuFormRef = ref<any>(null)
 const updateSpu = (row: SpuData) => {
   scene.value = 1
   spuFormRef.value.initSpuData(row)
+}
+
+// 删除spu
+const deleteSpu = async (row: SpuData) => {
+  const res = await deleteSpuAPI((row.id as number))
+  if (res.code === 200) {
+    ElMessage.success(res.message)
+    // 删除后看当前页码的数据是否大于一条，如果大于一条则不用跳转到第一页
+    getSpuList(spuList.value.length > 1 ? pageNo.value : 1)
+  } else {
+    ElMessage.error(res.message)
+  }
 }
 
 </script>
@@ -154,7 +166,7 @@ const updateSpu = (row: SpuData) => {
                 title="确定要删除吗?"
                 icon="DeleteFilled"
                 icon-color="#f56c6c"
-                @confirm=""
+                @confirm="deleteSpu(row)"
               >
                 <template #reference>
                   <el-button

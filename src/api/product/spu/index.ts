@@ -24,6 +24,8 @@ enum API {
   ADDSPU_URL = '/admin/product/saveSpuInfo',
   // 更新spu
   UPDATESPU_URL = '/admin/product/updateSpuInfo',
+  // 删除spu
+  DELETESPU_URL = '/admin/product/deleteSpu/'
 }
 
 // 获取已有spu列表
@@ -81,4 +83,12 @@ export function addOrUpdateSpuAPI(data: SpuData) {
       data,
     })
   }
+}
+
+// 删除spu
+export function deleteSpuAPI(spuId: string | number) {
+  return request<any, any>({
+    url: `${API.DELETESPU_URL}${spuId}`,
+    method: 'delete',
+  })
 }
