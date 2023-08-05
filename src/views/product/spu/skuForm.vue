@@ -12,6 +12,7 @@ import type {
   SpuData,
   SpuImageResponseData,
   SpuSaleAttrResponseData,
+  SkuData
 } from '@/api/product/spu/type'
 import type {
   AttrResponseData,
@@ -19,6 +20,32 @@ import type {
 
 let $emit = defineEmits(['changeScene'])
 
+// 收集sku参数
+let skuParams = ref<SkuData>({
+  // 父组件传过来的
+  category3Id: '', // 三级分类ID
+  spuId: '', // 已有SPU的ID
+  tmId: '', // SPU的品牌ID
+
+  // 双向绑定收集的
+  skuName: '', // SKU的名称
+  price: '', // SKU的价格
+  weight: '', // SKU的重量
+  skuDesc: '', // SKU的描述信息
+  skuAttrValueList: [ // SKU的平台属性
+    // {
+    //   attrId: '', // 平台属性ID
+    //   valueId: '', // 平台属性值ID
+    // }
+  ],
+  skuSaleAttrValueList: [ // SKU的销售属性
+    // {
+    //   saleAttrId: '', // 销售属性ID
+    //   saleValueId: '', // 销售属性值ID
+    // }
+  ],
+  skuDefaultImg: '', // SKU的默认图片
+})
 
 // 平台属性
 let attrList = ref<any>([])
@@ -27,6 +54,11 @@ let saleAttrList = ref<any>([])
 // 照片墙
 let imageList = ref<any>([])
 const initSkuData = async (c1Id: number | string, c2Id: number | string, row: SpuData) => {
+  // 收集数据
+  skuParams.value.category3Id = row.category3Id
+  skuParams.value.spuId = (row.id as number)
+  skuParams.value.tmId = row.tmId
+
   // // 获取平台属性
   // const res1: AttrResponseData = await getAttrListAPI(c1Id, c2Id, row.category3Id)
   // 获取对应的销售属性
@@ -42,7 +74,6 @@ const initSkuData = async (c1Id: number | string, c2Id: number | string, row: Sp
   attrList.value = res[0].data
   saleAttrList.value = res[1].data
   imageList.value = res[2].data
-  console.log(res)
 }
 
 // 取消按钮的回调
@@ -58,22 +89,28 @@ defineExpose({
 <template>
   <el-form label-width="100px">
     <el-form-item label="SPU名称">
-      <el-input placeholder="请输入SPU名称"></el-input>
+      <el-input
+        v-model="skuParams.skuName"
+        placeholder="请输入SPU名称"
+      ></el-input>
     </el-form-item>
     <el-form-item label="价格(元)">
       <el-input
+        v-model="skuParams.price"
         type="number"
         placeholder="请输入价格(元)"
       ></el-input>
     </el-form-item>
     <el-form-item label="重量(克)">
       <el-input
+        v-model="skuParams.weight"
         type="number"
         placeholder="请输入重量(克)"
       ></el-input>
     </el-form-item>
     <el-form-item label="SKU描述">
       <el-input
+        v-model="skuParams.skuDesc"
         type="textarea"
         placeholder="请输入SKU描述"
       ></el-input>

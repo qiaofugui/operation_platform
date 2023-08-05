@@ -93,3 +93,24 @@ export interface SaleAttr {
 export interface SaleAttrResponseData extends ResponseData {
   data: SaleAttr[]
 }
+
+export interface SkuAttrValue {
+  attrId: number | string
+  valueId: number | string
+}
+export interface SkuSaleAttrValue {
+  saleAttrId: number | string
+  saleValueId: number | string
+}
+export interface SkuData {
+  category3Id: number | string
+  spuId: number | string
+  tmId: number | string
+  skuName: string
+  price: number | string
+  weight: number | string
+  skuDesc: string
+  skuAttrValueList: SkuAttrValue[]
+  skuSaleAttrValueList: SkuSaleAttrValue[]
+  skuDefaultImg: string
+}
