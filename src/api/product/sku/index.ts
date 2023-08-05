@@ -1,6 +1,6 @@
 import request from '@/utils/request'
 
-import type { SkuResponseData } from './type'
+import type { SkuResponseData, SkuInfoResponseData } from './type'
 
 enum API {
   // 获取已有商品数据-sku列表
@@ -39,7 +39,7 @@ export function skuOffAPI(skuId: number | string) {
 
 // 获取sku商品信息
 export function getSkuInfoAPI(skuId: number | string) {
-  return request<any, any>({
+  return request<any, SkuInfoResponseData>({
     url: `${API.SKUINFO_URL}${skuId}`,
     method: 'get',
   })

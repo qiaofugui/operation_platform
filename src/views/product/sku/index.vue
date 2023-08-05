@@ -3,7 +3,7 @@ import { ref, onMounted } from "vue"
 
 import { getSkuListAPI, skuUpAPI, skuOffAPI, getSkuInfoAPI } from '@/api/product/sku'
 
-import type { SkuResponseData, SkuData } from "@/api/product/sku/type"
+import type { SkuResponseData, SkuData, SkuInfoResponseData } from "@/api/product/sku/type"
 
 let pageNo = ref(1)
 let pageSize = ref(5)
@@ -58,11 +58,17 @@ const updateSku = () => {
 
 // 抽屉
 let drawer = ref(true)
+let loading = ref(false)
+let skuInfo = ref<SkuData>({})
 // 查看详情
 const findSku = async (row: SkuData) => {
-  const res = await getSkuInfoAPI((row.id as number)
-
+  loading.value = true
   drawer.value = true
+  const res: SkuInfoResponseData = await getSkuInfoAPI(row.id as number)
+  if (res.code !== 200) return ElMessage.error(res.message)
+  skuInfo.value = res.data
+  loading.value = false
+
 }
 
 </script>
@@ -195,69 +201,88 @@ const findSku = async (row: SkuData) => {
         <h4>查看商品详情</h4>
       </template>
       <template #default>
-        <el-row
-          :gutter="5"
-          class="mb-15"
-        >
-          <el-col :span="6">名称</el-col>
-          <el-col :span="18"></el-col>
-        </el-row>
-        <el-row
-          :gutter="5"
-          class="mb-15"
-        >
-          <el-col :span="6">描述</el-col>
-          <el-col :span="18"></el-col>
-        </el-row>
-        <el-row
-          :gutter="5"
-          class="mb-15"
-        >
-          <el-col :span="6">价格</el-col>
-          <el-col :span="18"></el-col>
-        </el-row>
-        <el-row
-          :gutter="5"
-          class="mb-15"
-        >
-          <el-col :span="6">平台属性</el-col>
-          <el-col :span="18">
-            <el-tag>1</el-tag>
-          </el-col>
-        </el-row>
-        <el-row
-          :gutter="5"
-          class="mb-15"
-        >
-          <el-col :span="6">销售属性</el-col>
-          <el-col :span="18">
-            <el-tag>1</el-tag>
-          </el-col>
-        </el-row>
-        <el-row :gutter="5">
-          <el-col :span="6">商品图片</el-col>
-          <el-col :span="18">
-            <el-carousel
-              trigger="click"
-              height="200px"
-            >
+        <div v-loading="loading">
+          <el-row
+            :gutter="5"
+            class="mb-15"
+          >
+            <el-col :span="6">名称</el-col>
+            <el-col :span="18">{{ skuInfo.skuName }}</el-col>
+          </el-row>
+          <el-row
+            :gutter="5"
+            class="mb-15"
+          >
+            <el-col :span="6">描述</el-col>
+            <el-col :span="18">{{ skuInfo.skuDesc }}</el-col>
+          </el-row>
+          <el-row
+            :gutter="5"
+            class="mb-15"
+          >
+            <el-col :span="6">价格</el-col>
+            <el-col
+              :span="18"
+              style="color: #ff5000;"
+            >{{ skuInfo.price }}</el-col>
+          </el-row>
+          <el-row
+            :gutter="5"
+            class="mb-15"
+          >
+            <el-col :span="6">平台属性</el-col>
+            <el-col :span="18">
+              <span v-if="skuInfo.skuAttrValueList?.length <= 0">无</span>
+              <el-tag
+                style="margin: 3px;"
+                v-for="item in skuInfo.skuAttrValueList"
+                :key="item.id"
+              >{{ item.valueName
+              }}</el-tag>
+            </el-col>
+          </el-row>
+          <el-row
+            :gutter="5"
+            class="mb-15"
+          >
+            <el-col :span="6">销售属性</el-col>
+            <el-col :span="18">
+              <span v-if="skuInfo.skuSaleAttrValueList?.length <= 0">无</span>
+              <el-tag
+                style="margin: 3px;"
+                type="success"
+                v-for="item in skuInfo.skuSaleAttrValueList"
+                :key="item.id"
+              >{{
+                item.saleAttrValueName }}</el-tag>
+            </el-col>
+          </el-row>
+          <el-row :gutter="5">
+            <el-col :span="6">商品图片</el-col>
+            <el-col :span="18">
+              <span v-if="skuInfo.skuImageList?.length <= 0">无</span>
               <el-carousel
-                type="card"
+                trigger="click"
                 height="200px"
               >
-                <el-carousel-item
-                  v-for="item in 6"
-                  :key="item"
+                <el-carousel
+                  type="card"
+                  height="200px"
                 >
-                  <h3
-                    text="2xl"
-                    justify="center"
-                  >{{ item }}</h3>
-                </el-carousel-item>
+                  <el-carousel-item
+                    v-for="item in skuInfo.skuImageList"
+                    :key="item.id"
+                  >
+                    <el-image
+                      :src="item.imgUrl"
+                      fit="fill"
+                    />
+                  </el-carousel-item>
+                </el-carousel>
               </el-carousel>
-            </el-carousel>
-          </el-col>
-        </el-row>
+            </el-col>
+          </el-row>
+        </div>
       </template>
       <template #footer></template>
     </el-drawer>
@@ -268,20 +293,10 @@ const findSku = async (row: SkuData) => {
 .mb-15 {
   margin-bottom: 15px;
 }
-
 .el-carousel__item h3 {
-  color: #475669;
   opacity: 0.75;
   line-height: 200px;
   margin: 0;
   text-align: center;
-}
-
-.el-carousel__item:nth-child(2n) {
-  background-color: #99a9bf;
-}
-
-.el-carousel__item:nth-child(2n + 1) {
-  background-color: #d3dce6;
 }
 </style>
