@@ -7,7 +7,8 @@ import type {
   SpuSaleAttrResponseData,
   SaleAttrResponseData,
   SpuData,
-  SkuData
+  SkuData,
+  SkuResponseData
 } from './type'
 
 enum API {
@@ -26,9 +27,11 @@ enum API {
   // 更新spu
   UPDATESPU_URL = '/admin/product/updateSpuInfo',
   // 删除spu
-  DELETESPU_URL = '/admin/product/deleteSpu/'
+  DELETESPU_URL = '/admin/product/deleteSpu/',
   // 追加新的SKU地址
-  ADDSKU_URL = '/admin/product/saveSkuInfo'
+  ADDSKU_URL = '/admin/product/saveSkuInfo',
+  // 获取某个spu的sku列表
+  SKUINFO_URL = '/admin/product/findBySpuId/',
 }
 
 // 获取已有spu列表
@@ -102,5 +105,13 @@ export function addSkuAPI(data: SkuData) {
     url: API.ADDSKU_URL,
     method: 'post',
     data,
+  })
+}
+
+// 获取某个spu的sku列表
+export function getSkuListAPI(spuId: string | number) {
+  return request<any, SkuResponseData>({
+    url: `${API.SKUINFO_URL}${spuId}`,
+    method: 'get',
   })
 }

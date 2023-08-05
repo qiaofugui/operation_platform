@@ -6,7 +6,8 @@ import {
 } from '@/api/product/attr'
 import {
   getSpuImageListAPI,
-  getSpuSaleAttrListAPI
+  getSpuSaleAttrListAPI,
+  addSkuAPI
 } from '@/api/product/spu'
 import type {
   SpuData,
@@ -19,6 +20,8 @@ import type {
 } from '@/api/product/attr/type'
 
 let $emit = defineEmits(['changeScene'])
+
+let loading = ref(false)
 
 // 收集sku参数
 let skuParams = ref<SkuData>({
@@ -54,6 +57,7 @@ let saleAttrList = ref<any>([])
 // 照片墙
 let imageList = ref<any>([])
 const initSkuData = async (c1Id: number | string, c2Id: number | string, row: SpuData) => {
+  loading.value = true
   // 收集数据
   skuParams.value.category3Id = row.category3Id
   skuParams.value.spuId = (row.id as number)
@@ -74,6 +78,53 @@ const initSkuData = async (c1Id: number | string, c2Id: number | string, row: Sp
   attrList.value = res[0].data
   saleAttrList.value = res[1].data
   imageList.value = res[2].data
+
+  loading.value = false
+}
+
+// 表格组件实例
+let table = ref<any>(null)
+// 设置默认图片
+const setDefaultImg = (row: any) => {
+  skuParams.value.skuDefaultImg = row.imgUrl
+
+  // 点击的时候先让全部的复选框不勾选
+  table.value.clearSelection()
+
+  // 选中复选框
+  table.value.toggleRowSelection(row, true)
+}
+// 禁止用户选中
+const checkSelectable = (row: any) => {
+  // 点击的时候先让全部的复选框不勾选
+  if (row.imgUrl === skuParams.value.skuDefaultImg) {
+    return true
+  }
+  return false
+}
+
+// 保存按钮回调
+const save = async () => {
+  // 整理参数
+  // 平台属性
+  skuParams.value.skuAttrValueList = attrList.value.map((item: any) => ({
+      attrId: item.id,
+      valueId: item.attrValueList[0].id
+  }))
+  // 销售属性
+  skuParams.value.skuSaleAttrValueList = saleAttrList.value.map((item: any) => ({
+    saleAttrId: item.id,
+    saleValueId: item.spuSaleAttrValueList[0].id
+  }))
+
+  // 发请求添加
+  const res = await addSkuAPI(skuParams)
+  if (res.code === 200) {
+    ElMessage.success(res.message)
+    $emit('changeScene', { flag: 0, params: 'update' })
+  } else {
+    ElMessage.error(res.message)
+  }
 }
 
 // 取消按钮的回调
@@ -87,7 +138,10 @@ defineExpose({
 </script>
 
 <template>
-  <el-form label-width="100px">
+  <el-form
+    label-width="100px"
+    v-loading="loading"
+  >
     <el-form-item label="SPU名称">
       <el-input
         v-model="skuParams.skuName"
@@ -123,7 +177,7 @@ defineExpose({
         >
           <el-col
             :span="8"
-            v-for="item in attrList"
+            v-for="(item, i) in attrList"
             :key="item.id"
           >
             <el-form-item
@@ -131,12 +185,12 @@ defineExpose({
               label-width="100px"
               style="margin-bottom: 10px;overflow: hidden;"
             >
-              <el-select>
+              <el-select v-model="skuParams.skuAttrValueList[i]">
                 <el-option
                   v-for="attrValue in item.attrValueList"
                   :key="attrValue.id"
                   :label="attrValue.valueName"
-                  :value="attrValue.id"
+                  :value="`${item.id}:${attrValue.id}`"
                 />
               </el-select>
             </el-form-item>
@@ -150,16 +204,16 @@ defineExpose({
     <el-form-item label="销售属性">
       <el-form :inline="true">
         <el-form-item
-          v-for="item in saleAttrList"
+          v-for="(item, i) in saleAttrList"
           :key="item.id"
           :label="item.saleAttrName"
         >
-          <el-select>
+          <el-select v-model="skuParams.skuSaleAttrValueList[i]">
             <el-option
               v-for="saleAttrValue in item.spuSaleAttrValueList"
               :key="saleAttrValue.id"
               :label="saleAttrValue.saleAttrValueName"
-              :value="saleAttrValue.id"
+              :value="`${item.id}:${saleAttrValue.id}`"
             />
           </el-select>
         </el-form-item>
@@ -167,6 +221,7 @@ defineExpose({
     </el-form-item>
     <el-form-item label="图片名称">
       <el-table
+        ref="table"
         border
         :data="imageList"
       >
@@ -174,6 +229,7 @@ defineExpose({
           type="selection"
           align="center"
           width="80px"
+          :selectable="checkSelectable"
         ></el-table-column>
         <el-table-column label="图片">
           <template #="{ row }">
@@ -191,7 +247,7 @@ defineExpose({
           <template #="{ row }">
             <el-button
               type="primary"
-              @click=""
+              @click="setDefaultImg(row)"
             >设置默认</el-button>
             <el-button
               type="primary"
@@ -202,7 +258,10 @@ defineExpose({
       </el-table>
     </el-form-item>
     <el-form-item>
-      <el-button type="primary">保存</el-button>
+      <el-button
+        type="primary"
+        @click="save"
+      >保存</el-button>
       <el-button @click="cancel">取消</el-button>
     </el-form-item>
   </el-form>

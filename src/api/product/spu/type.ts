@@ -114,3 +114,9 @@ export interface SkuData {
   skuSaleAttrValueList: SkuSaleAttrValue[]
   skuDefaultImg: string
 }
+
+// 获取sku数据接口数据类型
+
+export interface SkuResponseData extends ResponseData {
+  data: SkuData[]
+}

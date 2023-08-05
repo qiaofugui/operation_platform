@@ -5,12 +5,12 @@ import useCategoryStore from '@/store/modules/category'
 import SkuForm from './skuForm.vue'
 import SpuForm from './spuForm.vue'
 
-import { getHasSpuListAPI, deleteSpuAPI } from '@/api/product/spu'
-import type { HasSpuResponseData, SpuData } from '@/api/product/spu/type'
+import { getHasSpuListAPI, deleteSpuAPI, getSkuListAPI } from '@/api/product/spu'
+import type { HasSpuResponseData, SpuData, SkuResponseData } from '@/api/product/spu/type'
 
 const categoryStore = useCategoryStore()
 
-let scene = ref(2)
+let scene = ref(0)
 
 // 分页器默认页码
 let pageNo = ref(1)
@@ -82,6 +82,19 @@ const skuFormRef = ref<any>(null)
 const addSku = (row: SpuData) => {
   scene.value = 2
   skuFormRef.value.initSkuData(categoryStore.c1Id, categoryStore.c2Id, row)
+}
+
+let skuList = ref<SpuData[]>([])
+let show  = ref(false)
+// 查看sku
+const findSku = async (row: SpuData) => {
+  const res: SkuResponseData = await getSkuListAPI((row.id as number))
+  if (res.code === 200) {
+    skuList.value = res.data
+    show.value = true
+  } else {
+    ElMessage.error(res.message)
+  }
 }
 
 // 删除spu
@@ -168,6 +181,7 @@ const deleteSpu = async (row: SpuData) => {
                   type="info"
                   size="small"
                   icon="View"
+                  @click="findSku(row)"
                 />
               </el-tooltip>
               <el-popconfirm
@@ -215,6 +229,40 @@ const deleteSpu = async (row: SpuData) => {
       </div>
     </el-card>
   </div>
+
+  <!-- 展示sku -->
+  <el-dialog
+    v-model="show"
+    title="SKU列表"
+  >
+    <el-table
+      border
+      :data="skuList"
+    >
+      <el-table-column
+        label="SKU名称"
+        prop="skuName"
+        show-overflow-tooltip
+      ></el-table-column>
+      <el-table-column
+        label="SKU价格"
+        prop="price"
+      ></el-table-column>
+      <el-table-column
+        label="SKU重量"
+        prop="weight"
+      ></el-table-column>
+      <el-table-column label="SKU图片">
+        <template #="{ row }">
+          <el-image
+            style="width: 100px; height: 100px"
+            :src="row.skuDefaultImg"
+            fit="cover"
+          />
+        </template>
+      </el-table-column>
+    </el-table>
+  </el-dialog>
 </template>
 
 <style lang="scss" scoped></style>
