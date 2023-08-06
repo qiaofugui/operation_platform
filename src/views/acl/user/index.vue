@@ -10,6 +10,7 @@ let pageNo = ref(1)
 let pageSize = ref(3)
 // 分页器默认总条数
 let total = ref(0)
+let loading = ref(false)
 
 let userList = ref<User[]>([])
 
@@ -24,10 +25,13 @@ const changeSize = () => {
 const getAllUser = async (page: number = 1) => {
   pageNo.value = page
 
+  loading.value = true
+
   const res: UserResponseData = await getAllUserAPI(pageNo.value, pageSize.value)
   if (res.code !== 200) return ElMessage.error(res.message)
   userList.value = res.data.records
   total.value = res.data.total
+  loading.value = false
 }
 
 onMounted(() => {
@@ -101,10 +105,9 @@ const addUser = () => {
 }
 // 添更新用户
 const updateUser = (row: User) => {
-  console.log(row)
   // 清空上一次表单提示信息
   nextTick(() => {
-    userForm.value.clearValidate()
+    userForm.value?.clearValidate()
   })
   // 存储收集已有的账号信息
   Object.assign(userParams.value, row)
@@ -120,7 +123,31 @@ const save = async () => {
   if (res.code !== 200) return ElMessage.error(res.message)
   drawer.value = false
   ElMessage.success(res.message)
-  getAllUser(userParams.id ? pageNo.value : 1 )
+  getAllUser(userParams.id ? pageNo.value : 1)
+}
+
+// 职位分配
+let drawer1 = ref(false)
+const setRole = (row: User) => {
+  // 存储已有用户信息
+  Object.assign(userParams.value, row)
+  drawer1.value = true
+}
+
+// 测试复选框
+// 全选复选框
+let checkAll = ref(false)
+let isIndeterminate = ref(false)
+let allRole = ref<any>(['前台', '后台', '超级管理员', '测试','a'])
+let userRole = ref<any>(['超级管理员', '测试'])
+const handleCheckAllChange = (val: boolean) => {
+  userRole.value = val ? allRole.value : []
+  isIndeterminate.value = false
+}
+const handleCheckedRoleChange = (value: string[]) => {
+  const checkedCount = value.length
+  checkAll.value = checkedCount === allRole.value.length
+  isIndeterminate.value = checkedCount > 0 && checkedCount < allRole.value.length
 }
 </script>
 
@@ -155,6 +182,7 @@ const save = async () => {
       >批量删除</el-button>
 
       <el-table
+        v-loading="loading"
         style="margin: 10px 0;"
         border
         :data="userList"
@@ -205,7 +233,7 @@ const save = async () => {
               type="success"
               size="small"
               icon="User"
-              @click=""
+              @click="setRole(row)"
             >分配角色</el-button>
             <el-button
               type="primary"
@@ -312,6 +340,52 @@ const save = async () => {
           @click="save"
         >确定</el-button>
         <el-button @click="drawer = false">取消</el-button>
+      </template>
+    </el-drawer>
+
+    <!-- 某一个已有账号职位分配 -->
+    <el-drawer
+      v-model="drawer1"
+      size="25%"
+    >
+      <template #header>
+        <h2>分配用户角色</h2>
+      </template>
+      <template #default>
+        <el-form>
+          <el-form-item label="用户名称">
+            <el-input
+              v-model="userParams.username"
+              disabled
+            ></el-input>
+          </el-form-item>
+          <el-form-item label="角色列表">
+            <div>
+              <el-checkbox
+                :indeterminate="isIndeterminate"
+                v-model="checkAll"
+                @change="handleCheckAllChange"
+              >全选</el-checkbox>
+            </div>
+            <el-checkbox-group
+              v-model="userRole"
+              @change="handleCheckedRoleChange"
+            >
+              <el-checkbox
+                v-for="role in allRole"
+                :key="role"
+                :label="role"
+              >{{ role }}</el-checkbox>
+            </el-checkbox-group>
+          </el-form-item>
+        </el-form>
+      </template>
+      <template #footer>
+        <el-button
+          type="primary"
+          @click=""
+        >确定</el-button>
+        <el-button @click="">取消</el-button>
       </template>
     </el-drawer>
   </div>
