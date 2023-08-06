@@ -1,8 +1,21 @@
 <script lang="ts" setup>
 import { ref, onMounted, nextTick } from "vue"
 
-import { getAllUserAPI, addOrUpdateUserAPI, getAllRoleAPI, setRoleAPI } from "@/api/acl/user"
-import type { UserResponseData, User, RoleResponseData, s, SetRole } from "@/api/acl/type"
+import {
+  getAllUserAPI,
+  addOrUpdateUserAPI,
+  getAllRoleAPI,
+  setRoleAPI,
+  deleteUserAPI,
+  batchDeleteUserAPI
+} from "@/api/acl/user"
+import type {
+  UserResponseData,
+  User,
+  RoleResponseData,
+  Role,
+  SetRole
+} from "@/api/acl/type"
 
 // 分页器默认页码
 let pageNo = ref(1)
@@ -162,14 +175,42 @@ const handleCheckedRoleChange = (value: string[]) => {
 const setRoleSave = async () => {
   // 收集处理数据
   let data: SetRole = {
-    userId:(userParams.value.id as number),
+    userId: (userParams.value.id as number),
     roleIdList: userRole.value.map((item: Role) => (item.id as number))
   }
-  const res:any = await setRoleAPI(data)
+  const res: any = await setRoleAPI(data)
   if (res.code !== 200) return ElMessage.error(res.message)
-  getAllUser(pageNo.value)
   ElMessage.success(res.message)
+  getAllUser(pageNo.value)
   drawer1.value = false
+}
+
+// 单个删除用户
+const deleteUser = async (row: User) => {
+  const res: any = await deleteUserAPI(row.id)
+  if (res.code !== 200) return ElMessage.error(res.message)
+  ElMessage.success(res.message)
+  // 删除完检查当前页面是否还有数据没有跳转到第一页
+  getAllUser(userList.value.length > 1 ? pageNo.value : 1)
+}
+
+// 要批量删除的用户数据
+let deleteUsers = ref<User[]>([])
+// 第一行复选框发生变化时事件
+const handleSelectionChange = (e: User[]) => {
+  deleteUsers.value = e
+}
+
+//批量删除按钮
+const batchDeleteUser = async () => {
+  // 处理数据
+  let data = deleteUsers.value.map((item: User) => item.id)
+
+  const res: any = await batchDeleteUserAPI(data)
+  if (res.code !== 200) return ElMessage.error(res.message)
+  ElMessage.success(res.message)
+  // 删除完检查当前页面是否还有数据没有跳转到第一页
+  getAllUser(userList.value.length > 1 ? pageNo.value : 1)
 }
 
 // 测试复选框
@@ -214,16 +255,23 @@ const setRoleSave = async () => {
         type="primary"
         @click="addUser"
       >添加</el-button>
-      <el-button
-        type="danger"
-        @click=""
-      >批量删除</el-button>
+      <el-popconfirm
+        :title="`确定要批量删除选中的用户吗?`"
+        icon="DeleteFilled"
+        icon-color="#f56c6c"
+        @confirm="batchDeleteUser"
+      >
+        <template #reference>
+          <el-button type="danger" :disabled="deleteUsers.length ? false : true">批量删除</el-button>
+        </template>
+      </el-popconfirm>
 
       <el-table
         v-loading="loading"
         style="margin: 10px 0;"
         border
         :data="userList"
+        @selection-change="handleSelectionChange"
       >
         <el-table-column
           type="selection"
@@ -280,10 +328,10 @@ const setRoleSave = async () => {
               @click="updateUser(row)"
             >编辑</el-button>
             <el-popconfirm
-              title="确定要删除吗?"
+              :title="`确定要删除 ${row.username} 吗?`"
               icon="DeleteFilled"
               icon-color="#f56c6c"
-              @confirm=""
+              @confirm="deleteUser(row)"
             >
               <template #reference>
                 <el-button

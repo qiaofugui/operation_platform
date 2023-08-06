@@ -17,7 +17,11 @@ enum API {
   // 根据用户显示角色数据
   ALLROLE_URL = '/admin/acl/user/toAssign/',
   // 根据用户设置角色
-  SETROLE_URL = '/admin/acl/user/doAssignRole'
+  SETROLE_URL = '/admin/acl/user/doAssignRole',
+  // 单个删除用户
+  DELETEUSER_URL = '/admin/acl/user/remove/',
+  // 批量删除用户
+  BATCHDELETEUSER_URL = '/admin/acl/user/batchRemove'
 }
 
 // 获取用户列表
@@ -59,5 +63,22 @@ export function setRoleAPI(data: SetRole) {
     url: `${API.SETROLE_URL}`,
     method: 'post',
     data
+  })
+}
+
+// 单个删除用户
+export function deleteUserAPI(userId: string | number) {
+  return request<any, any>({
+    url: `${API.DELETEUSER_URL}${userId}`,
+    method: 'delete'
+  })
+}
+
+// 批量删除用户
+export function batchDeleteUserAPI(idList: string[] | number[]) {
+  return request<any, any>({
+    url: `${API.BATCHDELETEUSER_URL}`,
+    method: 'delete',
+    data: idList
   })
 }
