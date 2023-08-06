@@ -34,6 +34,19 @@ onMounted(() => {
   getAllUser()
 })
 
+// 控制抽屉显示与隐藏
+let drawer = ref(false)
+
+// 添加用户
+const addUser = () =>{
+  drawer.value = true
+}
+// 添更新用户
+const updateUser = (row: User) =>{
+  drawer.value = true
+}
+
+
 </script>
 
 <template>
@@ -59,7 +72,7 @@ onMounted(() => {
     <el-card style="margin: 10px 0;">
       <el-button
         type="primary"
-        @click=""
+        @click="addUser"
       >添加</el-button>
       <el-button
         type="danger"
@@ -123,7 +136,7 @@ onMounted(() => {
               type="primary"
               size="small"
               icon="Edit"
-              @click=""
+              @click="updateUser(row)"
             >编辑</el-button>
             <el-popconfirm
               title="确定要删除吗?"
@@ -154,6 +167,55 @@ onMounted(() => {
         @size-change="changeSize"
       />
     </el-card>
+
+    <!-- 抽屉结构添加新用户|更新用户 -->
+    <el-drawer
+      v-model="drawer"
+      size="25%"
+    >
+      <template #header>
+        <h4>header</h4>
+      </template>
+      <template #default>
+        <el-form label-width="80px">
+          <el-form-item label="用户名称">
+            <el-input
+              placeholder="请输入用户名称"
+              clearable
+            ></el-input>
+          </el-form-item>
+          <el-form-item label="用户昵称">
+            <el-input
+              placeholder="请输入用户昵称"
+              clearable
+            ></el-input>
+          </el-form-item>
+          <el-form-item label="用户密码">
+            <el-input
+              type="password"
+              show-password
+              placeholder="请输入密码"
+              clearable
+            ></el-input>
+          </el-form-item>
+          <el-form-item label="确认密码">
+            <el-input
+              type="password"
+              show-password
+              placeholder="请确认密码"
+              clearable
+            ></el-input>
+          </el-form-item>
+        </el-form>
+      </template>
+      <template #footer>
+        <el-button
+          type="primary"
+          @click=""
+        >确定</el-button>
+        <el-button @click="">取消</el-button>
+      </template>
+    </el-drawer>
   </div>
 </template>
 
