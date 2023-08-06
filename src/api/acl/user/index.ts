@@ -18,10 +18,10 @@ enum API {
   ALLROLE_URL = '/admin/acl/user/toAssign/',
   // 根据用户设置角色
   SETROLE_URL = '/admin/acl/user/doAssignRole',
-  // 单个删除用户
-  DELETEUSER_URL = '/admin/acl/user/remove/',
-  // 批量删除用户
-  BATCHDELETEUSER_URL = '/admin/acl/user/batchRemove'
+    // 单个删除用户
+    DELETEUSER_URL = '/admin/acl/user/remove/',
+    // 批量删除用户
+    BATCHDELETEUSER_URL = '/admin/acl/user/batchRemove'
 }
 
 // 获取用户列表
