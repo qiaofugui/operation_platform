@@ -26,8 +26,26 @@ import zhCn from 'element-plus/lib/locale/lang/zh-cn'
 <template>
   <!-- 设置element-plus中文 -->
   <el-config-provider :locale="zhCn">
-    <router-view></router-view>
+    <router-view v-slot="{ Component }">
+      <transition name="fade">
+        <component :is="Component" />
+      </transition>
+    </router-view>
   </el-config-provider>
 </template>
 
-<style scoped></style>
+<style scoped>
+.fade-enter-from {
+  opacity: 0;
+  transform: scale(0);
+}
+
+.fade-enter-active {
+  transition: all 0.3s;
+}
+
+.fade-enter-to {
+  opacity: 1;
+  transform: scale(1);
+}
+</style>
