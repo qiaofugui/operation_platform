@@ -87,6 +87,7 @@ let rulesForm = ref({
 const addUser = () => {
   // 每次打开清空
   Object.assign(userParams.value, {
+    id: 0,
     username: '',
     name: '',
     password: '',
@@ -100,6 +101,13 @@ const addUser = () => {
 }
 // 添更新用户
 const updateUser = (row: User) => {
+  console.log(row)
+  // 清空上一次表单提示信息
+  nextTick(() => {
+    userForm.value.clearValidate()
+  })
+  // 存储收集已有的账号信息
+  Object.assign(userParams.value, row)
   drawer.value = true
 }
 
@@ -112,7 +120,7 @@ const save = async () => {
   if (res.code !== 200) return ElMessage.error(res.message)
   drawer.value = false
   ElMessage.success(res.message)
-  getAllUser()
+  getAllUser(userParams.id ? pageNo.value : 1 )
 }
 </script>
 
@@ -241,7 +249,7 @@ const save = async () => {
       size="25%"
     >
       <template #header>
-        <h4>添加用户</h4>
+        <h4>{{ userParams.id ? '更新用户' : '添加用户' }}</h4>
       </template>
       <template #default>
         <el-form
@@ -273,6 +281,7 @@ const save = async () => {
           <el-form-item
             label="用户密码"
             prop="password"
+            v-if="!userParams.id"
           >
             <el-input
               v-model="userParams.password"
@@ -285,6 +294,7 @@ const save = async () => {
           <el-form-item
             label="确认密码"
             prop="rePassword"
+            v-if="!userParams.id"
           >
             <el-input
               v-model="userParams.rePassword"
