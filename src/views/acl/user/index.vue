@@ -17,6 +17,9 @@ import type {
   SetRole
 } from "@/api/acl/type"
 
+import useSettingStore from '@/store/modules/setting'
+let settingStore = useSettingStore()
+
 // 分页器默认页码
 let pageNo = ref(1)
 // 分页器默认每页条数
@@ -40,7 +43,7 @@ const getAllUser = async (page: number = 1) => {
 
   loading.value = true
 
-  const res: UserResponseData = await getAllUserAPI(pageNo.value, pageSize.value)
+  const res: UserResponseData = await getAllUserAPI(pageNo.value, pageSize.value, keyword.value)
   if (res.code !== 200) return ElMessage.error(res.message)
   userList.value = res.data.records
   total.value = res.data.total
@@ -228,6 +231,17 @@ const batchDeleteUser = async () => {
 //   isIndeterminate.value = checkedCount > 0 && checkedCount < allRole.value.length
 // }
 
+// 头部用户搜索功能
+let keyword = ref('')
+const search = () => {
+  getAllUser()
+  keyword.value = ''
+}
+// 重置按钮
+const reset = () => {
+  settingStore.changeRefresh()
+}
+
 </script>
 
 <template>
@@ -238,14 +252,15 @@ const batchDeleteUser = async () => {
         class="form"
       >
         <el-form-item label="用户名">
-          <el-input placeholder="输入用户名进行搜索"></el-input>
+          <el-input v-model="keyword" placeholder="输入用户名进行搜索"></el-input>
         </el-form-item>
         <el-form-item>
           <el-button
             type="primary"
-            @click=""
+            :disabled="!keyword"
+            @click="search"
           >搜索</el-button>
-          <el-button @click="">重置</el-button>
+          <el-button @click="reset">重置</el-button>
         </el-form-item>
       </el-form>
     </el-card>

@@ -25,10 +25,13 @@ enum API {
 }
 
 // 获取用户列表
-export function getAllUserAPI(page: number | string, limit: number | string) {
+export function getAllUserAPI(page: number | string, limit: number | string, username?: string) {
   return request<any, UserResponseData>({
     url: `${API.ALLUSER_URL}${page}/${limit}`,
-    method: 'get'
+    method: 'get',
+    params: {
+      username
+    }
   })
 }
 
