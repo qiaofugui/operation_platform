@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { ref, onMounted } from "vue"
+import { ref, onMounted, nextTick } from "vue"
 
 import { getAllUserAPI, addOrUpdateUserAPI } from "@/api/acl/user"
 import type { UserResponseData, User } from "@/api/acl/type"
@@ -37,20 +37,64 @@ onMounted(() => {
 // 控制抽屉显示与隐藏
 let drawer = ref(false)
 // 收集用户信息
+let userForm = ref(null)
 let userParams = ref<User>({
   username: '',
   name: '',
   password: '',
+  rePassword: ''
 })
-let rePassword = ref('')
+// 自定义校验用户名
+const validatorUsername = (rule: any, value: any, callback: any) => {
+  // 用户名|昵称长度最少五位
+  if (value.trim().length >= 5) {
+    callback()
+  } else {
+    callback(new Error('用户名称长度最少五位'))
+  }
+}
+const validatorName = (rule: any, value: any, callback: any) => {
+  // 用户名|昵称长度最少五位
+  if (value.trim().length >= 5) {
+    callback()
+  } else {
+    callback(new Error('用户昵称长度最少五位'))
+  }
+}
+const validatorPassword = (rule: any, value: any, callback: any) => {
+  if (value.trim().length >= 5) {
+    callback()
+  } else {
+    callback(new Error('用户密码长度最少六位'))
+  }
+}
+const validatorRePassword = (rule: any, value: any, callback: any) => {
+  if (value === userParams.value.password) {
+    callback()
+  } else {
+    callback(new Error('两次密码不一致'))
+  }
+}
+// 表单规则校验对象
+let rulesForm = ref({
+  username: [{ required: true, trigger: 'blur', validator: validatorUsername }],
+  name: [{ required: true, trigger: 'blur', validator: validatorName }],
+  password: [{ required: true, trigger: 'blur', validator: validatorPassword }],
+  rePassword: [{ required: true, trigger: 'change', validator: validatorRePassword }]
+})
 
 // 添加用户
 const addUser = () => {
-   // 每次打开清空
-   Object.assign(userParams.value, {
+  // 每次打开清空
+  Object.assign(userParams.value, {
     username: '',
     name: '',
     password: '',
+    rePassword: ''
+  })
+  // 清空上一次表单提示信息
+  nextTick(() => {
+    userForm.value.clearValidate()
   })
   drawer.value = true
 }
@@ -61,14 +105,15 @@ const updateUser = (row: User) => {
 
 // 保存按钮
 const save = async () => {
+  // 表单校验
+  await userForm.value.validate()
   // 添加或更新
   const res: any = await addOrUpdateUserAPI(userParams.value)
-  if (res.code !== 200) return  ElMessage.error(res.message)
+  if (res.code !== 200) return ElMessage.error(res.message)
   drawer.value = false
   ElMessage.success(res.message)
   getAllUser()
 }
-
 </script>
 
 <template>
@@ -199,22 +244,36 @@ const save = async () => {
         <h4>添加用户</h4>
       </template>
       <template #default>
-        <el-form label-width="80px">
-          <el-form-item label="用户名称">
+        <el-form
+          label-width="80px"
+          :model="userParams"
+          :rules="rulesForm"
+          ref="userForm"
+        >
+          <el-form-item
+            label="用户名称"
+            prop="username"
+          >
             <el-input
               v-model="userParams.username"
               placeholder="请输入用户名称"
               clearable
             ></el-input>
           </el-form-item>
-          <el-form-item label="用户昵称">
+          <el-form-item
+            label="用户昵称"
+            prop="name"
+          >
             <el-input
               v-model="userParams.name"
               placeholder="请输入用户昵称"
               clearable
             ></el-input>
           </el-form-item>
-          <el-form-item label="用户密码">
+          <el-form-item
+            label="用户密码"
+            prop="password"
+          >
             <el-input
               v-model="userParams.password"
               type="password"
@@ -223,9 +282,12 @@ const save = async () => {
               clearable
             ></el-input>
           </el-form-item>
-          <el-form-item label="确认密码">
+          <el-form-item
+            label="确认密码"
+            prop="rePassword"
+          >
             <el-input
-              v-model="rePassword"
+              v-model="userParams.rePassword"
               type="password"
               show-password
               placeholder="请确认密码"
