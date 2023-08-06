@@ -1,5 +1,8 @@
 <script lang="ts" setup>
-import { ref } from "vue";
+import { ref, onMounted } from "vue"
+
+import { getAllUserAPI } from "@/api/acl/user"
+import type { UserResponseData, User } from "@/api/acl/type"
 
 // 分页器默认页码
 let pageNo = ref(1)
@@ -8,13 +11,28 @@ let pageSize = ref(3)
 // 分页器默认总条数
 let total = ref(0)
 
+let userList = ref<User[]>([])
+
 const changePageNo = (page: number) => {
-  // getSpuList(page)
+  getAllUser(page)
 }
 // 下拉框改变每页显示条数
 const changeSize = () => {
-  // getSpuList()
+  getAllUser()
 }
+
+const getAllUser = async (page: number = 1) => {
+  pageNo.value = page
+
+  const res: UserResponseData = await getAllUserAPI(pageNo.value, pageSize.value)
+  if (res.code !== 200) return ElMessage.error(res.message)
+  userList.value = res.data.records
+  total.value = res.data.total
+}
+
+onMounted(() => {
+  getAllUser()
+})
 
 </script>
 
@@ -51,7 +69,7 @@ const changeSize = () => {
       <el-table
         style="margin: 10px 0;"
         border
-        :data="[{}]"
+        :data="userList"
       >
         <el-table-column
           type="selection"
@@ -73,20 +91,22 @@ const changeSize = () => {
           label="用户名"
         ></el-table-column>
         <el-table-column
-          prop="nickname"
+          prop="name"
           label="昵称"
         ></el-table-column>
         <el-table-column
-          prop=""
+          prop="roleName"
           label="用户角色"
         ></el-table-column>
         <el-table-column
-          prop=""
+          prop="createTime"
           label="创建时间"
+          show-overflow-tooltip
         ></el-table-column>
         <el-table-column
-          prop=""
+          prop="updateTime"
           label="更新时间"
+          show-overflow-tooltip
         ></el-table-column>
         <el-table-column
           label="操作"
