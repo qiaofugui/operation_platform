@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { ref, onMounted } from "vue"
 
-import { getAllUserAPI } from "@/api/acl/user"
+import { getAllUserAPI, addOrUpdateUserAPI } from "@/api/acl/user"
 import type { UserResponseData, User } from "@/api/acl/type"
 
 // 分页器默认页码
@@ -36,16 +36,38 @@ onMounted(() => {
 
 // 控制抽屉显示与隐藏
 let drawer = ref(false)
+// 收集用户信息
+let userParams = ref<User>({
+  username: '',
+  name: '',
+  password: '',
+})
+let rePassword = ref('')
 
 // 添加用户
-const addUser = () =>{
+const addUser = () => {
+   // 每次打开清空
+   Object.assign(userParams.value, {
+    username: '',
+    name: '',
+    password: '',
+  })
   drawer.value = true
 }
 // 添更新用户
-const updateUser = (row: User) =>{
+const updateUser = (row: User) => {
   drawer.value = true
 }
 
+// 保存按钮
+const save = async () => {
+  // 添加或更新
+  const res: any = await addOrUpdateUserAPI(userParams.value)
+  if (res.code !== 200) return  ElMessage.error(res.message)
+  drawer.value = false
+  ElMessage.success(res.message)
+  getAllUser()
+}
 
 </script>
 
@@ -174,24 +196,27 @@ const updateUser = (row: User) =>{
       size="25%"
     >
       <template #header>
-        <h4>header</h4>
+        <h4>添加用户</h4>
       </template>
       <template #default>
         <el-form label-width="80px">
           <el-form-item label="用户名称">
             <el-input
+              v-model="userParams.username"
               placeholder="请输入用户名称"
               clearable
             ></el-input>
           </el-form-item>
           <el-form-item label="用户昵称">
             <el-input
+              v-model="userParams.name"
               placeholder="请输入用户昵称"
               clearable
             ></el-input>
           </el-form-item>
           <el-form-item label="用户密码">
             <el-input
+              v-model="userParams.password"
               type="password"
               show-password
               placeholder="请输入密码"
@@ -200,6 +225,7 @@ const updateUser = (row: User) =>{
           </el-form-item>
           <el-form-item label="确认密码">
             <el-input
+              v-model="rePassword"
               type="password"
               show-password
               placeholder="请确认密码"
@@ -211,9 +237,9 @@ const updateUser = (row: User) =>{
       <template #footer>
         <el-button
           type="primary"
-          @click=""
+          @click="save"
         >确定</el-button>
-        <el-button @click="">取消</el-button>
+        <el-button @click="drawer = false">取消</el-button>
       </template>
     </el-drawer>
   </div>

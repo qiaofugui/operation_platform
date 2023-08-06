@@ -6,13 +6,13 @@ export interface ResponseData {
 
 export interface User {
   id?: number | string
-  createTime: string
-  updateTime: string
+  createTime?: string
+  updateTime?: string
   username?: string
   password?: string
   name?: string
-  phone: string
-  roleName: string
+  phone?: string
+  roleName?: string
 }
 
 export interface UserResponseData extends ResponseData {
