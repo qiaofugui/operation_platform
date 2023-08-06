@@ -1,8 +1,8 @@
 <script lang="ts" setup>
 import { ref, onMounted, nextTick } from "vue"
 
-import { getAllUserAPI, addOrUpdateUserAPI } from "@/api/acl/user"
-import type { UserResponseData, User } from "@/api/acl/type"
+import { getAllUserAPI, addOrUpdateUserAPI, getAllRoleAPI, setRoleAPI } from "@/api/acl/user"
+import type { UserResponseData, User, RoleResponseData, s, SetRole } from "@/api/acl/type"
 
 // 分页器默认页码
 let pageNo = ref(1)
@@ -128,18 +128,26 @@ const save = async () => {
 
 // 职位分配
 let drawer1 = ref(false)
-const setRole = (row: User) => {
+// 全部权限
+let allRole = ref<Role>([])
+// 用户已选择权限
+let userRole = ref<Role>([])
+// 分配角色按钮
+const setRole = async (row: User) => {
   // 存储已有用户信息
   Object.assign(userParams.value, row)
+
+  // 获取职位接口
+  const res: RoleResponseData = await getAllRoleAPI(row.id)
+  if (res.code !== 200) return ElMessage.error(res.message)
+  allRole.value = res.data.allRolesList
+  userRole.value = res.data.assignRoles
+
   drawer1.value = true
 }
-
-// 测试复选框
 // 全选复选框
 let checkAll = ref(false)
 let isIndeterminate = ref(false)
-let allRole = ref<any>(['前台', '后台', '超级管理员', '测试','a'])
-let userRole = ref<any>(['超级管理员', '测试'])
 const handleCheckAllChange = (val: boolean) => {
   userRole.value = val ? allRole.value : []
   isIndeterminate.value = false
@@ -149,6 +157,36 @@ const handleCheckedRoleChange = (value: string[]) => {
   checkAll.value = checkedCount === allRole.value.length
   isIndeterminate.value = checkedCount > 0 && checkedCount < allRole.value.length
 }
+
+// 确定用户角色
+const setRoleSave = async () => {
+  // 收集处理数据
+  let data: SetRole = {
+    userId:(userParams.value.id as number),
+    roleIdList: userRole.value.map((item: Role) => (item.id as number))
+  }
+  const res:any = await setRoleAPI(data)
+  if (res.code !== 200) return ElMessage.error(res.message)
+  getAllUser(pageNo.value)
+  ElMessage.success(res.message)
+  drawer1.value = false
+}
+
+// 测试复选框
+// let checkAll = ref(false)
+// let isIndeterminate = ref(false)
+// let allRole = ref<any>(['前台', '后台', '超级管理员', '测试','a'])
+// let userRole = ref<any>(['超级管理员', '测试'])
+// const handleCheckAllChange = (val: boolean) => {
+//   userRole.value = val ? allRole.value : []
+//   isIndeterminate.value = false
+// }
+// const handleCheckedRoleChange = (value: string[]) => {
+//   const checkedCount = value.length
+//   checkAll.value = checkedCount === allRole.value.length
+//   isIndeterminate.value = checkedCount > 0 && checkedCount < allRole.value.length
+// }
+
 </script>
 
 <template>
@@ -373,9 +411,9 @@ const handleCheckedRoleChange = (value: string[]) => {
             >
               <el-checkbox
                 v-for="role in allRole"
-                :key="role"
+                :key="role.id"
                 :label="role"
-              >{{ role }}</el-checkbox>
+              >{{ role.roleName }}</el-checkbox>
             </el-checkbox-group>
           </el-form-item>
         </el-form>
@@ -383,9 +421,9 @@ const handleCheckedRoleChange = (value: string[]) => {
       <template #footer>
         <el-button
           type="primary"
-          @click=""
+          @click="setRoleSave"
         >确定</el-button>
-        <el-button @click="">取消</el-button>
+        <el-button @click="drawer1 = false">取消</el-button>
       </template>
     </el-drawer>
   </div>

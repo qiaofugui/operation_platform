@@ -24,3 +24,23 @@ export interface UserResponseData extends ResponseData {
     pages: number
   }
 }
+
+export interface Role {
+  id?: number | string
+  createTime?: string
+  updateTime?: string
+  roleName: string
+  remark: null
+}
+export interface RoleResponseData extends ResponseData {
+  data: {
+    assignRoles: Role[]
+    allRolesList: Role[]
+  }
+}
+
+// 分配用户角色
+export interface SetRole {
+  userId: string | number,
+  roleIdList: number[]
+}
