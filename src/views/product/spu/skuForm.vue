@@ -146,6 +146,7 @@ defineExpose({
       <el-input
         v-model="skuParams.skuName"
         placeholder="请输入SPU名称"
+        prefix-icon="EditPen"
       ></el-input>
     </el-form-item>
     <el-form-item label="价格(元)">
@@ -153,6 +154,7 @@ defineExpose({
         v-model="skuParams.price"
         type="number"
         placeholder="请输入价格(元)"
+        prefix-icon="EditPen"
       ></el-input>
     </el-form-item>
     <el-form-item label="重量(克)">
@@ -160,6 +162,7 @@ defineExpose({
         v-model="skuParams.weight"
         type="number"
         placeholder="请输入重量(克)"
+        prefix-icon="EditPen"
       ></el-input>
     </el-form-item>
     <el-form-item label="SKU描述">
@@ -247,11 +250,9 @@ defineExpose({
           <template #="{ row }">
             <el-button
               type="primary"
+              size="small"
+              icon="Select"
               @click="setDefaultImg(row)"
-            >设置默认</el-button>
-            <el-button
-              type="primary"
-              @click=""
             >设置默认</el-button>
           </template>
         </el-table-column>
@@ -260,9 +261,13 @@ defineExpose({
     <el-form-item>
       <el-button
         type="primary"
+        icon="Select"
         @click="save"
       >保存</el-button>
-      <el-button @click="cancel">取消</el-button>
+      <el-button
+        icon="CloseBold"
+        @click="cancel"
+      >取消</el-button>
     </el-form-item>
   </el-form>
 </template>

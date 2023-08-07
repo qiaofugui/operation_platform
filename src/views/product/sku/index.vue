@@ -214,14 +214,20 @@ const delSku = async (row: SkuData) => {
             class="mb-15"
           >
             <el-col :span="6">名称</el-col>
-            <el-col :span="18">{{ skuInfo.skuName }}</el-col>
+            <el-col
+              :span="18"
+              style="line-height: 24px;font-size: 14px;"
+            >{{ skuInfo.skuName }}</el-col>
           </el-row>
           <el-row
             :gutter="5"
             class="mb-15"
           >
             <el-col :span="6">描述</el-col>
-            <el-col :span="18">{{ skuInfo.skuDesc }}</el-col>
+            <el-col
+              :span="18"
+              style="line-height: 24px;font-size: 14px;"
+            >{{ skuInfo.skuDesc }}</el-col>
           </el-row>
           <el-row
             :gutter="5"
@@ -230,7 +236,7 @@ const delSku = async (row: SkuData) => {
             <el-col :span="6">价格</el-col>
             <el-col
               :span="18"
-              style="color: #ff5000;"
+              style="color: #ff5000;line-height: 24px;font-size: 14px;"
             >{{ skuInfo.price }}</el-col>
           </el-row>
           <el-row
@@ -244,8 +250,7 @@ const delSku = async (row: SkuData) => {
                 style="margin: 3px;"
                 v-for="item in skuInfo.skuAttrValueList"
                 :key="item.id"
-              >{{ item.valueName
-              }}</el-tag>
+              >{{ item.valueName }}</el-tag>
             </el-col>
           </el-row>
           <el-row
@@ -260,8 +265,7 @@ const delSku = async (row: SkuData) => {
                 type="success"
                 v-for="item in skuInfo.skuSaleAttrValueList"
                 :key="item.id"
-              >{{
-                item.saleAttrValueName }}</el-tag>
+              >{{ item.saleAttrValueName }}</el-tag>
             </el-col>
           </el-row>
           <el-row :gutter="5">
@@ -271,6 +275,7 @@ const delSku = async (row: SkuData) => {
               <el-carousel
                 trigger="click"
                 height="200px"
+                :interval="2000"
               >
                 <el-carousel
                   type="card"

@@ -146,7 +146,10 @@ const deleteSpu = async (row: SpuData) => {
             label="SPU描述"
             show-overflow-tooltip
           ></el-table-column>
-          <el-table-column label="SPU操作">
+          <el-table-column
+            label="SPU操作"
+            width="205px"
+          >
             <template #="{ row }">
               <el-tooltip
                 effect="dark"
@@ -185,7 +188,7 @@ const deleteSpu = async (row: SpuData) => {
                 />
               </el-tooltip>
               <el-popconfirm
-                title="确定要删除吗?"
+                :title="`确定要删除 ${row.spuName} 吗?`"
                 icon="DeleteFilled"
                 icon-color="#f56c6c"
                 @confirm="deleteSpu(row)"

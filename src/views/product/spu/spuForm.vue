@@ -235,6 +235,7 @@ defineExpose({
     <el-form-item label="SPU名称">
       <el-input
         placeholder="请输入SPU名称"
+        prefix-icon="EditPen"
         v-model="spuParams.spuName"
       ></el-input>
     </el-form-item>
@@ -336,13 +337,10 @@ defineExpose({
             ></el-button>
           </template>
         </el-table-column>
-        <el-table-column
-          label="操作"
-          width="80px"
-        >
+        <el-table-column label="操作">
           <template #="{ row }">
             <el-popconfirm
-              title="确定要删除吗?"
+              :title="`确定要删除 ${row.saleAttrName} 吗?`"
               icon="DeleteFilled"
               icon-color="#f56c6c"
               @confirm="saleAttr.splice(saleAttr.indexOf(row), 1)"
@@ -361,9 +359,13 @@ defineExpose({
 
       <el-button
         type="primary"
+        icon="Select"
         @click="save"
       >保存</el-button>
-      <el-button @click="cancel">取消</el-button>
+      <el-button
+        icon="CloseBold"
+        @click="cancel"
+      >取消</el-button>
 
     </el-form-item>
   </el-form>

@@ -174,7 +174,7 @@ onUnmounted(() => {
           <el-table-column
             prop="address"
             label="操作"
-            width="120px"
+            width="165px"
           >
             <template #="{ row }">
               <el-button
@@ -182,9 +182,9 @@ onUnmounted(() => {
                 size="small"
                 icon="Edit"
                 @click="updateAttr(row)"
-              />
+              >编辑</el-button>
               <el-popconfirm
-                title="确定要删除吗?"
+                :title="`确定要删除 ${row.attrName} 吗?`"
                 icon="DeleteFilled"
                 icon-color="#f56c6c"
                 @confirm="deleteAttr(row)"
@@ -194,7 +194,7 @@ onUnmounted(() => {
                     type="danger"
                     size="small"
                     icon="Delete"
-                  />
+                  >删除</el-button>
                 </template>
               </el-popconfirm>
             </template>
@@ -208,7 +208,8 @@ onUnmounted(() => {
             <el-input
               placeholder="请输入属性名"
               v-model="attrParams.attrName"
-            ></el-input>
+              prefix-icon="EditPen"
+            />
           </el-form-item>
         </el-form>
         <el-button
@@ -217,7 +218,10 @@ onUnmounted(() => {
           :disabled="attrParams.attrName.trim().length >= 0 ? false : true"
           @click="addAttrValue"
         >添加属性值</el-button>
-        <el-button @click="cancel">取消</el-button>
+        <el-button
+          icon="CloseBold"
+          @click="cancel"
+        >取消</el-button>
         <el-table
           border
           style="margin: 20px 0"
@@ -248,7 +252,7 @@ onUnmounted(() => {
           <el-table-column label="操作">
             <template #="{ row, $index }">
               <el-popconfirm
-                title="确定要删除吗?"
+                :title="`确定要删除 ${row.valueName} 吗?`"
                 icon="DeleteFilled"
                 icon-color="#f56c6c"
                 @confirm="attrParams.attrValueList.splice($index, 1)"
@@ -266,10 +270,14 @@ onUnmounted(() => {
         </el-table>
         <el-button
           type="primary"
+          icon="Select"
           @click="save"
           :disabled="attrParams.attrValueList.length > 0 ? false : true"
         >保存</el-button>
-        <el-button @click="cancel">取消</el-button>
+        <el-button
+          icon="CloseBold"
+          @click="cancel"
+        >取消</el-button>
       </div>
     </el-card>
   </div>

@@ -271,15 +271,20 @@ const handler = async () => {
           <el-input
             v-model="keyword"
             placeholder="输入角色名称进行搜索"
+            prefix-icon="Search"
           ></el-input>
         </el-form-item>
         <el-form-item>
           <el-button
             type="primary"
             :disabled="!keyword"
+            icon="Search"
             @click="search"
           >搜索</el-button>
-          <el-button @click="reset">重置</el-button>
+          <el-button
+            icon="Refresh"
+            @click="reset"
+          >重置</el-button>
         </el-form-item>
       </el-form>
     </el-card>
@@ -408,17 +413,20 @@ const handler = async () => {
           <el-input
             v-model="roleParams.roleName"
             placeholder="请输入角色名称"
+            prefix-icon="User"
           ></el-input>
         </el-form-item>
 
       </el-form>
       <template #footer>
         <span class="dialog-footer">
-          <el-button @click="dialogFormVisible = false">
-            取消
-          </el-button>
+          <el-button
+            icon="CloseBold"
+            @click="dialogFormVisible = false"
+          >取消</el-button>
           <el-button
             type="primary"
+            icon="Select"
             @click="save"
             :disabled="roleParams.roleName.trim().length >= 2 ? false : true"
           >确认</el-button>
@@ -451,9 +459,13 @@ const handler = async () => {
       <template #footer>
         <el-button
           type="primary"
+          icon="Select"
           @click="handler"
         >确定</el-button>
-        <el-button @click="drawer = false">取消</el-button>
+        <el-button
+          icon="CloseBold"
+          @click="drawer = false"
+        >取消</el-button>
       </template>
     </el-drawer>
 

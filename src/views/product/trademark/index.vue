@@ -90,6 +90,10 @@ const addTrademark = () => {
 }
 // 修改品牌
 const updateTrademark = (row: TradeMark) => {
+  // 清空表单验证
+  trademarkFormRef.value.clearValidate()
+
+
   dialogFormVisible.value = true
   trademarkParams.value = {
       id: row.id,
@@ -205,6 +209,7 @@ const handleAvatarSuccess: UploadProps['onSuccess'] = (
         <el-table-column
           prop="address"
           label="品牌操作"
+          width="165px"
         >
           <template #="{ row }">
             <el-button
@@ -212,9 +217,9 @@ const handleAvatarSuccess: UploadProps['onSuccess'] = (
               size="small"
               icon="Edit"
               @click="updateTrademark(row)"
-            />
+            >编辑</el-button>
             <el-popconfirm
-              title="确定要删除吗?"
+              :title="`确定要删除 ${row.tmName} 吗?`"
               icon="DeleteFilled"
               icon-color="#f56c6c"
               @confirm="deleteTrademark(row)"
@@ -224,7 +229,7 @@ const handleAvatarSuccess: UploadProps['onSuccess'] = (
                   type="danger"
                   size="small"
                   icon="Delete"
-                />
+                >删除</el-button>
               </template>
             </el-popconfirm>
           </template>
@@ -260,6 +265,7 @@ const handleAvatarSuccess: UploadProps['onSuccess'] = (
           <el-input
             placeholder="请输入品牌名称"
             v-model="trademarkParams.tmName"
+            prefix-icon="EditPen"
           />
         </el-form-item>
         <el-form-item
@@ -300,13 +306,15 @@ const handleAvatarSuccess: UploadProps['onSuccess'] = (
       </el-form>
       <template #footer>
         <span class="dialog-footer">
-          <el-button @click="cancel">取消</el-button>
+          <el-button
+            icon="CloseBold"
+            @click="cancel"
+          >取消</el-button>
           <el-button
             type="primary"
+            icon="Select"
             @click="confirm"
-          >
-            确认
-          </el-button>
+          >确认</el-button>
         </span>
       </template>
     </el-dialog>

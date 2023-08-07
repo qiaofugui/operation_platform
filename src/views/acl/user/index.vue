@@ -251,15 +251,23 @@ const reset = () => {
         class="form"
       >
         <el-form-item label="用户名">
-          <el-input v-model="keyword" placeholder="输入用户名进行搜索"></el-input>
+          <el-input
+            v-model="keyword"
+            placeholder="输入用户名进行搜索"
+            prefix-icon="Search"
+          ></el-input>
         </el-form-item>
         <el-form-item>
           <el-button
             type="primary"
+            icon="Search"
             :disabled="!keyword"
             @click="search"
           >搜索</el-button>
-          <el-button @click="reset">重置</el-button>
+          <el-button
+            icon="Refresh"
+            @click="reset"
+          >重置</el-button>
         </el-form-item>
       </el-form>
     </el-card>
@@ -267,6 +275,7 @@ const reset = () => {
     <el-card style="margin: 10px 0;">
       <el-button
         type="primary"
+        icon="Plus"
         @click="addUser"
       >添加</el-button>
       <el-popconfirm
@@ -276,7 +285,11 @@ const reset = () => {
         @confirm="batchDeleteUser"
       >
         <template #reference>
-          <el-button type="danger" :disabled="deleteUsers.length ? false : true">批量删除</el-button>
+          <el-button
+            type="danger"
+            icon="Delete"
+            :disabled="deleteUsers.length ? false : true"
+          >批量删除</el-button>
         </template>
       </el-popconfirm>
 
@@ -393,6 +406,7 @@ const reset = () => {
             <el-input
               v-model="userParams.username"
               placeholder="请输入用户名称"
+              prefix-icon="User"
               clearable
             ></el-input>
           </el-form-item>
@@ -403,6 +417,7 @@ const reset = () => {
             <el-input
               v-model="userParams.name"
               placeholder="请输入用户昵称"
+              prefix-icon="User"
               clearable
             ></el-input>
           </el-form-item>
@@ -416,6 +431,7 @@ const reset = () => {
               type="password"
               show-password
               placeholder="请输入密码"
+              prefix-icon="Lock"
               clearable
             ></el-input>
           </el-form-item>
@@ -429,6 +445,7 @@ const reset = () => {
               type="password"
               show-password
               placeholder="请确认密码"
+              prefix-icon="Lock"
               clearable
             ></el-input>
           </el-form-item>
@@ -437,9 +454,13 @@ const reset = () => {
       <template #footer>
         <el-button
           type="primary"
+          icon="Select"
           @click="save"
         >确定</el-button>
-        <el-button @click="drawer = false">取消</el-button>
+        <el-button
+          icon="CloseBold"
+          @click="drawer = false"
+        >取消</el-button>
       </template>
     </el-drawer>
 
@@ -456,6 +477,7 @@ const reset = () => {
           <el-form-item label="用户名称">
             <el-input
               v-model="userParams.username"
+              prefix-icon="User"
               disabled
             ></el-input>
           </el-form-item>
@@ -483,9 +505,13 @@ const reset = () => {
       <template #footer>
         <el-button
           type="primary"
+          icon="Select"
           @click="setRoleSave"
         >确定</el-button>
-        <el-button @click="drawer1 = false">取消</el-button>
+        <el-button
+          icon="CloseBold"
+          @click="drawer1 = false"
+        >取消</el-button>
       </template>
     </el-drawer>
   </div>

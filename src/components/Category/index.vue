@@ -39,9 +39,13 @@ defineProps({
           <el-form-item label="一级分类">
             <el-select
               v-model="categoryStore.c1Id"
+              prefix-icon="Plus"
               @change="handler1"
               :disabled="scene !== 0"
             >
+              <template #prefix>
+                一
+              </template>
               <el-option
                 v-for="item in categoryStore.c1List"
                 :key="item.id"
@@ -58,6 +62,9 @@ defineProps({
               @change="handler2"
               :disabled="scene !== 0"
             >
+              <template #prefix>
+                二
+              </template>
               <el-option
                 v-for="item in categoryStore.c2List"
                 :key="item.id"
@@ -73,6 +80,9 @@ defineProps({
               v-model="categoryStore.c3Id"
               :disabled="scene !== 0"
             >
+              <template #prefix>
+                三
+              </template>
               <el-option
                 v-for="item in categoryStore.c3List"
                 :key="item.id"
