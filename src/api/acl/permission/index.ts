@@ -12,6 +12,8 @@ enum API {
   ADDMENU_URL = '/admin/acl/permission/save',
   // 更新某一级菜单
   UPDATEMENU_URL = '/admin/acl/permission/update',
+  // 删除菜单
+  DELETEMENU_URL = '/admin/acl/permission/remove/',
 }
 
 // 获取全部菜单与按钮标识
@@ -37,4 +39,12 @@ export function addOrUpdateMenuAPI(data: AddOrUpdateMenuParams) {
       data
     })
   }
+}
+
+// 删除菜单
+export function deleteMenuAPI(id: number | string) {
+  return request<any, any>({
+    url: API.DELETEMENU_URL + id,
+    method: 'delete',
+  })
 }

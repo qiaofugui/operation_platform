@@ -3,7 +3,8 @@ import { ref, onMounted } from 'vue'
 
 import {
   getAllPermissionAPI,
-  addOrUpdateMenuAPI
+  addOrUpdateMenuAPI,
+  deleteMenuAPI
 } from '@/api/acl/permission'
 import {
   PermissionResponseData,
@@ -81,6 +82,15 @@ const addOrUpdateMenu = async () => {
   dialogVisible.value = false
   getPermissionList()
 }
+
+// 删除菜单按钮回调
+const deleteMenu = async (row: Permission) => {
+  const res: any = await deleteMenuAPI(row.id)
+  if (res.code !== 200) return ElMessage.error(res.message)
+  ElMessage.success(res.message)
+  dialogVisible.value = false
+  getPermissionList()
+}
 </script>
 
 <template>
@@ -125,10 +135,10 @@ const addOrUpdateMenu = async () => {
             @click="updatePermission(row)"
           >编辑</el-button>
           <el-popconfirm
-            :title="`确定要批量删除吗?`"
+            :title="`确定要删除 ${row.name} 吗?`"
             icon="DeleteFilled"
             icon-color="#f56c6c"
-            @confirm=""
+            @confirm="deleteMenu(row)"
           >
             <template #reference>
               <el-button
