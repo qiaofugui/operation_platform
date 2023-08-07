@@ -42,7 +42,10 @@ import setting from '@/setting.ts'
   }
 
   .bottom {
-    margin-left: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin-left: 30px;
 
     .title {
       font-size: 30px;

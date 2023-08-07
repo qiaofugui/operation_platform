@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import useSettingStore from '@/store/modules/setting'
 import useUserStore from '@/store/modules/user'
+import { reactive } from 'vue'
 
 import { useRouter, useRoute } from 'vue-router'
 
@@ -30,12 +31,63 @@ const logout = async () => {
   // 跳转到登录页
   router.push({ path: '/login', query: { redirect: route.path } })
 }
+
+// 主题相关数据
+let theme = reactive({
+  color: '#409EFF',
+  dark: false
+})
+
+// 暗黑模式切换
+const changeDark = (value: boolean) => {
+  // 获取html根节点
+  let html = document.documentElement
+  value ? html.className = 'dark' : html.className = ''
+}
 </script>
 
 <template>
-  <el-button icon="Refresh" circle @click="settingStore.changeRefresh" />
-  <el-button icon="FullScreen" circle @click="fullScreen" />
-  <el-button icon="Setting" circle />
+  <el-button
+    icon="Refresh"
+    circle
+    @click="settingStore.changeRefresh"
+  />
+  <el-button
+    icon="FullScreen"
+    circle
+    @click="fullScreen"
+  />
+  <el-popover
+    placement="bottom-end"
+    title="主题设置"
+    :width="100"
+    trigger="click"
+  >
+    <template #reference>
+      <el-button
+        icon="Setting"
+        circle
+      />
+    </template>
+    <el-form>
+      <el-form-item label="主题颜色">
+        <el-color-picker
+          v-model="theme.color"
+          show-alpha
+        />
+      </el-form-item>
+      <el-form-item label="暗黑模式">
+        <el-switch
+          v-model="theme.dark"
+          inline-prompt
+          active-icon="Moon"
+          inactive-icon="Sunny"
+          @change="changeDark"
+        />
+      </el-form-item>
+    </el-form>
+  </el-popover>
+
   <el-avatar
     :size="35"
     fit="cover"
