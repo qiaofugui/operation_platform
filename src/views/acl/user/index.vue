@@ -235,7 +235,6 @@ const batchDeleteUser = async () => {
 let keyword = ref('')
 const search = () => {
   getAllUser()
-  keyword.value = ''
 }
 // 重置按钮
 const reset = () => {

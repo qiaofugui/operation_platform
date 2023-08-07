@@ -49,6 +49,7 @@ declare module 'vue' {
     ElTah: typeof import('element-plus/es')['ElTah']
     ElTimePicker: typeof import('element-plus/es')['ElTimePicker']
     ElTooltip: typeof import('element-plus/es')['ElTooltip']
+    ElTree: typeof import('element-plus/es')['ElTree']
     ElUpload: typeof import('element-plus/es')['ElUpload']
     IEpArrowDown: typeof import('~icons/ep/arrow-down')['default']
     IEpExpand: typeof import('~icons/ep/expand')['default']
