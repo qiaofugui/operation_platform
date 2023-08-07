@@ -30,6 +30,17 @@ onMounted(() => {
 
 // 控制添加和修改菜单的dialog显示与隐藏
 let dialogVisible = ref(false)
+let formRef = ref<any>(null)
+let rule = ref<any>({
+  name: [
+    { required: true, message: '请输入名', trigger: 'blur' },
+    { min: 2, max: 10, message: '长度在 2 到 10 个字符', trigger: 'blur' }
+  ],
+  code: [
+    { required: true, message: '请输入值', trigger: 'blur' },
+    { min: 2, max: 10, message: '长度在 2 到 10 个字符', trigger: 'blur' }
+  ]
+})
 // 添加或修改菜单的携带参数
 let menuParams: AddOrUpdateMenuParams = ref({
   id: 0,
@@ -76,6 +87,9 @@ const save = () => {
   }
 }
 const addOrUpdateMenu = async () => {
+  // 发送请求前校验表单
+  await formRef.value.validate()
+
   const res: any = await addOrUpdateMenuAPI(menuParams.value)
   if (res.code !== 200) return ElMessage.error(res.message)
   ElMessage.success(res.message)
@@ -158,15 +172,26 @@ const deleteMenu = async (row: Permission) => {
       :title="menuParams.id ? '编辑菜单' : '添加菜单'"
       width="25%"
     >
-      <el-form label-width="60px">
-        <el-form-item label="名">
+      <el-form
+        label-width="60px"
+        :model="menuParams"
+        :rules="rule"
+        ref="formRef"
+      >
+        <el-form-item
+          label="名"
+          prop="name"
+        >
           <el-input
             prefix-icon="EditPen"
             placeholder="请输入名"
             v-model="menuParams.name"
           ></el-input>
         </el-form-item>
-        <el-form-item label="值">
+        <el-form-item
+          label="值"
+          prop="code"
+        >
           <el-input
             prefix-icon="EditPen"
             placeholder="请输入值"
