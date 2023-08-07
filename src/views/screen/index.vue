@@ -3,6 +3,7 @@ import { ref, onMounted, onUnmounted } from 'vue'
 
 // 引入顶部子组件
 import Top from './components/top/index.vue'
+import Left from './components/left/index.vue'
 
 // #region
 // 以下为数据大屏适配设置
@@ -37,11 +38,14 @@ onUnmounted(() => {
       class="screen"
       ref="screenRef"
     >
+      <!-- 数据大屏顶部 -->
       <div class="top">
         <Top />
       </div>
       <div class="bottom">
-        <div class="left">left</div>
+        <div class="left">
+          <Left />
+        </div>
         <div class="center">center</div>
         <div class="right">right</div>
       </div>
@@ -79,6 +83,7 @@ onUnmounted(() => {
 
       .left {
         flex: 1;
+        height: calc(1080px - 40px);
       }
 
       .center {
