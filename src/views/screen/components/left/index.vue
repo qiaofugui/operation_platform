@@ -21,7 +21,7 @@ import Age from './components/age/index.vue'
   flex-direction: column;
 
   .tourist {
-    flex: 1.2;
+    flex: 1.3;
     margin: 20px 0 15px 0;
   }
 

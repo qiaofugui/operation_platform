@@ -23,12 +23,6 @@ onMounted(() => {
         fontSize: 18,
         color: "#fff"
       },
-      // 副标题
-      subtextStyle: {
-        fontWeight: "bold",
-        fontSize: 10,
-        color: "rgb(0,0,0)"
-      }
     },
     // x|y轴配置
     xAxis: {},
@@ -39,14 +33,14 @@ onMounted(() => {
         // 展示什么样的图标表
         type: 'liquidFill',
         // 展示的数据
-        data: [0.55, 0.35, 0.25],
+        data: [0.55, 0.45, 0.35],
         // 是否开启动画
         waveAnimation: true,
         // 动画时间
         animationDuration: 0,
         animationDurationUpdate: 0,
         // 半径
-        radius: '90%',
+        radius: '93%',
         // 水球的颜色
         outline: {
           show: false,
@@ -68,23 +62,23 @@ onMounted(() => {
         type: "pie",
         center: ["50%", "50%"],
         radius: ["95%", "96%"], //外层线粗细
-        hoverAnimation: false,
+        hoverAnimation: true,
         data: [
           {
             name: "",
             value: 100,
             labelLine: {
-              show: false
+              show: true
             },
             itemStyle: {
               color: "#67CDFB"
             },
             emphasis: {
               labelLine: {
-                show: false
+                show: true
               },
               itemStyle: {
-                // color: "#5886f0"
+                color: "#5886f0"
               }
             }
           }
@@ -122,7 +116,7 @@ onMounted(() => {
                 show: false
               },
               itemStyle: {
-                // color: "#5886f0"
+                color: "#5886f0"
               }
             }
           },
@@ -134,14 +128,14 @@ onMounted(() => {
               color: "rgba(0,0,0,0)"
             },
             label: {
-              show: false
+              show: true
             },
             labelLine: {
-              show: false
+              show: true
             },
             emphasis: {
               labelLine: {
-                show: false
+                show: true
               },
               itemStyle: {
                 color: "#050038"
@@ -153,7 +147,7 @@ onMounted(() => {
     ],
     // 布局设置
     grid: {
-      top: '0',
+      top: 0,
       left: 0,
       right: 0,
       bottom: 0,
@@ -171,11 +165,17 @@ onMounted(() => {
       <p class="right">可预约总量 <span>99999</span> 人</p>
     </div>
     <div class="number">
-      <span v-for="item in people" :key="item">{{ item }}</span>
+      <span
+        v-for="item in people"
+        :key="item"
+      >{{ item }}</span>
       <span>人</span>
     </div>
     <!-- 展示图标 -->
-    <div class="charts" ref="charts">charts</div>
+    <div
+      class="charts"
+      ref="charts"
+    >charts</div>
   </div>
 </template>
 
