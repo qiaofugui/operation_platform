@@ -2,11 +2,13 @@
 import { ref, onMounted } from 'vue'
 
 import {
-  getAllPermissionAPI
+  getAllPermissionAPI,
+  addOrUpdateMenuAPI
 } from '@/api/acl/permission'
 import {
   PermissionResponseData,
-  Permission
+  Permission,
+  AddOrUpdateMenuParams
 } from '@/api/acl/permission/type'
 
 const permissionList = ref<Permission[]>([])
@@ -19,7 +21,6 @@ const getPermissionList = async () => {
   if (res.code !== 200) return ElMessage.error(res.message)
   permissionList.value = res.data
   loading.value = false
-  console.log(res.data)
 }
 
 onMounted(() => {
@@ -28,17 +29,57 @@ onMounted(() => {
 
 // 控制添加和修改菜单的dialog显示与隐藏
 let dialogVisible = ref(false)
+// 添加或修改菜单的携带参数
+let menuParams: AddOrUpdateMenuParams = ref({
+  id: 0,
+  code: '',
+  pid: 0,
+  name: '',
+  level: 0
+})
 
 // 添加菜单按钮的回调
-const addPermission = () => {
+const addPermission = (row: Permission) => {
+  // 打开前先清空
+  Object.assign(menuParams.value, {
+    id: 0,
+    code: '',
+    pid: 0,
+    name: '',
+    level: 0
+  })
+
   // 显示对话框
   dialogVisible.value = true
+
+  // 收集新增菜单的参数
+  menuParams.value.level = row.level + 1
+  menuParams.value.pid = row.pid
 }
 
 // 编辑|更新菜单按钮回调
 const updatePermission = (row: Permission) => {
+  // 回填数据
+  Object.assign(menuParams.value, row)
+
   // 显示对话框
   dialogVisible.value = true
+}
+
+// 确认添加|更新菜单的回调
+const save = () => {
+  if (menuParams.value.id) {
+    addOrUpdateMenu()
+  } else {
+    addOrUpdateMenu()
+  }
+}
+const addOrUpdateMenu = async () => {
+  const res: any = await addOrUpdateMenuAPI(menuParams.value)
+  if (res.code !== 200) return ElMessage.error(res.message)
+  ElMessage.success(res.message)
+  dialogVisible.value = false
+  getPermissionList()
 }
 </script>
 
@@ -73,8 +114,9 @@ const updatePermission = (row: Permission) => {
             size="small"
             icon="Plus"
             :disabled="row.level === 4 ? true : false"
-            @click="addPermission"
-          >{{row.level === 3 ? '添加功能' : '添加菜单'}}</el-button>
+            @click="addPermission(row)"
+          >{{ row.level === 3 ? '添加功能' :
+              '添加菜单' }}</el-button>
           <el-button
             type="primary"
             size="small"
@@ -103,20 +145,22 @@ const updatePermission = (row: Permission) => {
 
     <el-dialog
       v-model="dialogVisible"
-      title="Tips"
+      :title="menuParams.id ? '编辑菜单' : '添加菜单'"
       width="25%"
     >
       <el-form label-width="60px">
-        <el-form-item label="名称">
+        <el-form-item label="名">
           <el-input
             prefix-icon="EditPen"
-            placeholder="请输入权限名"
+            placeholder="请输入名"
+            v-model="menuParams.name"
           ></el-input>
         </el-form-item>
-        <el-form-item label="权限值">
+        <el-form-item label="值">
           <el-input
             prefix-icon="EditPen"
-            placeholder="请输入权限值"
+            placeholder="请输入值"
+            v-model="menuParams.code"
           ></el-input>
         </el-form-item>
       </el-form>
@@ -129,7 +173,7 @@ const updatePermission = (row: Permission) => {
           <el-button
             type="primary"
             icon="Select"
-            @click="dialogVisible = false"
+            @click="save"
           >确认</el-button>
         </span>
       </template>
