@@ -12,13 +12,36 @@ import type {
 
 import { GET_TOKEN } from '@/utils/token'
 
-import { constantRoutes } from '@/router/routes'
+import { constantRoutes, asyncRoutes, anyRoutes } from '@/router/routes'
+import router from '@/router'
+
+// 静态方法
+/**
+ * @description: 递归过滤异步路由表，返回符合用户角色权限的路由表
+ * @param {any} asyncRoutes 异步路由表
+ * @param {string[]} router 当前用户拥有的路由标识
+ * @return {*}
+ */
+const filterAsyncRoutes = (asyncRoutes: any, router: string[]) => {
+  // 过滤异步路由表
+  return asyncRoutes.filter((item: any) => {
+    // 如果当前用户拥有的路由标识中包含当前路由标识
+    if (router.includes(item.name)) {
+      // 如果当前路由标识包含子路由
+      if (item.children && item.children.length > 0) {
+        // 递归过滤子路由
+        item.children = filterAsyncRoutes(item.children, router)
+      }
+      return true
+    }
+  })
+}
 
 const useUserStore = defineStore(
   'user',
   () => {
     const token = ref(GET_TOKEN() || '')
-    const menuRoutes = ref(constantRoutes)
+    const menuRoutes = ref<any>([...constantRoutes, ...anyRoutes])
     const username = ref('')
     const avatar = ref('')
     //存储当前用户是否包含某一个按钮
@@ -45,6 +68,19 @@ const useUserStore = defineStore(
         username.value = result.data.name
         avatar.value = result.data.avatar
         buttons.value = result.data.buttons
+
+        // 登录成功
+        // 路由权限处理
+        // 计算当前用户拥有的路由标识
+        const userAsyncRoute: any = filterAsyncRoutes(asyncRoutes, result.data.routes)
+        // 将常量路由表和用户拥有的路由表进行合并
+        menuRoutes.value = [...menuRoutes.value, ...userAsyncRoute]
+        console.log(router.getRoutes())
+        console.log(menuRoutes)
+        // 将路由表添加到路由当中
+        userAsyncRoute.forEach((item: any) => {
+          router.addRoute(item)
+        })
       } else {
         return Promise.reject(new Error(result.message))
       }
@@ -59,6 +95,7 @@ const useUserStore = defineStore(
         username.value = ''
         avatar.value = ''
         buttons.value = []
+        // asyncRoutes.value = []
         return 'ok'
       } else {
         return Promise.reject(new Error(result.message))
@@ -68,18 +105,19 @@ const useUserStore = defineStore(
     return {
       token,
       userLogin,
-      menuRoutes,
       username,
       userLogout,
       userInfo,
       avatar,
       buttons,
+      asyncRoutes,
+      menuRoutes
     }
   },
   {
     persist: [
       {
-        paths: ['token', 'username', 'avatar', 'buttons'],
+        paths: ['token', 'username', 'avatar', 'buttons', 'menuRoutes', 'asyncRoutes'],
         storage: localStorage,
       },
     ],
