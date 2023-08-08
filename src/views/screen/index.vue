@@ -4,6 +4,7 @@ import { ref, onMounted, onUnmounted } from 'vue'
 // 引入顶部子组件
 import Top from './components/top/index.vue'
 import Left from './components/left/index.vue'
+import Center from './components/center/index.vue'
 
 // #region
 // 以下为数据大屏适配设置
@@ -46,7 +47,9 @@ onUnmounted(() => {
         <div class="left">
           <Left />
         </div>
-        <div class="center">center</div>
+        <div class="center">
+          <Center />
+        </div>
         <div class="right">right</div>
       </div>
     </div>
