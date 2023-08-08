@@ -1,0 +1,1 @@
+import{f as e,s as o,j as t}from"./index-6a94d50c.js";const n={viewBox:"0 0 1024 1024",width:"1.2em",height:"1.2em"},s=t("path",{fill:"currentColor",d:"M480 480V128a32 32 0 0 1 64 0v352h352a32 32 0 1 1 0 64H544v352a32 32 0 1 1-64 0V544H128a32 32 0 0 1 0-64h352z"},null,-1),a=[s];function c(_,r){return e(),o("svg",n,a)}const i={name:"ep-plus",render:c};export{i as _};
