@@ -9,6 +9,11 @@ onMounted(() => {
   let myCharts = echarts.init(charts.value)
   // 设置实例的配置项
   myCharts.setOption({
+    tooltip: {
+      show: true,
+      trigger: "item",
+      formatter: "{b} <br/>占比：{c}%"
+    },
     xAxis: {
       type: "value",
       show: false
@@ -17,7 +22,7 @@ onMounted(() => {
       {
         type: "category",
         position: "left",
-        data: ["男生"],
+        data: ["男士"],
         axisTick: {
           show: false
         },

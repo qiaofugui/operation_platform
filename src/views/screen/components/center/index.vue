@@ -15,6 +15,7 @@ import Bottom from './components/bottom/index.vue'
   display: flex;
   flex-direction: column;
   height: 100%;
+  padding: 0 35px;
 
   .top {
     flex: 7.5;

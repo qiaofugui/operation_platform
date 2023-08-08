@@ -14,72 +14,72 @@ let planePath: string =
 
 onMounted(() => {
   let mapData = [
-  {
-    fromName: "北京",
-    toName: "上海",
-    coords: [
-      [116.4551, 40.2539],
-      [121.4648, 31.2891]
-    ]
-  },
-  {
-    fromName: "上海",
-    toName: "北京",
-    coords: [
-      [121.4648, 31.2891],
-      [116.4551, 40.2539]
-    ]
-  },
-  {
-    fromName: "北京",
-    toName: "广州",
-    coords: [
-      [116.4551, 40.2539],
-      [113.5107, 23.2196]
-    ]
-  },
-  {
-    fromName: "广州",
-    toName: "北京",
-    coords: [
-      [113.5107, 23.2196],
-      [116.4551, 40.2539]
-    ]
-  },
-  {
-    fromName: "北京",
-    toName: "成都",
-    coords: [
-      [116.4551, 40.2539],
-      [103.9526, 30.7617]
-    ]
-  },
-  {
-    fromName: "成都",
-    toName: "北京",
-    coords: [
-      [103.9526, 30.7617],
-      [116.4551, 40.2539]
-    ]
-  },
-  {
-    fromName: "成都",
-    toName: "新疆维吾尔自治区",
-    coords: [
-      [103.9526, 30.7617],
-      [85.294711, 41.371801]
-    ]
-  },
-  {
-    fromName: " 新疆维吾尔自治区",
-    toName: "成都",
-    coords: [
-      [85.294711, 41.371801],
-      [103.9526, 30.7617]
-    ]
-  }
-]
-initChart(mapData)
+    {
+      fromName: "北京",
+      toName: "上海",
+      coords: [
+        [116.4551, 40.2539],
+        [121.4648, 31.2891]
+      ]
+    },
+    {
+      fromName: "上海",
+      toName: "北京",
+      coords: [
+        [121.4648, 31.2891],
+        [116.4551, 40.2539]
+      ]
+    },
+    {
+      fromName: "北京",
+      toName: "广州",
+      coords: [
+        [116.4551, 40.2539],
+        [113.5107, 23.2196]
+      ]
+    },
+    {
+      fromName: "广州",
+      toName: "北京",
+      coords: [
+        [113.5107, 23.2196],
+        [116.4551, 40.2539]
+      ]
+    },
+    {
+      fromName: "北京",
+      toName: "成都",
+      coords: [
+        [116.4551, 40.2539],
+        [103.9526, 30.7617]
+      ]
+    },
+    {
+      fromName: "成都",
+      toName: "北京",
+      coords: [
+        [103.9526, 30.7617],
+        [116.4551, 40.2539]
+      ]
+    },
+    {
+      fromName: "成都",
+      toName: "新疆维吾尔自治区",
+      coords: [
+        [103.9526, 30.7617],
+        [85.294711, 41.371801]
+      ]
+    },
+    {
+      fromName: " 新疆维吾尔自治区",
+      toName: "成都",
+      coords: [
+        [85.294711, 41.371801],
+        [103.9526, 30.7617]
+      ]
+    }
+  ]
+  initChart(mapData)
 })
 
 const initChart = (data: any = []): ECharts => {
@@ -248,7 +248,11 @@ defineExpose({
       </div>
     </div>
     <!-- 展示图标 -->
-    <div class="charts" ref="charts" style="width: 100%;height: 100%;margin-top: 10px;">charts</div>
+    <div
+      class="charts"
+      ref="charts"
+      style="width: 100%;height: 100%;margin-top: 10px;"
+    >charts</div>
   </div>
 </template>
 
@@ -258,7 +262,7 @@ defineExpose({
   flex-direction: column;
 
   .title {
-    flex:3;
+    flex: 3;
     margin-top: 30px;
     height: 50px;
     text-align: center;
@@ -270,7 +274,6 @@ defineExpose({
   }
 
   .subtitle {
-    margin-left: 35px;
     background: url(../../../../images/map-title-bg.png) no-repeat;
     background-size: contain;
     color: white;
