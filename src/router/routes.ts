@@ -1,4 +1,4 @@
-// 常量路由
+// 常量路由 任何角色都可以访问的
 export const constantRoutes = [
   {
     path: '/login',
@@ -53,6 +53,20 @@ export const constantRoutes = [
       icon: 'DataBoard',
     },
   },
+  {
+    path: '/404',
+    name: '404',
+    component: () => import('@/views/404/index.vue'),
+    meta: {
+      title: '404',
+      hidden: true,
+      icon: 'Grid',
+    },
+  }
+]
+
+// 异步路由
+export const asyncRoutes = [
   {
     path: '/acl',
     name: 'Acl',
@@ -148,17 +162,11 @@ export const constantRoutes = [
         },
       },
     ],
-  },
-  {
-    path: '/404',
-    name: '404',
-    component: () => import('@/views/404/index.vue'),
-    meta: {
-      title: '404',
-      hidden: true,
-      icon: 'Grid',
-    },
-  },
+  }
+]
+
+// 任意路由
+export const anyRoutes = [
   {
     path: '/:pathMatch(.*)*',
     name: 'Any',
@@ -168,5 +176,5 @@ export const constantRoutes = [
       hidden: true,
       icon: 'Grid',
     },
-  },
+  }
 ]

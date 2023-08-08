@@ -10,7 +10,7 @@ const goHome = () => {
   <div class="box">
     <img src="../../assets/images/error_images/404.png" />
     <div>
-      <h2>你访问的页面不存在！</h2>
+      <h2>你访问的页面不存在~🤷‍♂️🤷‍♀️</h2>
       <p>请检查你的 url 是否正确，或者点击下面按钮回到首页</p>
       <div>
         <el-button
