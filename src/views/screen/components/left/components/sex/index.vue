@@ -123,10 +123,10 @@ onMounted(() => {
     </div>
     <div class="gender">
       <div class="man">
-        <img src="../../../../images/man.png" alt="">
+        <img src="../../../../assets/images/man.png" alt="">
       </div>
       <div class="women">
-        <img src="../../../../images/woman.png" alt="">
+        <img src="../../../../assets/images/woman.png" alt="">
       </div>
     </div>
     <div class="charts" ref="charts"></div>
@@ -135,7 +135,7 @@ onMounted(() => {
 
 <style lang="scss" scoped>
 .sex {
-  background: url(../../../../images/dataScreen-main-lb.png) no-repeat;
+  background: url(../../../../assets/images/dataScreen-main-lb.png) no-repeat;
   background-size: 100% 100%;
 
   .top {
@@ -144,13 +144,14 @@ onMounted(() => {
     .title {
       color: white;
       font-size: 20px;
+      font-family: "YouSheBiaoTiHei", sans-serif;
     }
 
     .bg {
       width: 68px;
       height: 8px;
       margin: 10px 0;
-      background: url(../../../../images/dataScreen-title.png) no-repeat;
+      background: url(../../../../assets/images/dataScreen-title.png) no-repeat;
       background-size: 100% 100%;
     }
   }
@@ -172,7 +173,7 @@ onMounted(() => {
     }
 
     .man {
-      background: url(../../../../images/man-bg.png) no-repeat;
+      background: url(../../../../assets/images/man-bg.png) no-repeat;
 
       &::after {
         content: '男';
@@ -184,7 +185,7 @@ onMounted(() => {
     }
 
     .women {
-      background: url(../../../../images/woman-bg.png) no-repeat;
+      background: url(../../../../assets/images/woman-bg.png) no-repeat;
 
       &::after {
         content: '女';

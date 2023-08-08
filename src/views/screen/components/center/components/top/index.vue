@@ -244,7 +244,7 @@ defineExpose({
         平台高峰预警信息(2条)
       </div>
       <div class="subtitle">
-        景区实时客流量
+        景 区 实 时 客 流 量
       </div>
     </div>
     <!-- 展示图标 -->
@@ -266,15 +266,16 @@ defineExpose({
     margin-top: 30px;
     height: 50px;
     text-align: center;
-    background: url(../../../../images/dataScreen-header-warn-bg.png) no-repeat center;
+    background: url(../../../../assets/images/dataScreen-header-warn-bg.png) no-repeat center;
     background-size: contain;
     color: white;
     line-height: 50px;
-    font-size: 14px;
+    font-size: 18px;
+    font-family: "YouSheBiaoTiHei", sans-serif;
   }
 
   .subtitle {
-    background: url(../../../../images/map-title-bg.png) no-repeat;
+    background: url(../../../../assets/images/map-title-bg.png) no-repeat;
     background-size: contain;
     color: white;
     line-height: 30px;

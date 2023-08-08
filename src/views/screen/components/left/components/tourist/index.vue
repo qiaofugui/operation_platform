@@ -205,7 +205,7 @@ onMounted(() => {
 
 <style lang="scss" scoped>
 .tourist {
-  background: url(../../../../images/dataScreen-main-lb.png) no-repeat;
+  background: url(../../../../assets/images/dataScreen-main-lb.png) no-repeat;
   background-size: 100% 100%;
 
   .top {
@@ -214,13 +214,14 @@ onMounted(() => {
     .title {
       color: white;
       font-size: 20px;
+      font-family: "YouSheBiaoTiHei", sans-serif;
     }
 
     .bg {
       width: 68px;
       height: 8px;
       margin: 10px 0;
-      background: url(../../../../images/dataScreen-title.png) no-repeat;
+      background: url(../../../../assets/images/dataScreen-title.png) no-repeat;
       background-size: 100% 100%;
     }
 
@@ -231,6 +232,7 @@ onMounted(() => {
 
       span {
         color: #ff8100;
+        font-style: italic;
       }
     }
   }
@@ -242,13 +244,14 @@ onMounted(() => {
     span {
       flex: 1;
       height: 60px;
-      background: url(../../../../images/total.png) no-repeat;
+      background: url(../../../../assets/images/total.png) no-repeat;
       background-size: 100% 100%;
       color: #29fcff;
-      font-size: 28px;
+      font-size: 34px;
       font-weight: 700;
       text-align: center;
       line-height: 60px;
+      font-family: "YouSheBiaoTiHei", sans-serif;
     }
   }
 

@@ -218,7 +218,7 @@ defineExpose({
 
 <style lang="scss" scoped>
 .bottom {
-  background: url(../../../../images/dataScreen-main-lb.png) no-repeat;
+  background: url(../../../../assets/images/dataScreen-main-lb.png) no-repeat;
   background-size: 100% 100%;
 
   .top {
@@ -227,13 +227,14 @@ defineExpose({
     .title {
       color: white;
       font-size: 20px;
+      font-family: "YouSheBiaoTiHei", sans-serif;
     }
 
     .bg {
       width: 68px;
       height: 8px;
       margin: 10px 0;
-      background: url(../../../../images/dataScreen-title.png) no-repeat;
+      background: url(../../../../assets/images/dataScreen-title.png) no-repeat;
       background-size: 100% 100%;
     }
   }
@@ -250,7 +251,7 @@ defineExpose({
       width: 180px;
       height: 60px;
       padding-left: 20px;
-      background: url("../../../../images/line-bg.png") no-repeat;
+      background: url("../../../../assets/images/line-bg.png") no-repeat;
       background-size: 100% 100%;
 
       span {

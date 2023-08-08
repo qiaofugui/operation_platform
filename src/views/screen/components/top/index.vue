@@ -51,19 +51,20 @@ onUnmounted(() => {
     flex: 1.5;
     display: flex;
     justify-content: end;
-    background: url(../../images/dataScreen-header-left-bg.png) no-repeat;
+    background: url(../../assets/images/dataScreen-header-left-bg.png) no-repeat;
     background-size: cover;
 
     .lbtn {
       width: 150px;
       height: 40px;
-      background: url(../../images/dataScreen-header-btn-bg-l.png) no-repeat;
+      background: url(../../assets/images/dataScreen-header-btn-bg-l.png) no-repeat;
       background-size: 100% 100%;
       font-size: 20px;
       text-align: center;
       line-height: 40px;
       color: #29fcff;
       cursor: pointer;
+      font-family: "YouSheBiaoTiHei", sans-serif;
     }
   }
 
@@ -73,12 +74,13 @@ onUnmounted(() => {
     .title {
       width: 100%;
       height: 75px;
-      background: url(../../images/dataScreen-header-center-bg.png) no-repeat;
+      background: url(../../assets/images/dataScreen-header-center-bg.png) no-repeat;
       background-size: 100% 100%;
       font-size: 28px;
       text-align: center;
       line-height: 75px;
       color: #29fcff;
+      font-family: "YouSheBiaoTiHei", sans-serif;
     }
   }
 
@@ -86,23 +88,24 @@ onUnmounted(() => {
     flex: 1.5;
     display: flex;
     justify-content: space-between;
-    background: url(../../images/dataScreen-header-right-bg.png) no-repeat;
+    background: url(../../assets/images/dataScreen-header-right-bg.png) no-repeat;
     background-size: cover;
     text-align: center;
     line-height: 40px;
     color: #29fcff;
-
     .rbtn {
       width: 150px;
       height: 40px;
-      background: url(../../images/dataScreen-header-btn-bg-r.png) no-repeat;
+      background: url(../../assets/images/dataScreen-header-btn-bg-r.png) no-repeat;
       background-size: 100% 100%;
       font-size: 20px;
+      font-family: "YouSheBiaoTiHei", sans-serif;
     }
 
     .time {
       font-size: 18px;
       margin-right: 10px;
+      font-family: "YouSheBiaoTiHei", sans-serif;
     }
   }
 }

@@ -60,14 +60,16 @@ onUnmounted(() => {
 </template>
 
 <style lang="scss" scoped>
+@import url(./assets/fonts/font.scss);
+
 .container {
   width: 100vw;
   height: 100vh;
-  background: url(./images/bg.png) no-repeat;
-  /* background: url(./images/bg1.png) no-repeat; */
-  /* background: url(./images/bg2.png) no-repeat; */
-  /* background: url(./images/bg3.jpg) no-repeat; */
-  /* background: url(./images/bg4.jpg) no-repeat; */
+  background: url(./assets/images/bg.png) no-repeat;
+  /* background: url(./assets/images/bg1.png) no-repeat; */
+  /* background: url(./assets/images/bg2.png) no-repeat; */
+  /* background: url(./assets/images/bg3.jpg) no-repeat; */
+  /* background: url(./assets/images/bg4.jpg) no-repeat; */
   background-size: cover;
 
   .screen {

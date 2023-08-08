@@ -263,7 +263,7 @@ defineExpose({
 
 <style lang="scss" scoped>
 .rank {
-  background: url(../../images/dataScreen-main-lb.png) no-repeat;
+  background: url(../../assets/images/dataScreen-main-lb.png) no-repeat;
   background-size: 100% 100%;
 
   .top {
@@ -273,13 +273,14 @@ defineExpose({
     .title {
       color: white;
       font-size: 20px;
+      font-family: "YouSheBiaoTiHei", sans-serif;
     }
 
     .bg {
       width: 68px;
       height: 8px;
       margin: 10px 0;
-      background: url(../../images/dataScreen-title.png) no-repeat;
+      background: url(../../assets/images/dataScreen-title.png) no-repeat;
       background-size: 100% 100%;
     }
   }
@@ -290,7 +291,7 @@ defineExpose({
     height: 36px;
     margin: 10px 10px 0;
     line-height: 36px;
-    background: url("../../images/rankingChart-bg.png") no-repeat;
+    background: url("../../assets/images/rankingChart-bg.png") no-repeat;
     background-size: 100% 100%;
 
     span {
