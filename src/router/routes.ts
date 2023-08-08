@@ -80,7 +80,7 @@ export const asyncRoutes = [
     children: [
       {
         path: '/acl/user',
-        name: 'Alc',
+        name: 'User',
         component: () => import('@/views/acl/user/index.vue'),
         meta: {
           title: '用户管理',
@@ -166,8 +166,7 @@ export const asyncRoutes = [
 ]
 
 // 任意路由
-export const anyRoutes = [
-  {
+export const anyRoutes = {
     path: '/:pathMatch(.*)*',
     name: 'Any',
     redirect: '/404',
@@ -176,5 +175,4 @@ export const anyRoutes = [
       hidden: true,
       icon: 'Grid',
     },
-  }
-]
+}

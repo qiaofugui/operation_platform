@@ -20,7 +20,17 @@ import SvgIcon from '@/components/SvgIcon/index.vue'
 <!-- <style scoped></style> -->
 
 <script setup lang="ts">
+import { onMounted } from 'vue'
+
 import zhCn from 'element-plus/lib/locale/lang/zh-cn'
+
+import useUserStore from "@/store/modules/user"
+
+const userStore = useUserStore()
+
+onMounted(async() => {
+  await userStore.userInfo()
+})
 </script>
 
 <template>

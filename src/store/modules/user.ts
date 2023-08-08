@@ -15,6 +15,8 @@ import { GET_TOKEN } from '@/utils/token'
 import { constantRoutes, asyncRoutes, anyRoutes } from '@/router/routes'
 import router from '@/router'
 
+import cloneDeep from 'lodash/cloneDeep'
+
 // 静态方法
 /**
  * @description: 递归过滤异步路由表，返回符合用户角色权限的路由表
@@ -41,7 +43,7 @@ const useUserStore = defineStore(
   'user',
   () => {
     const token = ref(GET_TOKEN() || '')
-    const menuRoutes = ref<any>([...constantRoutes, ...anyRoutes])
+    const menuRoutes = ref<any>(constantRoutes)
     const username = ref('')
     const avatar = ref('')
     //存储当前用户是否包含某一个按钮
@@ -56,7 +58,7 @@ const useUserStore = defineStore(
         token.value = result.data as string
         return 'ok'
       } else {
-        return Promise.reject(new Error(result.data))
+        return Promise.reject(new Error(result.message))
       }
     }
 
@@ -72,15 +74,15 @@ const useUserStore = defineStore(
         // 登录成功
         // 路由权限处理
         // 计算当前用户拥有的路由标识
-        const userAsyncRoute: any = filterAsyncRoutes(asyncRoutes, result.data.routes)
+        // ****要用深拷贝，否则会污染asyncRoutes
+        const userAsyncRoute: any = filterAsyncRoutes(cloneDeep(asyncRoutes), result.data.routes)
         // 将常量路由表和用户拥有的路由表进行合并
-        menuRoutes.value = [...menuRoutes.value, ...userAsyncRoute]
-        console.log(router.getRoutes())
-        console.log(menuRoutes)
-        // 将路由表添加到路由当中
-        userAsyncRoute.forEach((item: any) => {
+        menuRoutes.value = [...constantRoutes, ...userAsyncRoute, anyRoutes,]
+          // 将路由表添加到路由当中
+          ;[...userAsyncRoute, anyRoutes].forEach((item: any) => {
           router.addRoute(item)
         })
+        return 'ok'
       } else {
         return Promise.reject(new Error(result.message))
       }
@@ -95,7 +97,7 @@ const useUserStore = defineStore(
         username.value = ''
         avatar.value = ''
         buttons.value = []
-        // asyncRoutes.value = []
+        menuRoutes.value = []
         return 'ok'
       } else {
         return Promise.reject(new Error(result.message))
@@ -110,14 +112,13 @@ const useUserStore = defineStore(
       userInfo,
       avatar,
       buttons,
-      asyncRoutes,
       menuRoutes
     }
   },
   {
     persist: [
       {
-        paths: ['token', 'username', 'avatar', 'buttons', 'menuRoutes', 'asyncRoutes'],
+        paths: ['token', 'username', 'avatar', 'buttons', 'menuRoutes'],
         storage: localStorage,
       },
     ],

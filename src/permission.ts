@@ -11,15 +11,18 @@ import setting from '@/setting'
 
 import { ElMessage } from 'element-plus'
 
+import { ref } from 'vue'
+const flag = ref(false)
+
 // 全部路由组件：登录|404|任意路由|主页|数据大屏|权限管理（三个子路由）|商品管理（四个子路由）
 
 // 全局前置守卫
 router.beforeEach(async (to, from, next) => {
-  // 放在外面会持久化失效
-  const userStore = useUserStore(pinia)
-
   Nprogress.start()
   document.title = `${setting.title} - ${to.meta.title}`
+
+  // 放在外面会持久化失效
+  const userStore = useUserStore(pinia)
   const token = userStore.token
   const username = userStore.username
   if (token) {
@@ -29,14 +32,21 @@ router.beforeEach(async (to, from, next) => {
       if (!username) {
         try {
           await userStore.userInfo()
-          next()
+          next({ ...to, replace: true })
         } catch (error) {
           ElMessage.error('获取用户信息失败，请重新登陆')
           await userStore.userLogout()
           next({ path: '/login', query: { redirect: to.path } })
         }
       } else {
-        next()
+        // ********** 刷新白屏路由丢失解决方法 **********
+        if (!flag.value) {
+          await userStore.userInfo()
+          flag.value = true
+          next({ ...to, replace: true })
+        } else {
+          next()
+        }
       }
     }
   } else {
@@ -49,6 +59,6 @@ router.beforeEach(async (to, from, next) => {
 })
 
 // 全局后置守卫
-router.afterEach((to, from) => {
+router.afterEach(async (to, from) => {
   Nprogress.done()
 })

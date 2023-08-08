@@ -1,9 +1,9 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
-import { constantRoutes, anyRoutes } from './routes'
+import { constantRoutes } from './routes'
 
 export default createRouter({
   history: createWebHashHistory(),
-  routes: [...constantRoutes, ...anyRoutes],
+  routes: constantRoutes,
   // 滚动行为
   scrollBehavior: () => ({ left: 0, top: 0 }),
 })
