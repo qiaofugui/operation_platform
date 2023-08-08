@@ -102,7 +102,7 @@ const changeTheme = () => {
         </div>
       </el-form-item>
       <el-form-item label="暗黑模式">
-        <el-switch v-model="theme.dark" inline-prompt active-icon="Moon" inactive-icon="Sunny" @change="changeDark" />
+        <el-switch v-model="theme.dark" inline-prompt active-icon="Sunny" inactive-icon="Moon" @change="changeDark" />
       </el-form-item>
     </el-form>
   </el-popover>

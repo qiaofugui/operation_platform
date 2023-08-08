@@ -9,29 +9,33 @@ import setting from '@/setting.ts'
 </script>
 
 <template>
-  <el-card>
-    <div class="box">
-      <img
-        :src="userStore.avatar"
-        alt=""
-        class="avatar"
-      >
-      <div class="bottom">
-        <h3 class="title">{{ getTime() }}好 {{ userStore.username }}</h3>
-        <p class="subtitle">{{ setting.title }}</p>
+  <div class="container">
+    <el-card>
+      <div class="box">
+        <img
+          :src="userStore.avatar"
+          alt=""
+          class="avatar"
+        >
+        <div class="bottom">
+          <h3 class="title">{{ getTime() }} {{ userStore.username }}</h3>
+          <p class="subtitle">{{ setting.title }}</p>
+        </div>
       </div>
+    </el-card>
+    <div class="bottoms">
+
     </div>
-  </el-card>
-  <div class="bottoms">
-    <svg-icon
-      name="welcome"
-      width="600px"
-      height="300px"
-    ></svg-icon>
   </div>
 </template>
 
 <style scoped lang="scss">
+.container {
+  height: 100%;
+  background: url(../../assets/images/welcome.png) no-repeat center 60%;
+  background-size: 70%;
+}
+
 .box {
   display: flex;
 
