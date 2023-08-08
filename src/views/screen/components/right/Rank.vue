@@ -57,6 +57,9 @@ const initChart = (data: any = {}): ECharts => {
   const charEle = charts.value
   const charEch: ECharts = init(charEle);
   const option: EChartsOption = {
+    tooltip: {
+      show: true,
+    },
     grid: {
       top: "5%",
       left: "7%",
@@ -188,7 +191,8 @@ const initChart = (data: any = {}): ECharts => {
     ],
     series: [
       {
-        name: "条",
+        // name: "条",
+        name: "",
         type: "bar",
         yAxisIndex: 0,
         data: data.data,
@@ -211,7 +215,8 @@ const initChart = (data: any = {}): ECharts => {
         }
       },
       {
-        name: "框",
+        // name: "框",
+        name: "",
         type: "bar",
         yAxisIndex: 1,
         data: data.data.map((val: ChartProp) => {
