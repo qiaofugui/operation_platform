@@ -13,146 +13,176 @@ onMounted(() => {
   let myCharts = echarts.init(charts.value)
   // 设置实例的配置项
   myCharts.setOption({
-    // 标题设置
-    title: {
-      text: '预约量',
-      left: 'center',
-      top: '25%',
-      textStyle: {
-        fontWeight: "normal",
-        fontSize: 18,
-        color: "#fff"
-      },
-    },
-    // x|y轴配置
-    xAxis: {},
-    yAxis: {},
-    // 系列
-    series: [
+    title: [
       {
-        // 展示什么样的图标表
-        type: 'liquidFill',
-        // 展示的数据
-        data: [0.55, 0.45, 0.35],
-        // 是否开启动画
-        waveAnimation: true,
-        // 动画时间
-        animationDuration: 0,
-        animationDurationUpdate: 0,
-        // 半径
-        radius: '93%',
-        // 水球的颜色
-        outline: {
-          show: false,
-        },
-        label: {
-          normal: {
-            show: true,
-            textStyle: {
-              fontSize: 24,
-            }
-          }
-        },
-        backgroundStyle: {
-          color: 'rgba(0,0,0,0)', //背景颜色
-        },
+        text: 55 + "%",
+        left: "49%",
+        top: "35%",
+        textAlign: "center",
+        textStyle: {
+          fontSize: "16",
+          fontWeight: "normal",
+          color: "#ffffff",
+          align: "center",
+          textBorderColor: "rgba(0, 0, 0, 0)",
+          textShadowColor: "#000",
+          textShadowBlur: 0,
+          textShadowOffsetX: 0,
+          textShadowOffsetY: 1
+        }
       },
-      //外层线
       {
-        type: "pie",
-        center: ["50%", "50%"],
-        radius: ["95%", "96%"], //外层线粗细
-        hoverAnimation: true,
-        data: [
-          {
-            name: "",
-            value: 100,
-            labelLine: {
-              show: true
-            },
-            itemStyle: {
-              color: "#67CDFB"
-            },
-            emphasis: {
-              labelLine: {
-                show: true
-              },
-              itemStyle: {
-                color: "#5886f0"
-              }
-            }
-          }
-        ]
-      },
-      // 进度线
-      {
-        type: "pie",
-        center: ["50%", "50%"],
-        radius: ["95%", "100%"], //进度线粗细
-        hoverAnimation: false,
-        data: [
-          {
-            name: "",
-            value: 55, //进度
-            labelLine: {
-              show: false
-            },
-            itemStyle: {
-              color: {
-                type: "linear",
-                x: 0,
-                y: 0,
-                x2: 1,
-                y2: 2,
-                colorStops: [
-                  // !! 在此添加渐变过程色 !!
-                  { offset: 0, color: "#33E2ED" },
-                  { offset: 1, color: "#807AFE" }
-                ]
-              }
-            },
-            emphasis: {
-              labelLine: {
-                show: false
-              },
-              itemStyle: {
-                color: "#5886f0"
-              }
-            }
-          },
-          {
-            //画剩余的刻度圆环
-            name: "",
-            value: 55,
-            itemStyle: {
-              color: "rgba(0,0,0,0)"
-            },
-            label: {
-              show: true
-            },
-            labelLine: {
-              show: true
-            },
-            emphasis: {
-              labelLine: {
-                show: true
-              },
-              itemStyle: {
-                color: "#050038"
-              }
-            }
-          }
-        ]
+        text: "预约量",
+        left: "49%",
+        top: "25%",
+        textAlign: "center",
+        textStyle: {
+          fontSize: "15",
+          fontWeight: "normal",
+          color: "#ffffff",
+          align: "center",
+          textBorderColor: "rgba(0, 0, 0, 0)",
+          textShadowColor: "#000",
+          textShadowBlur: 0,
+          textShadowOffsetX: 0,
+          textShadowOffsetY: 1
+        }
       }
     ],
-    // 布局设置
     grid: {
-      top: 0,
-      left: 0,
-      right: 0,
-      bottom: 0,
+      top: "0",
+      left: "0px",
+      right: "0px",
+      bottom: "0",
       containLabel: true
-    }
+    },
+    polar: {
+      radius: ["85%", "95%"],
+      center: ["50%", "50%"]
+    },
+    angleAxis: {
+      max: 120,
+      clockwise: false,
+      axisLine: {
+        show: false
+      },
+      axisTick: {
+        show: false
+      },
+      axisLabel: {
+        show: false
+      },
+      splitLine: {
+        show: false
+      },
+      startAngle: 188
+    },
+    radiusAxis: {
+      type: "category",
+      show: true,
+      axisLabel: {
+        show: false
+      },
+      axisLine: {
+        show: false
+      },
+      axisTick: {
+        show: false
+      }
+    },
+    series: [
+      {
+        type: "liquidFill",
+        radius: "80%",
+        z: 2,
+        center: ["50%", "50%"],
+        data: [0.4, 0.4, 0.4], // data个数代表波浪数
+        itemStyle: {
+          color: {
+            type: "linear",
+            x: 0,
+            y: 0,
+            x2: 0,
+            y2: 1,
+            colorStops: [
+              {
+                offset: 0,
+                color: "#35FAB6" // 0% 处的颜色
+              },
+              {
+                offset: 1,
+                color: "rgba(40, 209, 247,0.3)" // 100% 处的颜色
+              }
+            ],
+            global: false // 缺省为 false
+          }
+        },
+        outline: {
+          borderDistance: 0,
+          itemStyle: {
+            borderWidth: 2,
+            borderColor: "#31d8d5",
+            shadowBlur: 20,
+            shadowColor: "#50c1a7"
+          }
+        },
+        label: {
+          show: false
+        },
+        backgroundStyle: {
+          borderWidth: 1,
+          // 径向渐变，前三个参数分别是圆心 x, y 和半径，取值同线性渐变
+          color: {
+            type: "radial",
+            x: 0.5,
+            y: 0.5,
+            r: 0.5,
+            colorStops: [
+              {
+                offset: 0,
+                color: "#0D2648" // 0% 处的颜色
+              },
+              {
+                offset: 0.8,
+                color: "#0D2648" // 100% 处的颜色
+              },
+              {
+                offset: 1,
+                color: "#228E7D" // 100% 处的颜色
+              }
+            ],
+            global: false // 缺省为 false
+          }
+        }
+      },
+      {
+        type: "pie",
+        radius: ["80%", "90%"],
+        center: ["50%", "50%"],
+        z: 1,
+        label: {
+          show: false
+        },
+        silent: true,
+        itemStyle: {
+          borderWidth: 2,
+          borderType: [8, 10],
+          borderDashOffset: 15,
+          borderColor: "#31d8d5",
+          color: "#11144e",
+          borderCap: "round"
+        },
+        data: [100]
+      },
+      {
+        type: "bar",
+        data: [55],
+        z: 10,
+        coordinateSystem: "polar",
+        roundCap: true,
+        color: "#31d8d5"
+      }
+    ]
   })
 })
 </script>
@@ -165,17 +195,11 @@ onMounted(() => {
       <p class="right">可预约总量 <span>99999</span> 人</p>
     </div>
     <div class="number">
-      <span
-        v-for="item in people"
-        :key="item"
-      >{{ item }}</span>
+      <span v-for="item in people" :key="item">{{ item }}</span>
       <span>人</span>
     </div>
     <!-- 展示图标 -->
-    <div
-      class="charts"
-      ref="charts"
-    >charts</div>
+    <div class="charts" ref="charts">charts</div>
   </div>
 </template>
 

@@ -9,61 +9,98 @@ onMounted(() => {
   let myCharts = echarts.init(charts.value)
   // 设置实例的配置项
   myCharts.setOption({
-    title: {
-      // text: '男女比例',
-      // left: 'center',
-      // top: '0',
-      // textStyle: {
-      //   fontWeight: "normal",
-      //   fontSize: 14,
-      //   color: "#fff"
-      // },
-    },
-    tooltip: {
-      trigger: 'item',
-      axisPointer: {
-        // 坐标轴指示器，坐标轴触发有效
-        type: 'shadow' // 默认为直线，可选为：'line' | 'shadow'
-      }
-    },
-    // x|y轴配置
     xAxis: {
-      show: false,
-      min: 0,
-      max: 100
-    },
-    yAxis: {
-      type: 'category',
+      type: "value",
       show: false
     },
-    // 系列
-    series: [
+    yAxis: [
       {
-        type: 'bar',
-        name: '男',
-        data: [50],
-        barWidth: 20,
-        itemStyle: {
-          color: '#007afe',
-          borderRadius: [10, 10, 10, 10]
+        type: "category",
+        position: "left",
+        data: ["男生"],
+        axisTick: {
+          show: false
         },
-        z: 10,
+        axisLine: {
+          show: false
+        },
+        axisLabel: {
+          show: false
+        }
       },
       {
-        type: 'bar',
-        name: '女',
-        data: [100],
-        barWidth: 20,
-        barGap: '-100%',
-        itemStyle: {
-          color: '#ff4b7a',
-          borderRadius: [10, 10, 10, 10]
+        type: "category",
+        position: "right",
+        data: ["女士"],
+        axisTick: {
+          show: false
         },
+        axisLine: {
+          show: false
+        },
+        axisLabel: {
+          show: false,
+          padding: [0, 0, 40, -60],
+          fontSize: 12,
+          lineHeight: 60,
+          color: "rgba(255, 255, 255, 0.9)",
+          formatter: "{value}" + 50 + "%",
+          rich: {
+            a: {
+              color: "transparent",
+              lineHeight: 30,
+              fontFamily: "digital",
+              fontSize: 12
+            }
+          }
+        }
+      }
+    ],
+    series: [
+      {
+        type: "bar",
+        barWidth: 20,
+        data: [50],
+        z: 999,
+        itemStyle: {
+          borderRadius: 10,
+          color: "#007AFE"
+        },
+        label: {
+          show: true,
+          color: "#E7E8ED",
+          position: "insideLeft",
+          offset: [0, -20],
+          fontSize: 14,
+          formatter: () => {
+            return `男士 50%`;
+          }
+        }
+      },
+      {
+        type: "bar",
+        barWidth: 20,
+        data: [100],
+        barGap: "-100%",
+        itemStyle: {
+          borderRadius: 10,
+          color: "#FF4B7A"
+        },
+        label: {
+          show: true,
+          color: "#E7E8ED",
+          position: "insideRight",
+          offset: [0, -20],
+          fontSize: 14,
+          formatter: () => {
+            return `女士 50%`;
+          }
+        }
       }
     ],
     // 布局设置
     grid: {
-      top: 0,
+      top: 20,
       left: 50,
       right: 60,
       bottom: 0,
@@ -116,6 +153,7 @@ onMounted(() => {
   .gender {
     display: flex;
     justify-content: center;
+    font-size: 14px;
 
     .man,
     .women {
@@ -132,10 +170,10 @@ onMounted(() => {
       background: url(../../../../images/man-bg.png) no-repeat;
 
       &::after {
-        content: '男士';
+        content: '男';
         position: absolute;
-        top: 2px;
-        left: 40px;
+        top: 3px;
+        left: 47px;
         color: white;
       }
     }
@@ -144,10 +182,10 @@ onMounted(() => {
       background: url(../../../../images/woman-bg.png) no-repeat;
 
       &::after {
-        content: '女士';
+        content: '女';
         position: absolute;
-        top: 2px;
-        left: 40px;
+        top: 3px;
+        left: 47px;
         color: white;
       }
     }
