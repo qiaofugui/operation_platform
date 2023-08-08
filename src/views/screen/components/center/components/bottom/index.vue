@@ -240,7 +240,7 @@ defineExpose({
 
   .charts {
     width: 100%;
-    height: 200px;
+    height: 195px;
     margin-top: 20px;
 
     :deep(.lineChart-bg) {

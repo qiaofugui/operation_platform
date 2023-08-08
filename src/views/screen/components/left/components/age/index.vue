@@ -60,7 +60,7 @@ const initChart = (data: any): ECharts => {
     },
     legend: {
       orient: "vertical",
-      right: "20px",
+      right: "40px",
       top: "15px",
       itemGap: 15,
       itemWidth: 14,
@@ -164,7 +164,7 @@ defineExpose({
 <template>
   <div class="age">
     <div class="top">
-      <p class="title">男女比例</p>
+      <p class="title">年龄比例</p>
       <p class="bg"></p>
     </div>
 
