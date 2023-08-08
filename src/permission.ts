@@ -43,7 +43,7 @@ router.beforeEach(async (to, from, next) => {
         if (!flag.value) {
           await userStore.userInfo()
           flag.value = true
-          next({ ...to, replace: true })
+          next({ ...to })
         } else {
           next()
         }

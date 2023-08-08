@@ -20,9 +20,12 @@ import 'element-plus/theme-chalk/el-drawer.css'
 // 暗黑模式
 import 'element-plus/theme-chalk/dark/css-vars.css'
 
-import './permission.ts'
+// 自定义指令
+import { isHasButton }  from '@/directive/has.ts'
 
 const app = createApp(App)
+
+isHasButton(app)
 
 app.use(globalComponent)
 
@@ -31,3 +34,5 @@ app.use(router)
 app.use(pinia)
 
 app.mount('#app')
+
+import './permission.ts'

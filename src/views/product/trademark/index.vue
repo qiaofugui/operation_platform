@@ -15,6 +15,10 @@ import type {
 
 import type { UploadProps } from 'element-plus'
 
+// 按钮权限的实现
+import useUserStore from '@/store/modules/user'
+const userStore = useUserStore()
+
 // 当前页
 const pageNo = ref<number>(1)
 // 每页显示条数
@@ -171,6 +175,7 @@ const handleAvatarSuccess: UploadProps['onSuccess'] = (
     <el-card>
       <el-button
         type="primary"
+        v-if="userStore.buttons.includes('btn.Trademark.add')"
         @click="addTrademark"
       >
         <IEpPlus />

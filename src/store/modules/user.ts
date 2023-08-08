@@ -42,7 +42,7 @@ const filterAsyncRoutes = (asyncRoutes: any, router: string[]) => {
 const useUserStore = defineStore(
   'user',
   () => {
-    const token = ref(GET_TOKEN() || '')
+    const token = ref('')
     const menuRoutes = ref<any>(constantRoutes)
     const username = ref('')
     const avatar = ref('')
@@ -77,7 +77,7 @@ const useUserStore = defineStore(
         // ****要用深拷贝，否则会污染asyncRoutes
         const userAsyncRoute: any = filterAsyncRoutes(cloneDeep(asyncRoutes), result.data.routes)
         // 将常量路由表和用户拥有的路由表进行合并
-        menuRoutes.value = [...constantRoutes, ...userAsyncRoute, anyRoutes,]
+        menuRoutes.value = [...constantRoutes, ...userAsyncRoute, anyRoutes]
           // 将路由表添加到路由当中
           ;[...userAsyncRoute, anyRoutes].forEach((item: any) => {
           router.addRoute(item)

@@ -273,9 +273,11 @@ const reset = () => {
     </el-card>
 
     <el-card style="margin: 10px 0;">
+      <!-- 按钮权限指令方式实现 -->
       <el-button
         type="primary"
         icon="Plus"
+        v-has="'btn.User.add'"
         @click="addUser"
       >添加</el-button>
       <el-popconfirm
