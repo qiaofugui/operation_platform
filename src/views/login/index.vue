@@ -1,24 +1,24 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+// import { ref } from 'vue'
 
 import LoginForm from './components/LoginForm.vue'
 
-let dark = ref(false)
+// let dark = ref(false)
 
-// 暗黑模式切换
-const changeDark = (value: boolean) => {
-  // 获取html根节点
-  let html = document.documentElement
-  value ? html.className = 'dark' : html.className = ''
-}
+// // 暗黑模式切换
+// const changeDark = (value: boolean) => {
+//   // 获取html根节点
+//   let html = document.documentElement
+//   value ? html.className = 'dark' : html.className = ''
+// }
 </script>
 
 <template>
   <div class="login-container flx-center">
     <div class="login-box">
-      <div class="dark">
+      <!-- <div class="dark">
         <el-switch v-model="dark" inline-prompt active-icon="Sunny" inactive-icon="Moon" @change="changeDark" />
-      </div>
+      </div> -->
       <div class="login-left">
         <img class="login-left-img" src="@/assets/images/login_left.png" alt="login" />
       </div>

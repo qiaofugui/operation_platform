@@ -1,1 +1,0 @@
-import{bb as a,r as t}from"./index-6a94d50c.js";const l=a("setting",()=>{const e=t(!1),s=t(!1);return{fold:e,refresh:s,changeFold:()=>{e.value=!e.value},changeRefresh:()=>{s.value=!s.value}}},{persist:[{paths:["fold"],storage:localStorage}]});export{l as u};

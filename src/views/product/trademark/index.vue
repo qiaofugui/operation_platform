@@ -95,8 +95,9 @@ const addTrademark = () => {
 // 修改品牌
 const updateTrademark = (row: TradeMark) => {
   // 清空表单验证
-  trademarkFormRef.value.clearValidate()
-
+  nextTick(() => {
+    trademarkFormRef.value.clearValidate()
+  })
 
   dialogFormVisible.value = true
   trademarkParams.value = {
