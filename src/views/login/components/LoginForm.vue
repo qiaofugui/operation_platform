@@ -15,7 +15,8 @@ const userStore = useUserStore()
 // 收集表单数据
 let loginForm = reactive({
   username: 'admin',
-  password: 'atguigu123',
+  // password: 'atguigu123',
+  password: '111111',
 })
 const validatorUserName = (rule: any, value: any, callback: any) => {
   if(value.trim().length === 0) {
